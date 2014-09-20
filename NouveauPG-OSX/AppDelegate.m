@@ -17,6 +17,26 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    
+    m_topLevelNodes = [NSArray arrayWithObjects:@"RECIPIENTS",@"IDENTITIES",@"MESSAGES", nil];
+    [m_outlineView reloadData];
+    [m_outlineView sizeLastColumnToFit];
+    [m_outlineView setFloatsGroupRows:NO];
+    
+    // NSTableViewRowSizeStyleDefault should be used, unless the user has picked an explicit size. In that case, it should be stored out and re-used.
+    [m_outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
+    
+}
+
+// -------------------------------------------------------------------------------
+//	applicationShouldTerminateAfterLastWindowClosed:sender
+//
+//	NSApplication delegate method placed here so the sample conveniently quits
+//	after we close the window.
+// -------------------------------------------------------------------------------
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)sender
+{
+	return YES;
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "com.nouveaupg.NouveauPG_OSX" in the user's Application Support directory.
@@ -178,6 +198,57 @@
     }
 
     return NSTerminateNow;
+}
+
+#pragma mark Data source
+
+- (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
+    return [m_topLevelNodes objectAtIndex:index];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    return NO;
+}
+
+- (NSInteger) outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
+    return [m_topLevelNodes count];
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
+    return NO;
+}
+
+- (BOOL)outlineView:(NSOutlineView *)outlineView shouldShowOutlineCellForItem:(id)item {
+    // As an example, hide the "outline disclosure button" for FAVORITES. This hides the "Show/Hide" button and disables the tracking area for that row.
+    return NO;
+}
+
+- (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
+    // For the groups, we just return a regular text view.
+    if ([m_topLevelNodes containsObject:item]) {
+        NSTableCellView *result = [outlineView makeViewWithIdentifier:@"HeaderCell" owner:self];
+        // Uppercase the string value, but don't set anything else. NSOutlineView automatically applies attributes as necessary
+        NSString *value = [item uppercaseString];
+        [result.textField setStringValue:value];
+        return result;
+    }
+    return nil;
+}
+
+#pragma mark UI actions
+
+- (IBAction)importFromClipboard:(id)sender {
+    NSString *clipboardText = [[NSPasteboard generalPasteboard] stringForType:@"public.utf8-plain-text"];
+
+    NSLog(@"Pasteboard content: %@",clipboardText);
+}
+
+- (IBAction)addAction:(id)sender {
+    
+}
+
+- (IBAction)removeAction:(id)sender {
+    
 }
 
 @end

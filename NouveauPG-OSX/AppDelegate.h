@@ -8,7 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    IBOutlet NSOutlineView *m_outlineView;
+    IBOutlet NSView *m_placeholderView;
+    
+    NSArray *m_topLevelNodes;
+}
 
 @property (assign) IBOutlet NSWindow *window;
 
@@ -16,6 +21,11 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
+- (void)setupNavigation;
+
 - (IBAction)saveAction:(id)sender;
+- (IBAction)importFromClipboard:(id)sender;
+- (IBAction)addAction:(id)sender;
+- (IBAction)removeAction:(id)sender;
 
 @end
