@@ -21,7 +21,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
-- (void)setupNavigation;
+@property (strong,nonatomic) NSArray *recipients;
 
 - (IBAction)saveAction:(id)sender;
 - (IBAction)importFromClipboard:(id)sender;

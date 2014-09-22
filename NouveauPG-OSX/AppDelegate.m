@@ -7,12 +7,16 @@
 //
 
 #import "AppDelegate.h"
+#import "OpenPGPMessage.h"
+#import "OpenPGPPacket.h"
 
 @implementation AppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
+
+@synthesize recipients;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -26,6 +30,19 @@
     // NSTableViewRowSizeStyleDefault should be used, unless the user has picked an explicit size. In that case, it should be stored out and re-used.
     [m_outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
     
+    NSManagedObjectContext *ctx = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Recipient"
+                                              inManagedObjectContext:ctx];
+    [fetchRequest setEntity:entity];
+    
+    NSError *error;
+    self.recipients = [ctx executeFetchRequest:fetchRequest error:&error];
+    NSLog(@"Loaded %lu recipients (public key certificates) from datastore.",(unsigned long)[self.recipients count]);
+    
+    if (error) {
+        NSLog(@"NSError: %@",[error description]);
+    }
 }
 
 // -------------------------------------------------------------------------------
@@ -54,7 +71,7 @@
         return _managedObjectModel;
     }
 	
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"NouveauPG_OSX" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"CoreDataModel" withExtension:@"momd"];
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -101,7 +118,7 @@
         }
     }
     
-    NSURL *url = [applicationFilesDirectory URLByAppendingPathComponent:@"NouveauPG_OSX.storedata"];
+    NSURL *url = [applicationFilesDirectory URLByAppendingPathComponent:@"CoreDataModel.storedata"];
     NSPersistentStoreCoordinator *coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
     if (![coordinator addPersistentStoreWithType:NSXMLStoreType configuration:nil URL:url options:nil error:&error]) {
         [[NSApplication sharedApplication] presentError:error];
@@ -239,8 +256,20 @@
 
 - (IBAction)importFromClipboard:(id)sender {
     NSString *clipboardText = [[NSPasteboard generalPasteboard] stringForType:@"public.utf8-plain-text"];
-
-    NSLog(@"Pasteboard content: %@",clipboardText);
+    
+    OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:clipboardText];
+    
+    if ([message validChecksum]) {
+        NSLog(@"OpenPGP message found on clipboard.");
+        NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
+        for ( OpenPGPPacket *eachPacket in packets ) {
+            NSLog(@"Packet tag: %ld",(long)[eachPacket packetTag]);
+            NSLog(@"Packet length: %lu",(unsigned long)[[eachPacket packetData] length]);
+        }
+    }
+    else {
+        NSLog(@"Error: No valid OpenPGP message found on clipboard.");
+    }
 }
 
 - (IBAction)addAction:(id)sender {

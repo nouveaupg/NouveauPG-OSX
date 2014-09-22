@@ -1,8 +1,8 @@
 //
 //  Message.h
-//  NouveauPG
+//  NouveauPG-OSX
 //
-//  Created by John Hill on 7/11/14.
+//  Created by John Hill on 9/22/14.
 //  Copyright (c) 2014 John Hill. All rights reserved.
 //
 
@@ -12,11 +12,10 @@
 
 @interface Message : NSManagedObject
 
-@property (nonatomic, retain) NSString * body;
 @property (nonatomic, retain) NSDate * created;
-@property (nonatomic, retain) NSDate * edited;
+@property (nonatomic, retain) NSDate * modified;
+@property (nonatomic, retain) NSDate * read;
 @property (nonatomic, retain) NSString * descriptor;
-
-@property (nonatomic, retain) NSString *keyId;
+@property (nonatomic, retain) NSString * body;
 
 @end

@@ -1,8 +1,8 @@
 //
 //  Recipient.m
-//  NouveauPG
+//  NouveauPG-OSX
 //
-//  Created by John Hill on 5/9/14.
+//  Created by John Hill on 9/22/14.
 //  Copyright (c) 2014 John Hill. All rights reserved.
 //
 
@@ -11,9 +11,13 @@
 
 @implementation Recipient
 
-@dynamic userId;
 @dynamic certificate;
+@dynamic userId;
 @dynamic added;
-@dynamic details;
+@dynamic keyId;
+@dynamic dateSigned;
+@dynamic publicKeyAlgo;
+@dynamic name;
+@dynamic email;
 
 @end

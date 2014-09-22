@@ -1,8 +1,8 @@
 //
 //  Message.m
-//  NouveauPG
+//  NouveauPG-OSX
 //
-//  Created by John Hill on 7/11/14.
+//  Created by John Hill on 9/22/14.
 //  Copyright (c) 2014 John Hill. All rights reserved.
 //
 
@@ -11,11 +11,10 @@
 
 @implementation Message
 
-@dynamic body;
 @dynamic created;
-@dynamic edited;
+@dynamic modified;
+@dynamic read;
 @dynamic descriptor;
-
-@synthesize keyId;
+@dynamic body;
 
 @end
