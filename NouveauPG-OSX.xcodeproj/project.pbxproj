@@ -19,6 +19,19 @@
 		04795EF719C0A1AE000A3142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04795ED319C0A1AD000A3142 /* Cocoa.framework */; };
 		04795EFF19C0A1AE000A3142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04795EFD19C0A1AE000A3142 /* InfoPlist.strings */; };
 		04795F0119C0A1AE000A3142 /* NouveauPG_OSXTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 04795F0019C0A1AE000A3142 /* NouveauPG_OSXTests.m */; };
+		04C9637019CFC38100A2446C /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9636919CFC38100A2446C /* Identity.m */; };
+		04C9637119CFC38100A2446C /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9636B19CFC38100A2446C /* Message.m */; };
+		04C9637219CFC38100A2446C /* Recipient.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9636D19CFC38100A2446C /* Recipient.m */; };
+		04C9637319CFC38100A2446C /* RecipientDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9636F19CFC38100A2446C /* RecipientDetails.m */; };
+		04C9638819CFC3F300A2446C /* EncryptedEnvelope.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9637719CFC3F300A2446C /* EncryptedEnvelope.m */; };
+		04C9638919CFC3F300A2446C /* LiteralPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9637919CFC3F300A2446C /* LiteralPacket.m */; };
+		04C9638A19CFC3F300A2446C /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9637B19CFC3F300A2446C /* NSString+Base64.m */; };
+		04C9638B19CFC3F300A2446C /* OpenPGPEncryptedPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9637D19CFC3F300A2446C /* OpenPGPEncryptedPacket.m */; };
+		04C9638C19CFC3F300A2446C /* OpenPGPMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9637F19CFC3F300A2446C /* OpenPGPMessage.m */; };
+		04C9638D19CFC3F300A2446C /* OpenPGPPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9638119CFC3F300A2446C /* OpenPGPPacket.m */; };
+		04C9638E19CFC3F300A2446C /* OpenPGPPublicKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9638319CFC3F300A2446C /* OpenPGPPublicKey.m */; };
+		04C9638F19CFC3F300A2446C /* OpenPGPSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9638519CFC3F300A2446C /* OpenPGPSignature.m */; };
+		04C9639019CFC3F300A2446C /* UserIDPacket.m in Sources */ = {isa = PBXBuildFile; fileRef = 04C9638719CFC3F300A2446C /* UserIDPacket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +65,32 @@
 		04795EFC19C0A1AE000A3142 /* NouveauPG-OSXTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPG-OSXTests-Info.plist"; sourceTree = "<group>"; };
 		04795EFE19C0A1AE000A3142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04795F0019C0A1AE000A3142 /* NouveauPG_OSXTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NouveauPG_OSXTests.m; sourceTree = "<group>"; };
+		04C9636819CFC38100A2446C /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		04C9636919CFC38100A2446C /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		04C9636A19CFC38100A2446C /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		04C9636B19CFC38100A2446C /* Message.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Message.m; sourceTree = "<group>"; };
+		04C9636C19CFC38100A2446C /* Recipient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Recipient.h; sourceTree = "<group>"; };
+		04C9636D19CFC38100A2446C /* Recipient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Recipient.m; sourceTree = "<group>"; };
+		04C9636E19CFC38100A2446C /* RecipientDetails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecipientDetails.h; sourceTree = "<group>"; };
+		04C9636F19CFC38100A2446C /* RecipientDetails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecipientDetails.m; sourceTree = "<group>"; };
+		04C9637619CFC3F300A2446C /* EncryptedEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptedEnvelope.h; sourceTree = "<group>"; };
+		04C9637719CFC3F300A2446C /* EncryptedEnvelope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedEnvelope.m; sourceTree = "<group>"; };
+		04C9637819CFC3F300A2446C /* LiteralPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiteralPacket.h; sourceTree = "<group>"; };
+		04C9637919CFC3F300A2446C /* LiteralPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiteralPacket.m; sourceTree = "<group>"; };
+		04C9637A19CFC3F300A2446C /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		04C9637B19CFC3F300A2446C /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		04C9637C19CFC3F300A2446C /* OpenPGPEncryptedPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPGPEncryptedPacket.h; sourceTree = "<group>"; };
+		04C9637D19CFC3F300A2446C /* OpenPGPEncryptedPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPGPEncryptedPacket.m; sourceTree = "<group>"; };
+		04C9637E19CFC3F300A2446C /* OpenPGPMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPGPMessage.h; sourceTree = "<group>"; };
+		04C9637F19CFC3F300A2446C /* OpenPGPMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPGPMessage.m; sourceTree = "<group>"; };
+		04C9638019CFC3F300A2446C /* OpenPGPPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPGPPacket.h; sourceTree = "<group>"; };
+		04C9638119CFC3F300A2446C /* OpenPGPPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPGPPacket.m; sourceTree = "<group>"; };
+		04C9638219CFC3F300A2446C /* OpenPGPPublicKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPGPPublicKey.h; sourceTree = "<group>"; };
+		04C9638319CFC3F300A2446C /* OpenPGPPublicKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPGPPublicKey.m; sourceTree = "<group>"; };
+		04C9638419CFC3F300A2446C /* OpenPGPSignature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenPGPSignature.h; sourceTree = "<group>"; };
+		04C9638519CFC3F300A2446C /* OpenPGPSignature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenPGPSignature.m; sourceTree = "<group>"; };
+		04C9638619CFC3F300A2446C /* UserIDPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserIDPacket.h; sourceTree = "<group>"; };
+		04C9638719CFC3F300A2446C /* UserIDPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserIDPacket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +156,8 @@
 		04795ED919C0A1AD000A3142 /* NouveauPG-OSX */ = {
 			isa = PBXGroup;
 			children = (
+				04C9637519CFC3C200A2446C /* OpenPGP */,
+				04C9636719CFC32900A2446C /* CoreData Model */,
 				04795EE519C0A1AD000A3142 /* AppDelegate.h */,
 				04795EE619C0A1AD000A3142 /* AppDelegate.m */,
 				04795EE819C0A1AD000A3142 /* MainMenu.xib */,
@@ -155,6 +196,46 @@
 				04795EFD19C0A1AE000A3142 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		04C9636719CFC32900A2446C /* CoreData Model */ = {
+			isa = PBXGroup;
+			children = (
+				04C9636819CFC38100A2446C /* Identity.h */,
+				04C9636919CFC38100A2446C /* Identity.m */,
+				04C9636A19CFC38100A2446C /* Message.h */,
+				04C9636B19CFC38100A2446C /* Message.m */,
+				04C9636C19CFC38100A2446C /* Recipient.h */,
+				04C9636D19CFC38100A2446C /* Recipient.m */,
+				04C9636E19CFC38100A2446C /* RecipientDetails.h */,
+				04C9636F19CFC38100A2446C /* RecipientDetails.m */,
+			);
+			name = "CoreData Model";
+			sourceTree = "<group>";
+		};
+		04C9637519CFC3C200A2446C /* OpenPGP */ = {
+			isa = PBXGroup;
+			children = (
+				04C9637619CFC3F300A2446C /* EncryptedEnvelope.h */,
+				04C9637719CFC3F300A2446C /* EncryptedEnvelope.m */,
+				04C9637819CFC3F300A2446C /* LiteralPacket.h */,
+				04C9637919CFC3F300A2446C /* LiteralPacket.m */,
+				04C9637A19CFC3F300A2446C /* NSString+Base64.h */,
+				04C9637B19CFC3F300A2446C /* NSString+Base64.m */,
+				04C9637C19CFC3F300A2446C /* OpenPGPEncryptedPacket.h */,
+				04C9637D19CFC3F300A2446C /* OpenPGPEncryptedPacket.m */,
+				04C9637E19CFC3F300A2446C /* OpenPGPMessage.h */,
+				04C9637F19CFC3F300A2446C /* OpenPGPMessage.m */,
+				04C9638019CFC3F300A2446C /* OpenPGPPacket.h */,
+				04C9638119CFC3F300A2446C /* OpenPGPPacket.m */,
+				04C9638219CFC3F300A2446C /* OpenPGPPublicKey.h */,
+				04C9638319CFC3F300A2446C /* OpenPGPPublicKey.m */,
+				04C9638419CFC3F300A2446C /* OpenPGPSignature.h */,
+				04C9638519CFC3F300A2446C /* OpenPGPSignature.m */,
+				04C9638619CFC3F300A2446C /* UserIDPacket.h */,
+				04C9638719CFC3F300A2446C /* UserIDPacket.m */,
+			);
+			name = OpenPGP;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,7 +338,20 @@
 			files = (
 				04795EE719C0A1AD000A3142 /* AppDelegate.m in Sources */,
 				04795EED19C0A1AD000A3142 /* NouveauPG_OSX.xcdatamodeld in Sources */,
+				04C9638819CFC3F300A2446C /* EncryptedEnvelope.m in Sources */,
+				04C9637119CFC38100A2446C /* Message.m in Sources */,
+				04C9638A19CFC3F300A2446C /* NSString+Base64.m in Sources */,
+				04C9638C19CFC3F300A2446C /* OpenPGPMessage.m in Sources */,
+				04C9638919CFC3F300A2446C /* LiteralPacket.m in Sources */,
+				04C9638F19CFC3F300A2446C /* OpenPGPSignature.m in Sources */,
+				04C9637219CFC38100A2446C /* Recipient.m in Sources */,
 				04795EE019C0A1AD000A3142 /* main.m in Sources */,
+				04C9637319CFC38100A2446C /* RecipientDetails.m in Sources */,
+				04C9637019CFC38100A2446C /* Identity.m in Sources */,
+				04C9638B19CFC3F300A2446C /* OpenPGPEncryptedPacket.m in Sources */,
+				04C9639019CFC3F300A2446C /* UserIDPacket.m in Sources */,
+				04C9638E19CFC3F300A2446C /* OpenPGPPublicKey.m in Sources */,
+				04C9638D19CFC3F300A2446C /* OpenPGPPacket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +487,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
 				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-OSX-Info.plist";
+				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -470,6 +565,7 @@
 				04795F0619C0A1AE000A3142 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		04795F0719C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG-OSXTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +574,7 @@
 				04795F0919C0A1AE000A3142 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
