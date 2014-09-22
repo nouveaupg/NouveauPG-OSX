@@ -161,7 +161,37 @@
                     packet_length = ((*(ptr+1) - 192) << 8) + ( *(ptr+2)) + 192 + 3;
                 }
                 else {
-                    NSLog(@"Invalid packet header length encoding.");
+                    NSLog(@"Partial packet header length encoding.");
+                    // partial encoding
+                    unsigned int offset = 2;
+                    unsigned int partialBodyLen = 1 << (*(ptr+1) & 0x1F);
+                    
+                    NSMutableData *accumulator = [[NSMutableData alloc]init];
+                    [accumulator appendBytes:(ptr+offset) length:partialBodyLen];
+                    offset += partialBodyLen;
+                    unsigned char *nextChunkHeader = (unsigned char *)(ptr + offset);
+                    
+                    
+                    while (*nextChunkHeader > 223) {
+                        partialBodyLen = 1 << (*nextChunkHeader & 0x1F);
+                        offset++;
+                        [accumulator appendBytes:(ptr+offset) length:partialBodyLen];
+                        offset += partialBodyLen;
+                        
+                        nextChunkHeader = (ptr+offset);
+                    }
+                    if (*nextChunkHeader <= 223) {
+                        if( *nextChunkHeader <= 192 ) {
+                            partialBodyLen = *nextChunkHeader;
+                            [accumulator appendBytes:(nextChunkHeader + 1) length:partialBodyLen];
+                        }
+                        else {
+                            partialBodyLen = ((*nextChunkHeader - 192) << 8) + *(nextChunkHeader+1) + 192;
+                            [accumulator appendBytes:(nextChunkHeader + 2) length:partialBodyLen];
+                        }
+                        return [[OpenPGPPacket alloc]initWithPacketBody:accumulator tag:18 oldFormat:false];
+                    }
+                    
                     return nil;
                 }
                 m_packetData = [[NSData alloc]initWithBytes:ptr length:packet_length];
