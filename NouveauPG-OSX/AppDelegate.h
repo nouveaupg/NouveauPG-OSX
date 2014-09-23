@@ -7,12 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "OpenPGPMessage.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
     IBOutlet NSView *m_placeholderView;
     
     NSArray *m_topLevelNodes;
+    NSMutableDictionary *m_children;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -27,5 +29,7 @@
 - (IBAction)importFromClipboard:(id)sender;
 - (IBAction)addAction:(id)sender;
 - (IBAction)removeAction:(id)sender;
+
+-(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 
 @end

@@ -9,6 +9,10 @@
 #import "AppDelegate.h"
 #import "OpenPGPMessage.h"
 #import "OpenPGPPacket.h"
+#import "UserIDPacket.h"
+#import "OpenPGPPublicKey.h"
+#import "OpenPGPSignature.h"
+#import "Recipient.h"
 
 @implementation AppDelegate
 
@@ -30,6 +34,8 @@
     // NSTableViewRowSizeStyleDefault should be used, unless the user has picked an explicit size. In that case, it should be stored out and re-used.
     [m_outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
     
+    m_children = [[NSMutableDictionary alloc]initWithCapacity:3];
+    
     NSManagedObjectContext *ctx = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Recipient"
@@ -43,6 +49,12 @@
     if (error) {
         NSLog(@"NSError: %@",[error description]);
     }
+    
+    NSMutableArray *newArray = [[NSMutableArray alloc]init];
+    for ( Recipient *eachRecipient in recipients ) {
+        [newArray addObject:eachRecipient.name];
+    }
+    [m_children setObject:newArray forKey:@"RECIPIENTS"];
 }
 
 // -------------------------------------------------------------------------------
@@ -220,15 +232,34 @@
 #pragma mark Data source
 
 - (id)outlineView:(NSOutlineView *)outlineView child:(NSInteger)index ofItem:(id)item {
-    return [m_topLevelNodes objectAtIndex:index];
+    if (item == nil) {
+        return [m_topLevelNodes objectAtIndex:index];
+    }
+    else if( [item isEqualToString:@"RECIPIENTS"] ) {
+        NSString *returnValue =  [[m_children objectForKey:item] objectAtIndex:index];
+        return returnValue;
+    }
+    return @"";
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
+    if ([item isEqualToString:@"RECIPIENTS"]) {
+        if ([recipients count] > 0) {
+            return YES;
+        }
+    }
+    
     return NO;
 }
 
 - (NSInteger) outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item {
-    return [m_topLevelNodes count];
+    if (item == nil) {
+        return [m_topLevelNodes count];
+    }
+    else if([item isEqualToString:@"RECIPIENTS"]) {
+        return [[m_children objectForKey:item] count];
+    }
+    return 0;
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isGroupItem:(id)item {
@@ -237,7 +268,7 @@
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldShowOutlineCellForItem:(id)item {
     // As an example, hide the "outline disclosure button" for FAVORITES. This hides the "Show/Hide" button and disables the tracking area for that row.
-    return NO;
+    return YES;
 }
 
 - (NSView *)outlineView:(NSOutlineView *)outlineView viewForTableColumn:(NSTableColumn *)tableColumn item:(id)item {
@@ -249,7 +280,86 @@
         [result.textField setStringValue:value];
         return result;
     }
+    else if( [[m_children objectForKey:@"RECIPIENTS"] containsObject:item] ) {
+        NSTableCellView *result = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
+        [result.textField setStringValue:item];
+        return result;
+    }
     return nil;
+}
+
+-(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate {
+    NSLog(@"Importing Recipient from public key certificate.");
+    
+    if ([publicKeyCertificate validChecksum]) {
+        NSString *armouredText = [publicKeyCertificate originalArmouredText];
+        
+        OpenPGPPublicKey *primaryKey;
+        OpenPGPPublicKey *subkey;
+        UserIDPacket *userIdPkt;
+        
+        OpenPGPSignature *userIdSig;
+        OpenPGPSignature *subkeySig;
+        
+        NSArray *packets = [OpenPGPPacket packetsFromMessage:publicKeyCertificate];
+        for ( OpenPGPPacket *eachPacket in packets ) {
+            if ([eachPacket packetTag] == 6) {
+                primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+            }
+            else if( [eachPacket packetTag] == 13 ) {
+                userIdPkt = [[UserIDPacket alloc]initWithPacket:eachPacket];
+            }
+            else if( [eachPacket packetTag] == 14 ) {
+                subkey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+            }
+            else if ( [eachPacket packetTag] == 2 ) {
+                OpenPGPSignature *signature = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
+                if (signature.signatureType == 0x18) {
+                    subkeySig = signature;
+                }
+                else if (signature.signatureType == 0x13 ) {
+                    userIdSig = signature;
+                }
+            }
+        }
+        
+        // TODO: check certificate for errors before importing...
+        
+        NSManagedObjectContext *ctx = [self managedObjectContext];
+        Recipient *newRecipient = [NSEntityDescription insertNewObjectForEntityForName:@"Recipient" inManagedObjectContext:ctx];
+        newRecipient.userId = [userIdPkt stringValue];
+        newRecipient.certificate = armouredText;
+        newRecipient.keyId = [[primaryKey keyId] uppercaseString];
+        newRecipient.added = [NSDate date];
+        
+        NSRange firstBracket = [[userIdPkt stringValue] rangeOfString:@"<"];
+        if (firstBracket.location != NSNotFound) {
+            NSString *nameOnly = [[userIdPkt stringValue]substringToIndex:firstBracket.location];
+            NSRange secondBracket =[[userIdPkt stringValue] rangeOfString:@">"];
+            NSUInteger len = secondBracket.location - firstBracket.location - 1;
+            NSString *emailOnly = [[userIdPkt stringValue]substringWithRange:NSMakeRange(firstBracket.location+1, len)];
+            
+            newRecipient.name = nameOnly;
+            newRecipient.email = emailOnly;
+        }
+        else {
+            // If the UserID doesn't conform to RFC 2822, we don't attempt to pull out the e-mail address
+            newRecipient.name = [userIdPkt stringValue];
+        }
+
+        [self saveAction:self];
+        
+        NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:recipients];
+        [editable addObject:newRecipient];
+        recipients = [[NSArray alloc]initWithArray:editable];
+        
+        return true;
+    }
+    else {
+        NSLog(@"Invalid OpenPGP message/checksum failed.");
+    }
+    
+    return false;
 }
 
 #pragma mark UI actions
@@ -263,6 +373,11 @@
         NSLog(@"OpenPGP message found on clipboard.");
         NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
         for ( OpenPGPPacket *eachPacket in packets ) {
+            if ([eachPacket packetTag] == 6 ) {
+                [self importRecipientFromCertificate:message];
+                break;
+            }
+            
             NSLog(@"Packet tag: %ld",(long)[eachPacket packetTag]);
             NSLog(@"Packet length: %lu",(unsigned long)[[eachPacket packetData] length]);
         }

@@ -773,19 +773,26 @@
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="nFl-P8-bsb">
-                        <rect key="frame" x="9" y="8" width="21" height="21"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="RCT-f6-2Vx"/>
-                            <constraint firstAttribute="width" constant="21" id="l7D-EN-l9q"/>
-                        </constraints>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ntu-1f-dmZ">
+                    <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
+                        <rect key="frame" x="9" y="353" width="171" height="25"/>
+                        <buttonCell key="cell" type="roundTextured" title="Import from Clipboard" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nwU-a2-AdP">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                         <connections>
-                            <action selector="addAction:" target="Voe-Tx-rLC" id="P38-kJ-mQU"/>
+                            <action selector="importFromClipboard:" target="Voe-Tx-rLC" id="UIB-eU-vGC"/>
                         </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="o06-96-Bch">
+                        <rect key="frame" x="9" y="8" width="21" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="21" id="4HE-Ei-Uml"/>
+                            <constraint firstAttribute="height" constant="21" id="d15-5E-hiu"/>
+                        </constraints>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iNz-F3-uC0">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="PoA-hg-9Y0">
                         <rect key="frame" x="34" y="8" width="21" height="21"/>
@@ -798,27 +805,17 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
-                        <rect key="frame" x="9" y="353" width="171" height="25"/>
-                        <buttonCell key="cell" type="roundTextured" title="Import from Clipboard" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nwU-a2-AdP">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="importFromClipboard:" target="Voe-Tx-rLC" id="UIB-eU-vGC"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="nFl-P8-bsb" secondAttribute="bottom" constant="8" id="26Y-Ca-Xex"/>
                     <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" id="54T-y7-xgJ"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="o06-96-Bch" secondAttribute="trailing" constant="4" id="EGe-ml-g6m"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="34" id="F27-f0-XIY"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="VBT-QP-myW"/>
-                    <constraint firstItem="nFl-P8-bsb" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="9" id="Wac-Yf-1Il"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="nFl-P8-bsb" secondAttribute="trailing" constant="4" id="Xh2-xS-tiM"/>
                     <constraint firstAttribute="bottom" secondItem="PoA-hg-9Y0" secondAttribute="bottom" constant="8" id="bjL-fF-Itb"/>
                     <constraint firstAttribute="trailing" secondItem="2ol-qn-Nkp" secondAttribute="trailing" id="eZr-pK-6QJ"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="top" secondItem="tlu-MQ-7cL" secondAttribute="bottom" constant="8" id="fgU-HD-gRj"/>
                     <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="9" id="wWE-Tu-hef"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="o06-96-Bch" secondAttribute="top" id="ybR-D5-nWl"/>
                 </constraints>
             </view>
         </window>
