@@ -26,6 +26,8 @@
 {
     // Insert code here to initialize your application
     
+    OpenSSL_add_all_algorithms();
+    
     m_topLevelNodes = [NSArray arrayWithObjects:@"RECIPIENTS",@"IDENTITIES",@"MESSAGES", nil];
     [m_outlineView reloadData];
     [m_outlineView sizeLastColumnToFit];
@@ -324,6 +326,10 @@
         }
         
         // TODO: check certificate for errors before importing...
+        bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]
+        && [subkeySig validateSubkey:subkey withSigningKey:primaryKey];
+        
+        
         
         NSManagedObjectContext *ctx = [self managedObjectContext];
         Recipient *newRecipient = [NSEntityDescription insertNewObjectForEntityForName:@"Recipient" inManagedObjectContext:ctx];
@@ -347,7 +353,13 @@
             newRecipient.name = [userIdPkt stringValue];
         }
 
-        [self saveAction:self];
+        if (validSig) {
+            [self saveAction:self];
+        }
+        else {
+            NSLog(@"Did not add - invalid signature.!");
+        }
+        
         
         NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:recipients];
         [editable addObject:newRecipient];
