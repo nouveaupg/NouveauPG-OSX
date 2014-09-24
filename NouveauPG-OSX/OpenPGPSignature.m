@@ -206,23 +206,57 @@
     if ( decryptedSig ) {
         unsigned char *ptr = (unsigned char *)[decryptedSig bytes];
         unsigned char trailer[6];
-        unsigned char digest[20];
-        SHA_CTX *ctx = malloc(sizeof(SHA_CTX));
+        unsigned char digest[EVP_MAX_MD_SIZE];
+        int digestLen;
+        
+        EVP_MD_CTX *ctx = EVP_MD_CTX_create();
+        //SHA_CTX *ctx = malloc(sizeof(SHA_CTX));
         
         NSUInteger hashedData = 0;
-        SHA1_Init(ctx);
+        
+        EVP_MD *mdAlgo = NULL;
+        switch (hashAlgo) {
+            case 1:
+                mdAlgo = EVP_md5();
+                break;
+            case 3:
+                mdAlgo = EVP_ripemd160();
+                break;
+            case 8:
+                mdAlgo = EVP_sha256();
+                break;
+            case 9:
+                mdAlgo = EVP_sha384();
+                break;
+            case 10:
+                mdAlgo = EVP_sha512();
+                break;
+            case 11:
+                mdAlgo = EVP_sha224();
+                break;
+                
+            default:
+                mdAlgo = EVP_sha1();
+                break;
+        }
+        
+        EVP_DigestInit(ctx, mdAlgo);
+        //SHA1_Init(ctx);
         
         if( signatureType >= 0x10 && signatureType <= 0x13 ) {
             OpenPGPPacket *publicKeyPacket = [signingKey exportPublicKey];
-            SHA1_Update(ctx, [[publicKeyPacket packetData]bytes], [[publicKeyPacket packetData]length]);
+            EVP_DigestUpdate(ctx, [[publicKeyPacket packetData]bytes], [[publicKeyPacket packetData]length]);
+            //SHA1_Update(ctx, [[publicKeyPacket packetData]bytes], [[publicKeyPacket packetData]length]);
             NSUInteger uidlen = [uid length];
             trailer[0] = 0xb4;
             trailer[1] = uidlen >> 24;
             trailer[2] = (uidlen >> 16) & 0xff;
             trailer[3] = (uidlen >> 8) & 0xff;
             trailer[4] = uidlen & 0xff;
-            SHA1_Update(ctx, trailer, 5);
-            SHA1_Update(ctx, [uid UTF8String], uidlen);
+            //SHA1_Update(ctx, trailer, 5);
+            //SHA1_Update(ctx, [uid UTF8String], uidlen);
+            EVP_DigestUpdate(ctx, trailer, 5);
+            EVP_DigestUpdate(ctx, [uid UTF8String], uidlen);
             trailer[0] = 4;
             trailer[1] = signatureType;
             trailer[2] = publicKeyAlgo;
@@ -230,8 +264,10 @@
             NSUInteger hashedSubpacketBytes = [m_hashedSubpacketData length];
             trailer[4] = (hashedSubpacketBytes>>8) & 0xff;
             trailer[5] = hashedSubpacketBytes & 0xff;
-            SHA1_Update(ctx, trailer, 6);
-            SHA1_Update(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
+            //SHA1_Update(ctx, trailer, 6);
+            //SHA1_Update(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
+            EVP_DigestUpdate(ctx, trailer, 6);
+            EVP_DigestUpdate(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
             hashedData = [m_hashedSubpacketData length] + 6;
             trailer[0] = 4;
             trailer[1] = 0xff;
@@ -239,13 +275,18 @@
             trailer[3] = (hashedData >> 16) & 0xff;
             trailer[4] = (hashedData >> 8) & 0xff;
             trailer[5] = hashedData & 0xff;
-            SHA1_Update(ctx, trailer, 6);
-            SHA1_Final(digest, ctx);
-            free(ctx);
+            //SHA1_Update(ctx, trailer, 6);
+            EVP_DigestUpdate(ctx, trailer, 6);
+            EVP_DigestFinal_ex(ctx, digest, &digestLen);
+            //SHA1_Final(digest, ctx);
+            EVP_MD_CTX_destroy(ctx);
             
-            if (!memcmp(digest, (ptr+([decryptedSig length]-20)), 20)) {
-                NSLog(@"Validated signature!");
+            if (!memcmp(digest, (ptr+([decryptedSig length]-digestLen)), digestLen)) {
+                NSLog(@"Validated signature! (hashAlgo: %ld)",(long)hashAlgo);
                 return true;
+            }
+            else {
+                NSLog(@"Could not validate signature! (hashAlgo: %ld, sig type: 0x%02lx)",(long)hashAlgo,(long)signatureType);
             }
         }
     }
@@ -257,20 +298,49 @@
     if( decryptedSig ) {
         unsigned char *ptr = (unsigned char *)[decryptedSig bytes];
         unsigned char trailer[6];
-        unsigned char digest[20];
-        SHA_CTX *ctx = malloc(sizeof(SHA_CTX));
+        unsigned char digest[EVP_MAX_MD_SIZE];
+        int digestLen;
+        EVP_MD_CTX *ctx = EVP_MD_CTX_create();
+        //SHA_CTX *ctx = malloc(sizeof(SHA_CTX));
+        EVP_MD *mdAlgo = NULL;
+        switch (hashAlgo) {
+            case 1:
+                mdAlgo = EVP_md5();
+                break;
+            case 3:
+                mdAlgo = EVP_ripemd160();
+                break;
+            case 8:
+                mdAlgo = EVP_sha256();
+                break;
+            case 9:
+                mdAlgo = EVP_sha384();
+                break;
+            case 10:
+                mdAlgo = EVP_sha512();
+                break;
+            case 11:
+                mdAlgo = EVP_sha224();
+                break;
+                
+            default:
+                mdAlgo = EVP_sha1();
+                break;
+        }
         
+        EVP_DigestInit(ctx, mdAlgo);
         NSUInteger hashedData = 0;
-        SHA1_Init(ctx);
+        //SHA1_Init(ctx);
         if (signatureType == 0x18) {
             OpenPGPPacket *signingKeyPacket = [signingKey exportPublicKey];
-            SHA1_Update(ctx, [[signingKeyPacket packetData] bytes], [[signingKeyPacket packetData] length]);
-            
+            EVP_DigestUpdate(ctx, [[signingKeyPacket packetData] bytes], [[signingKeyPacket packetData] length]);
+            //SHA1_Update(ctx, [[signingKeyPacket packetData] bytes], [[signingKeyPacket packetData] length]);
             OpenPGPPacket *subkeyPacket = [subkey exportPublicKey];
             unsigned char *subkeyBuffer = malloc([[subkeyPacket packetData] length]);
             memcpy(subkeyBuffer, [[subkeyPacket packetData] bytes], [[subkeyPacket packetData] length]);
             subkeyBuffer[0] = 0x99;
-            SHA1_Update(ctx, subkeyBuffer, [[subkeyPacket packetData] length]);
+            EVP_DigestUpdate(ctx, subkeyBuffer, [[subkeyPacket packetData] length]);
+            //SHA1_Update(ctx, subkeyBuffer, [[subkeyPacket packetData] length]);
             free(subkeyBuffer);
             trailer[0] = 4;
             trailer[1] = signatureType;
@@ -279,8 +349,10 @@
             NSUInteger hashedSubpacketBytes = [m_hashedSubpacketData length];
             trailer[4] = (hashedSubpacketBytes>>8) & 0xff;
             trailer[5] = hashedSubpacketBytes & 0xff;
-            SHA1_Update(ctx, trailer, 6);
-            SHA1_Update(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
+            //SHA1_Update(ctx, trailer, 6);
+            //SHA1_Update(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
+            EVP_DigestUpdate(ctx, trailer, 6);
+            EVP_DigestUpdate(ctx, [m_hashedSubpacketData bytes], [m_hashedSubpacketData length]);
             hashedData = [m_hashedSubpacketData length] + 6;
             trailer[0] = 4;
             trailer[1] = 0xff;
@@ -288,13 +360,19 @@
             trailer[3] = (hashedData >> 16) & 0xff;
             trailer[4] = (hashedData >> 8) & 0xff;
             trailer[5] = hashedData & 0xff;
-            SHA1_Update(ctx, trailer, 6);
-            SHA1_Final(digest, ctx);
-            free(ctx);
+            EVP_DigestUpdate(ctx,trailer, 6);
+            EVP_DigestFinal_ex(ctx, digest, &digestLen);
+            //SHA1_Update(ctx, trailer, 6);
+            //SHA1_Final(digest, ctx);
+            //free(ctx);
+            EVP_MD_CTX_destroy(ctx);
             
-            if (!memcmp(digest, (ptr+([decryptedSig length]-20)), 20)) {
-                NSLog(@"Validated signature!");
+            if (!memcmp(digest, (ptr+([decryptedSig length]-digestLen)), digestLen)) {
+                NSLog(@"Validated signature! (hashAlgo: %ld)",(long)hashAlgo);
                 return true;
+            }
+            else {
+                NSLog(@"Could not validate signature! (hashAlgo: %ld, sig type: %02lx)",(long)hashAlgo,(long)signatureType);
             }
         }
     }
