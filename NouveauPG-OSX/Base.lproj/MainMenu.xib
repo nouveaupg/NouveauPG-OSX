@@ -794,8 +794,8 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="PoA-hg-9Y0">
-                        <rect key="frame" x="34" y="8" width="21" height="21"/>
+                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PoA-hg-9Y0">
+                        <rect key="frame" x="35" y="8" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="BsQ-Bl-f5C"/>
                             <constraint firstAttribute="width" constant="21" id="dj7-TQ-yOk"/>
