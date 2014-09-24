@@ -472,6 +472,7 @@
 }
 
 +(OpenPGPPacket *)signWithUserId:(NSString *)userId publicKey: (OpenPGPPublicKey *)key {
+    // deprecated: use +(OpenPGPPacket *)signString: withKey: using:
     OpenPGPPacket *outputPacket = nil;
     OpenPGPPacket *keyPacket = [key exportPublicKey];
     unsigned char digest[20];
@@ -574,6 +575,243 @@
             NSLog(@"Digest bytes: %02x%02x",digest[0],digest[1]);
             
             NSData *mpi = [key signHashWithPrivateKey:digest length:20];
+            memcpy((packetBody+43), [mpi bytes], [mpi length]);
+            outputPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:2 oldFormat:YES];
+        }else {
+            NSLog(@"Could not allocate userIdBuffer or hashContext (malloc fail).");
+        }
+        free(packetBody);
+    }
+    else {
+        NSLog(@"Could not allocate packetBody buffer.");
+    }
+    
+    return outputPacket;
+}
+
++(OpenPGPPacket *)signSubkey: (OpenPGPPublicKey *)subkey withPrimaryKey: (OpenPGPPublicKey *)primary using: (NSInteger)algo {
+    EVP_MD *hashFunction = NULL;
+    if (algo == 8) {
+        hashFunction = EVP_sha256();
+    }
+    else if( algo == 10 ) {
+        hashFunction = EVP_sha512();
+    }
+    else if( algo == 2 ) {
+        hashFunction = EVP_sha1();
+    }
+    else {
+        return nil;
+    }
+    
+    OpenPGPPacket *outputPacket = nil;
+    NSUInteger modulusBytes = (primary.publicKeySize + 7) / 8;
+    size_t packetLen = modulusBytes + 31;
+    size_t hashedBytes = 0;
+    unsigned char *packetBody = malloc(packetLen);
+    memset(packetBody, 0xcd, packetLen);
+    unsigned char digest[EVP_MAX_MD_SIZE];
+    int digestLen;
+    OpenPGPPacket *keyPacket = [primary exportPublicKey];
+    SHA1([[keyPacket packetData] bytes], [[keyPacket packetData] length], digest);
+    
+    if (packetBody) {
+        time_t signatureCreated = time(0);
+        
+        packetBody[0] = 4;
+        packetBody[1] = 0x18;
+        packetBody[2] = 1;
+        packetBody[3] = 2;
+        packetBody[4] = 0;
+        packetBody[5] = 9;
+        packetBody[6] = 5;
+        packetBody[7] = 2;
+        packetBody[8] = signatureCreated >> 24;
+        packetBody[9] = (signatureCreated >> 16) & 0xff;
+        packetBody[10] = (signatureCreated >> 8) & 0xff;
+        packetBody[11] = signatureCreated &  0xff;
+        packetBody[12] = 2;
+        packetBody[13] = 27;
+        packetBody[14] = 0x1; // key flags
+        packetBody[15] = 0;
+        packetBody[16] = 10;
+        packetBody[17] = 9;
+        packetBody[18] = 16;
+        memcpy((packetBody+19), (digest+12), 8);
+        packetBody[27] = 0xff;
+        packetBody[28] = 0xff;
+        packetBody[29] = primary.publicKeySize >> 8;
+        packetBody[30] = primary.publicKeySize & 0xff;
+        
+        EVP_MD_CTX *hashContext = EVP_MD_CTX_create();
+        
+        OpenPGPPacket *primaryKeyPacket = [primary exportPublicKey];
+        OpenPGPPacket *subkeyPacket = [subkey exportPublicKey];
+        
+        unsigned char *subkeyBuffer = malloc([subkeyPacket length]);
+        memcpy(subkeyBuffer, [[subkeyPacket packetData] bytes], [[subkeyPacket packetData] length]);
+        subkeyBuffer[0] = 0x99;
+
+        EVP_DigestInit(hashContext,hashFunction);
+        EVP_DigestUpdate(hashContext, [[primaryKeyPacket packetData] bytes], [[primaryKeyPacket packetData] length]);
+        EVP_DigestUpdate(hashContext, subkeyBuffer, [[subkeyPacket packetData] length]);
+        unsigned char trailer[6];
+        hashedBytes = 15;
+        trailer[0] = 4;
+        trailer[1] = 0xff;
+        trailer[2] = hashedBytes >> 24;
+        trailer[3] = (hashedBytes >> 16) & 0xff;
+        trailer[4] = (hashedBytes >> 8) & 0xff;
+        trailer[5] = hashedBytes & 0xff;
+        EVP_DigestUpdate(hashContext, trailer, 6);
+        EVP_DigestFinal(hashContext, digest, &digestLen);
+        
+        packetBody[27] = digest[0];
+        packetBody[28] = digest[1];
+        
+        NSData *mpi = [primary signHashWithPrivateKey:digest length:digestLen];
+        
+        BIGNUM *bn_mpi = BN_new();
+        BN_bin2bn([mpi bytes], [mpi length], bn_mpi);
+        int mpiBitCount = BN_num_bits(bn_mpi);
+        BN_free(bn_mpi);
+        
+        packetBody[29] = (mpiBitCount >> 8) & 0xff;
+        packetBody[30] = mpiBitCount & 0xff;
+        
+        memcpy((packetBody+31), [mpi bytes], [mpi length]);
+        outputPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:2 oldFormat:YES];
+    }
+    
+    return outputPacket;
+}
+
++(OpenPGPPacket *)signString: (NSString *)input withKey: (OpenPGPPublicKey *)keypair using: (NSInteger)algo {
+    OpenPGPPacket *outputPacket = nil;
+    OpenPGPPacket *keyPacket = [keypair exportPublicKey];
+    unsigned char digest[EVP_MAX_MD_SIZE];
+    int digestLen;
+    SHA1([[keyPacket packetData] bytes], [[keyPacket packetData] length], digest);
+    
+    EVP_MD *hashFunction = NULL;
+    if (algo == 8) {
+        hashFunction = EVP_sha256();
+    }
+    else if( algo == 10 ) {
+        hashFunction = EVP_sha512();
+    }
+    else if( algo == 2 ) {
+        hashFunction = EVP_sha1();
+    }
+    else {
+        return nil;
+    }
+    
+    NSUInteger modulusBytes = (keypair.publicKeySize + 7) / 8;
+    size_t packetLen = modulusBytes + 43;
+    size_t hashedBytes = 0;
+    unsigned char *packetBody = malloc(packetLen);
+    if (packetBody) {
+        time_t signatureCreated = time(0);
+        memset(packetBody, 0xcd, packetLen);
+        // no real reason to change any of these options
+        packetBody[0] = 4;
+        packetBody[1] = 0x13;
+        packetBody[2] = 1;
+        packetBody[3] = 2;
+        packetBody[4] = 0;
+        packetBody[5] = 21;
+        packetBody[6] = 5;
+        packetBody[7] = 2;
+        packetBody[8] = signatureCreated >> 24;
+        packetBody[9] = (signatureCreated >> 16) & 0xff;
+        packetBody[10] = (signatureCreated >> 8) & 0xff;
+        packetBody[11] = signatureCreated &  0xff;
+        packetBody[12] = 2;
+        packetBody[13] = 25;
+        packetBody[14] = 0x1; // key flags
+        packetBody[15] = 2;
+        packetBody[16] = 11; // symmetric algorithms
+        packetBody[17] = 7;
+        packetBody[18] = 2;
+        packetBody[19] = 21; // hash algorithms
+        packetBody[20] = algo;
+        packetBody[21] = 2;
+        packetBody[22] = 22; // compression algorithms
+        packetBody[23] = 0;
+        packetBody[24] = 2;
+        packetBody[25] = 30;
+        packetBody[26] = 1;
+        //packetBody[27] = 9;
+        //packetBody[28] = 16;
+        //memcpy((packetBody+29),(digest+12),8);
+        packetBody[27] = 0;
+        packetBody[28] = 10; // unhashed data
+        packetBody[29] = 9;
+        packetBody[30] = 16;
+        memcpy((packetBody+31),(digest+12),8);
+        packetBody[39] = 0xff;
+        packetBody[40] = 0xff;
+        packetBody[41] = keypair.publicKeySize >> 8;
+        packetBody[42] = keypair.publicKeySize & 0xff;
+        
+        OpenPGPPacket *pubKey = [keypair exportPublicKey];
+        NSData *packetData = [pubKey packetData];
+        
+        //SHA_CTX *hashContext = malloc(sizeof(SHA_CTX));
+        EVP_MD_CTX *hashContext = EVP_MD_CTX_create();
+        unsigned char *userIdBuffer = malloc([input length] + 5);
+        
+        if (userIdBuffer && hashContext) {
+            EVP_DigestInit(hashContext,hashFunction);
+            EVP_DigestUpdate(hashContext, [packetData bytes], [packetData length]);
+            //SHA1_Update(hashContext, [packetData bytes], [packetData length]);
+            hashedBytes += [packetData length];
+            userIdBuffer[0] = 0xB4;
+            userIdBuffer[1] = [input length] >> 24;
+            userIdBuffer[2] = ([input length] >> 16) & 0xff;
+            userIdBuffer[3] = ([input length] >> 8) & 0xff;
+            userIdBuffer[4] = [input length] & 0xff;
+            memcpy(userIdBuffer, [input UTF8String], [input length]);
+            //SHA1_Update(hashContext, userIdBuffer, [input length] + 5);
+            EVP_DigestUpdate(hashContext, userIdBuffer, [input length] + 5);
+            hashedBytes += [input length] + 5;
+            // maybe wrong
+            unsigned char trailer[6];
+            trailer[0] = 4;
+            trailer[1] = 0x13;
+            trailer[2] = 1;
+            trailer[3] = algo;
+            trailer[4] = packetBody[4];
+            trailer[5] = packetBody[5];
+            
+            EVP_DigestUpdate(hashContext, trailer, 6);
+            //SHA1_Update(hashContext, trailer, 6);
+            EVP_DigestUpdate(hashContext, (packetBody + 6), (packetBody[4]<<8) | packetBody[5]);
+            //SHA1_Update(hashContext, (packetBody + 6), (packetBody[4]<<8) | packetBody[5]);
+            
+            hashedBytes = 27;
+            trailer[0] = 4;
+            trailer[1] = 0xff;
+            trailer[2] = hashedBytes >> 24;
+            trailer[3] = (hashedBytes >> 16) & 0xff;
+            trailer[4] = (hashedBytes >> 8) & 0xff;
+            trailer[5] = hashedBytes & 0xff;
+            
+            EVP_DigestUpdate(hashContext, trailer, 6);
+            //SHA1_Update(hashContext, trailer, 6);
+            EVP_DigestFinal(hashContext, digest, &digestLen);
+            //SHA1_Final(digest, hashContext);
+            //free(hashContext);
+            EVP_MD_CTX_destroy(hashContext);
+            free(userIdBuffer);
+            
+            packetBody[39] = digest[0];
+            packetBody[40] = digest[1];
+            
+            NSLog(@"Digest bytes: %02x%02x",digest[0],digest[1]);
+            
+            NSData *mpi = [keypair signHashWithPrivateKey:digest length:digestLen];
             memcpy((packetBody+43), [mpi bytes], [mpi length]);
             outputPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:2 oldFormat:YES];
         }else {
