@@ -20,5 +20,6 @@
 @property (nonatomic, retain) NSString * publicKeyAlgo;
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * email;
+@property (nonatomic, retain) NSString * fingerprint;
 
 @end

@@ -3,6 +3,7 @@
     <entity name="Identities" representedClassName="Identities" syncable="YES">
         <attribute name="created" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fingerprint" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="keyId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="privateKeystore" optional="YES" attributeType="String" syncable="YES"/>
@@ -20,14 +21,15 @@
         <attribute name="certificate" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="dateSigned" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="fingerprint" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="keyId" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="publicKeyAlgo" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="userId" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Recipient" positionX="-63" positionY="-18" width="128" height="163"/>
-        <element name="Identities" positionX="-45" positionY="72" width="128" height="135"/>
+        <element name="Identities" positionX="-45" positionY="72" width="128" height="150"/>
         <element name="Message" positionX="-36" positionY="99" width="128" height="120"/>
+        <element name="Recipient" positionX="-63" positionY="-18" width="128" height="180"/>
     </elements>
 </model>

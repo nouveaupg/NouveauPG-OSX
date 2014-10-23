@@ -17,6 +17,7 @@
 @dynamic privateKeystore;
 @dynamic publicCertificate;
 @dynamic created;
+@dynamic fingerprint;
 
 @synthesize secondaryKey;
 @synthesize primaryKey;

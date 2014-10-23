@@ -8,10 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "OpenPGPMessage.h"
+#import "CertificateViewController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
     IBOutlet NSView *m_placeholderView;
+    
+    CertificateViewController *m_certificateViewController;
     
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;

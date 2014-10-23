@@ -22,5 +22,6 @@
 @property (nonatomic, retain) NSDate * created;
 @property (strong, nonatomic) OpenPGPPublicKey *primaryKey;
 @property (strong, nonatomic) OpenPGPPublicKey *secondaryKey;
+@property (nonatomic, retain) NSString *fingerprint;
 
 @end

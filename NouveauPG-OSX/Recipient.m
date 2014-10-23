@@ -19,5 +19,6 @@
 @dynamic publicKeyAlgo;
 @dynamic name;
 @dynamic email;
+@dynamic fingerprint;
 
 @end

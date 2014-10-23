@@ -290,6 +290,38 @@
     return nil;
 }
 
+- (void)outlineViewSelectionDidChange:(NSNotification *)notification
+{
+    id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
+    id parent = [m_outlineView parentForItem:selectedItem];
+    
+    if ([parent isEqualToString:@"RECIPIENTS"]) {
+        
+        Recipient *selectedObject = nil;
+        
+        for (Recipient *each in recipients) {
+            if ([[each name] isEqualToString:selectedItem]) {
+                selectedObject = each;
+            }
+        }
+        
+        if([[m_placeholderView subviews] firstObject] == nil) {
+            CertificateViewController *viewController = [[CertificateViewController alloc]initWithNibName:@"CertificateView" bundle:[NSBundle mainBundle]];
+            
+            [m_placeholderView addSubview:viewController.view];
+            
+            m_certificateViewController = viewController;
+        }
+        
+        [m_certificateViewController setUserId:selectedObject.name];
+        [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
+        [m_certificateViewController setEmail:selectedObject.email];
+    }
+    
+    NSLog(@"Selection did change.");
+}
+
+
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate {
     NSLog(@"Importing Recipient from public key certificate.");
     
@@ -329,7 +361,13 @@
         bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]
         && [subkeySig validateSubkey:subkey withSigningKey:primaryKey];
         
-        
+        unsigned char *fingerprint = [primaryKey fingerprintBytes];
+        unsigned int d1,d2,d3,d4,d5;
+        d1 = fingerprint[0] << 24 | fingerprint[1] << 16 | fingerprint[2] << 8 | fingerprint[3];
+        d2 = fingerprint[4] << 24 | fingerprint[5] << 16 | fingerprint[6] << 8 | fingerprint[7];
+        d3 = fingerprint[8] << 24 | fingerprint[9] << 16 | fingerprint[10] << 8 | fingerprint[11];
+        d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
+        d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
         
         NSManagedObjectContext *ctx = [self managedObjectContext];
         Recipient *newRecipient = [NSEntityDescription insertNewObjectForEntityForName:@"Recipient" inManagedObjectContext:ctx];
@@ -337,6 +375,8 @@
         newRecipient.certificate = armouredText;
         newRecipient.keyId = [[primaryKey keyId] uppercaseString];
         newRecipient.added = [NSDate date];
+        newRecipient.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
+        
         
         NSRange firstBracket = [[userIdPkt stringValue] rangeOfString:@"<"];
         if (firstBracket.location != NSNotFound) {

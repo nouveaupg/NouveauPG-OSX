@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0429884319F99FCC00083E70 /* CertificateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429884219F99FCC00083E70 /* CertificateView.xib */; };
-		0429884719F9A37C00083E70 /* CertificateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429884619F9A37C00083E70 /* CertificateView.m */; };
+		0429884F19F9A88700083E70 /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429884E19F9A88700083E70 /* CertificateViewController.m */; };
 		04795ED419C0A1AD000A3142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04795ED319C0A1AD000A3142 /* Cocoa.framework */; };
 		04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04795EDC19C0A1AD000A3142 /* InfoPlist.strings */; };
 		04795EE019C0A1AD000A3142 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04795EDF19C0A1AD000A3142 /* main.m */; };
@@ -47,8 +47,8 @@
 
 /* Begin PBXFileReference section */
 		0429884219F99FCC00083E70 /* CertificateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CertificateView.xib; sourceTree = "<group>"; };
-		0429884519F9A37C00083E70 /* CertificateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateView.h; sourceTree = "<group>"; };
-		0429884619F9A37C00083E70 /* CertificateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateView.m; sourceTree = "<group>"; };
+		0429884D19F9A88700083E70 /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
+		0429884E19F9A88700083E70 /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
 		04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NouveauPG-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795ED319C0A1AD000A3142 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		04795ED619C0A1AD000A3142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -116,15 +116,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0429884419F9A34B00083E70 /* Custom Views */ = {
-			isa = PBXGroup;
-			children = (
-				0429884519F9A37C00083E70 /* CertificateView.h */,
-				0429884619F9A37C00083E70 /* CertificateView.m */,
-			);
-			name = "Custom Views";
-			sourceTree = "<group>";
-		};
 		04795EC719C0A1AD000A3142 = {
 			isa = PBXGroup;
 			children = (
@@ -167,7 +158,6 @@
 		04795ED919C0A1AD000A3142 /* NouveauPG-OSX */ = {
 			isa = PBXGroup;
 			children = (
-				0429884419F9A34B00083E70 /* Custom Views */,
 				04F17B4319D0838400B17752 /* CoreDataModel.xcdatamodeld */,
 				04C9637519CFC3C200A2446C /* OpenPGP */,
 				04C9636719CFC32900A2446C /* CoreData Model */,
@@ -177,6 +167,8 @@
 				04795EEE19C0A1AD000A3142 /* Images.xcassets */,
 				04795EDA19C0A1AD000A3142 /* Supporting Files */,
 				0429884219F99FCC00083E70 /* CertificateView.xib */,
+				0429884D19F9A88700083E70 /* CertificateViewController.h */,
+				0429884E19F9A88700083E70 /* CertificateViewController.m */,
 			);
 			path = "NouveauPG-OSX";
 			sourceTree = "<group>";
@@ -358,8 +350,8 @@
 				04F17B4E19D0952900B17752 /* Message.m in Sources */,
 				04795EE019C0A1AD000A3142 /* main.m in Sources */,
 				04C9638B19CFC3F300A2446C /* OpenPGPEncryptedPacket.m in Sources */,
-				0429884719F9A37C00083E70 /* CertificateView.m in Sources */,
 				04F17B4B19D0951200B17752 /* Recipient.m in Sources */,
+				0429884F19F9A88700083E70 /* CertificateViewController.m in Sources */,
 				04C9639019CFC3F300A2446C /* UserIDPacket.m in Sources */,
 				04F17B4819D092FD00B17752 /* Identities.m in Sources */,
 				04C9638E19CFC3F300A2446C /* OpenPGPPublicKey.m in Sources */,
