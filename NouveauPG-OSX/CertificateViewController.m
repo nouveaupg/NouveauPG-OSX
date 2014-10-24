@@ -7,6 +7,7 @@
 //
 
 #import "CertificateViewController.h"
+#import "AppDelegate.h"
 
 @interface CertificateViewController ()
 
@@ -20,6 +21,15 @@
 
 -(void)setEmail:(NSString *)email {
     [m_emailField setStringValue:email];
+}
+
+-(void)setPublicKey:(OpenPGPPublicKey *)publicKey {
+    m_publicKey = publicKey;
+}
+
+-(IBAction)composeMessage:(id)sender {
+    AppDelegate *appDelegate = [NSApp delegate];
+    [appDelegate composeMessageForPublicKey:m_publicKey];
 }
 
 -(void)setPublicKeyAlgo:(NSString *)publicKeyAlgo {

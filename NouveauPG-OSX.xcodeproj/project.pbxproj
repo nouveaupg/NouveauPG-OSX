@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0429884319F99FCC00083E70 /* CertificateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429884219F99FCC00083E70 /* CertificateView.xib */; };
 		0429884F19F9A88700083E70 /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429884E19F9A88700083E70 /* CertificateViewController.m */; };
+		0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429885019F9B9DB00083E70 /* ComposePanel.xib */; };
+		0429885419F9BB9C00083E70 /* ComposeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885319F9BB9C00083E70 /* ComposeWindowController.m */; };
 		04795ED419C0A1AD000A3142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04795ED319C0A1AD000A3142 /* Cocoa.framework */; };
 		04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04795EDC19C0A1AD000A3142 /* InfoPlist.strings */; };
 		04795EE019C0A1AD000A3142 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04795EDF19C0A1AD000A3142 /* main.m */; };
@@ -49,6 +51,9 @@
 		0429884219F99FCC00083E70 /* CertificateView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CertificateView.xib; sourceTree = "<group>"; };
 		0429884D19F9A88700083E70 /* CertificateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CertificateViewController.h; sourceTree = "<group>"; };
 		0429884E19F9A88700083E70 /* CertificateViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CertificateViewController.m; sourceTree = "<group>"; };
+		0429885019F9B9DB00083E70 /* ComposePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposePanel.xib; sourceTree = "<group>"; };
+		0429885219F9BB9C00083E70 /* ComposeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeWindowController.h; sourceTree = "<group>"; };
+		0429885319F9BB9C00083E70 /* ComposeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeWindowController.m; sourceTree = "<group>"; };
 		04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NouveauPG-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795ED319C0A1AD000A3142 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		04795ED619C0A1AD000A3142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -169,6 +174,9 @@
 				0429884219F99FCC00083E70 /* CertificateView.xib */,
 				0429884D19F9A88700083E70 /* CertificateViewController.h */,
 				0429884E19F9A88700083E70 /* CertificateViewController.m */,
+				0429885019F9B9DB00083E70 /* ComposePanel.xib */,
+				0429885219F9BB9C00083E70 /* ComposeWindowController.h */,
+				0429885319F9BB9C00083E70 /* ComposeWindowController.m */,
 			);
 			path = "NouveauPG-OSX";
 			sourceTree = "<group>";
@@ -320,6 +328,7 @@
 				04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */,
 				0429884319F99FCC00083E70 /* CertificateView.xib in Resources */,
 				04795EEF19C0A1AD000A3142 /* Images.xcassets in Resources */,
+				0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */,
 				04795EE419C0A1AD000A3142 /* Credits.rtf in Resources */,
 				04795EEA19C0A1AD000A3142 /* MainMenu.xib in Resources */,
 			);
@@ -346,6 +355,7 @@
 				04C9638C19CFC3F300A2446C /* OpenPGPMessage.m in Sources */,
 				04C9638919CFC3F300A2446C /* LiteralPacket.m in Sources */,
 				04C9638F19CFC3F300A2446C /* OpenPGPSignature.m in Sources */,
+				0429885419F9BB9C00083E70 /* ComposeWindowController.m in Sources */,
 				04F17B4519D0838400B17752 /* CoreDataModel.xcdatamodeld in Sources */,
 				04F17B4E19D0952900B17752 /* Message.m in Sources */,
 				04795EE019C0A1AD000A3142 /* main.m in Sources */,

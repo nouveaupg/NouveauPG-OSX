@@ -21,4 +21,7 @@
 @dynamic email;
 @dynamic fingerprint;
 
+@synthesize primary;
+@synthesize subkey;
+
 @end

@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "OpenPGPPublicKey.h"
+
 @interface CertificateViewController : NSViewController {
     IBOutlet NSTextField *m_userIdField;
     IBOutlet NSTextField *m_emailField;
@@ -15,6 +17,8 @@
     IBOutlet NSTextField *m_primarySignatureField;
     IBOutlet NSTextField *m_subkeySignatureField;
     IBOutlet NSTextField *m_publicKeyAlgoField;
+    
+    OpenPGPPublicKey *m_publicKey;
 }
 
 -(void)setUserId:(NSString *)userId;
@@ -23,5 +27,8 @@
 -(void)setPrimarySignature: (NSString *)signature;
 -(void)setSubkeySignature: (NSString *)signature;
 -(void)setPublicKeyAlgo: (NSString *)publicKeyAlgo;
+-(void)setPublicKey:(OpenPGPPublicKey *)publicKey;
+
+-(IBAction)composeMessage:(id)sender;
 
 @end

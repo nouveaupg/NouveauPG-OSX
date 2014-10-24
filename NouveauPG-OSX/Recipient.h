@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+#import "OpenPGPPublicKey.h"
+
 
 @interface Recipient : NSManagedObject
 
@@ -21,5 +23,8 @@
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * email;
 @property (nonatomic, retain) NSString * fingerprint;
+
+@property (nonatomic, retain) OpenPGPPublicKey *primary;
+@property (nonatomic, retain) OpenPGPPublicKey *subkey;
 
 @end

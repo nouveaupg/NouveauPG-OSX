@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "OpenPGPMessage.h"
+#import "OpenPGPPublicKey.h"
 #import "CertificateViewController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
@@ -34,5 +35,6 @@
 - (IBAction)removeAction:(id)sender;
 
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
+-(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey;
 
 @end

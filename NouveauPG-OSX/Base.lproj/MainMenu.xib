@@ -681,7 +681,7 @@
                         <rect key="frame" x="0.0" y="37" width="480" height="310"/>
                         <subviews>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="6qS-0O-sBM">
-                                <rect key="frame" x="0.0" y="0.0" width="288" height="310"/>
+                                <rect key="frame" x="0.0" y="0.0" width="157.5" height="310"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <clipView key="contentView" ambiguous="YES" misplaced="YES" id="pAe-Rh-5cv">
                                     <rect key="frame" x="1" y="1" width="286" height="308"/>
@@ -693,7 +693,7 @@
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="283" minWidth="16" maxWidth="1000" id="7CG-uR-35p">
+                                                <tableColumn identifier="AutomaticTableColumnIdentifier.0" width="152.5" minWidth="16" maxWidth="1000" id="7CG-uR-35p">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -707,7 +707,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView identifier="HeaderCell" id="hzB-sm-UlE">
-                                                            <rect key="frame" x="1" y="0.0" width="283" height="17"/>
+                                                            <rect key="frame" x="1" y="0.0" width="152.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R7U-be-eDT">
@@ -724,7 +724,7 @@
                                                             </connections>
                                                         </tableCellView>
                                                         <tableCellView identifier="DataCell" id="F6k-eP-Hai">
-                                                            <rect key="frame" x="1" y="17" width="283" height="17"/>
+                                                            <rect key="frame" x="1" y="17" width="152.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g5D-Om-jyu">
@@ -764,7 +764,7 @@
                                 </scroller>
                             </scrollView>
                             <customView fixedFrame="YES" id="dfG-se-JAu">
-                                <rect key="frame" x="289" y="0.0" width="191" height="310"/>
+                                <rect key="frame" x="158.5" y="0.0" width="321.5" height="310"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
                         </subviews>

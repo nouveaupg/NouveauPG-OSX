@@ -30,6 +30,9 @@
                     <buttonCell key="cell" type="push" title="Compose Message" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3u4-21-ntA">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="composeMessage:" target="-2" id="WYJ-GL-Ve2"/>
+                        </connections>
                     </buttonCell>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MwE-FP-kPH">

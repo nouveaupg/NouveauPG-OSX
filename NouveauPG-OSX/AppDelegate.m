@@ -13,6 +13,7 @@
 #import "OpenPGPPublicKey.h"
 #import "OpenPGPSignature.h"
 #import "Recipient.h"
+#import "ComposeWindowController.h"
 
 @implementation AppDelegate
 
@@ -47,6 +48,23 @@
     NSError *error;
     self.recipients = [ctx executeFetchRequest:fetchRequest error:&error];
     NSLog(@"Loaded %lu recipients (public key certificates) from datastore.",(unsigned long)[self.recipients count]);
+    
+    for(Recipient *each in recipients) {
+        OpenPGPMessage *cert = [[OpenPGPMessage alloc]initWithArmouredText:each.certificate];
+        if ([cert validChecksum]) {
+            for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:cert]) {
+                if ([eachPacket packetTag] == 6) {
+                    each.primary = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
+                else if ([eachPacket packetTag] == 14) {
+                    each.subkey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
+            }
+        }
+        else {
+            NSLog(@"Invalid Public Key certificate for recipient: %@",each.name);
+        }
+    }
     
     if (error) {
         NSLog(@"NSError: %@",[error description]);
@@ -185,6 +203,12 @@
     }
 }
 
+-(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey {
+    
+    ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+    [windowController presentComposePanel:self.window withPublicKey:publicKey];
+}
+
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
     // Save changes in the application's managed object context before the application terminates.
@@ -313,9 +337,29 @@
             m_certificateViewController = viewController;
         }
         
+        if ([selectedObject.subkey publicKeyType] == 1) {
+            NSLog(@"Using subkey to encrypt... (KeyID: %@)",selectedObject.subkey.keyId);
+            [m_certificateViewController setPublicKey:selectedObject.subkey];
+        }
+        else {
+            NSLog(@"Could not use subkey because it is the wrong algo: %ld",(long)[selectedObject.subkey publicKeyType]);
+            
+            if ([selectedObject.primary publicKeyType] == 1) {
+                NSLog(@"Using primary key to encrypt... (KeyID: %@)",selectedObject.primary.keyId);
+                [m_certificateViewController setPublicKey:selectedObject.primary];
+            }
+            else {
+                NSLog(@"Could not use primary key because it is the wrong algo: %ld",(long)[selectedObject.primary publicKeyType]);
+                
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Public key problem" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"NouveauPG cannot encrypt messages for this key because it does not support this type of public key. NouveauPG only supports RSA encrypt/sign keys."];
+                [alert beginSheetModalForWindow:self.window completionHandler:nil];
+            }
+        }
+        
         [m_certificateViewController setUserId:selectedObject.name];
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
+        [m_certificateViewController setFingerprint:selectedObject.fingerprint];
     }
     
     NSLog(@"Selection did change.");
@@ -376,6 +420,8 @@
         newRecipient.keyId = [[primaryKey keyId] uppercaseString];
         newRecipient.added = [NSDate date];
         newRecipient.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
+        newRecipient.primary = primaryKey;
+        newRecipient.subkey = subkey;
         
         
         NSRange firstBracket = [[userIdPkt stringValue] rangeOfString:@"<"];
