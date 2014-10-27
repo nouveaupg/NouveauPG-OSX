@@ -19,6 +19,7 @@
 @synthesize signatureType;
 @synthesize publicKeyAlgo;
 @synthesize hashAlgo;
+@synthesize signatureCreated;
 
 - (id) initWithPacket: (OpenPGPPacket *)packet {
     if (self = [self initWithData:[packet packetData]]) {
@@ -88,6 +89,16 @@
             while (len > 0) {
                 NSUInteger subpacketLength = *ptr;
                 NSLog(@"Hashed subpacket tag: %d; length: %ld",*(ptr+1),len);
+                if (*(ptr + 1) == 2) {
+                    signatureCreated = 0;
+                    signatureCreated |= *(ptr+2) << 24;
+                    signatureCreated |= *(ptr+3) << 16;
+                    signatureCreated |= *(ptr+4) << 8;
+                    signatureCreated |= *(ptr+5);
+                    NSDate *dateCreated = [NSDate dateWithTimeIntervalSince1970:signatureCreated];
+                    NSLog(@"Signature created: %@",[dateCreated description]);
+                }
+                
                 ptr += subpacketLength + 1;
                 len -= subpacketLength + 1;
             }

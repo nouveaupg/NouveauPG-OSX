@@ -23,5 +23,7 @@
 
 @synthesize primary;
 @synthesize subkey;
+@synthesize userIdSig;
+@synthesize subkeySig;
 
 @end

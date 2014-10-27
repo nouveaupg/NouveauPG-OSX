@@ -59,6 +59,15 @@
                 else if ([eachPacket packetTag] == 14) {
                     each.subkey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
                 }
+                else if( [eachPacket packetTag] == 2 ) {
+                    OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
+                    if ([sig signatureType] >= 0x10 && [sig signatureType] <= 0x13) {
+                        each.userIdSig = sig;
+                    }
+                    else if([sig signatureType] == 0x18) {
+                        each.subkeySig = sig;
+                    }
+                }
             }
         }
         else {
@@ -356,10 +365,38 @@
             }
         }
         
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]initWithDateFormat:@"%Y-%m-%d %H:%M:%S" allowNaturalLanguage:NO];
+        
+        NSString *userIdDate =[formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:selectedObject.userIdSig.signatureCreated]];
+        
+        NSString *subkeyDate =[formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:selectedObject.subkeySig.signatureCreated]];
+        
+        
+        
+        
+        [m_certificateViewController setPrimarySignature:[NSString stringWithFormat:@"User ID signed: %@",userIdDate]];
+        [m_certificateViewController setSubkeySignature:[NSString stringWithFormat:@"Subkey signed: %@",subkeyDate]];
         [m_certificateViewController setUserId:selectedObject.name];
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
+        
+        NSInteger newIdenticonCode = 0;
+        
+        NSString *keyId = selectedObject.keyId;
+        for (int i = 0; i < 8; i++) {
+            unichar c = [keyId characterAtIndex:i];
+            if ((int)c < 58) {
+                newIdenticonCode |=  ((int)c-48);
+            }
+            else {
+                newIdenticonCode |= ((int)c-55);
+            }
+            if (i < 7) {
+                newIdenticonCode <<= 4;
+            }
+        }
+        [m_certificateViewController setIdenticon:newIdenticonCode];
     }
     
     NSLog(@"Selection did change.");

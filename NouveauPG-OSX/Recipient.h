@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 
 #import "OpenPGPPublicKey.h"
-
+#import "OpenPGPSignature.h"
 
 @interface Recipient : NSManagedObject
 
@@ -26,5 +26,7 @@
 
 @property (nonatomic, retain) OpenPGPPublicKey *primary;
 @property (nonatomic, retain) OpenPGPPublicKey *subkey;
+@property (nonatomic, retain) OpenPGPSignature *userIdSig;
+@property (nonatomic, retain) OpenPGPSignature *subkeySig;
 
 @end

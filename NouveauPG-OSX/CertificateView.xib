@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="m_emailField" destination="ghA-xF-3a4" id="OrL-of-KYJ"/>
                 <outlet property="m_fingerprintField" destination="2sE-JL-eaB" id="M0d-fD-FWC"/>
+                <outlet property="m_mainIdenticon" destination="kWN-2B-OjP" id="Hga-pD-Hu3"/>
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
@@ -18,25 +19,19 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="c22-O7-iKe">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="338"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPP-1H-eeu">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="338"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate_background" id="yWq-Ia-T80"/>
+                </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i83-ff-I2d">
-                    <rect key="frame" x="17" y="149" width="106" height="106"/>
+                    <rect key="frame" x="50" y="190" width="106" height="106"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="kWN-2B-OjP"/>
                 </imageView>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gbi-oz-s8F">
-                    <rect key="frame" x="279" y="145" width="156" height="32"/>
-                    <buttonCell key="cell" type="push" title="Compose Message" bezelStyle="rounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3u4-21-ntA">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                        <connections>
-                            <action selector="composeMessage:" target="-2" id="WYJ-GL-Ve2"/>
-                        </connections>
-                    </buttonCell>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MwE-FP-kPH">
-                    <rect key="frame" x="128" y="202" width="303" height="17"/>
+                    <rect key="frame" x="169" y="235" width="303" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User Id: First Last" id="z0u-no-5oC">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -44,7 +39,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ghA-xF-3a4">
-                    <rect key="frame" x="128" y="177" width="227" height="17"/>
+                    <rect key="frame" x="169" y="218" width="227" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -52,59 +47,72 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOn-AI-afk">
-                    <rect key="frame" x="59" y="62" width="372" height="17"/>
+                    <rect key="frame" x="90" y="97" width="308" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User ID Signed 2013-10-21 8:56:24 AM" id="sdU-sR-5Kg">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2sE-JL-eaB">
-                    <rect key="frame" x="24" y="97" width="399" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0A:3E:FB:A3 AB:CC:DE:5F 5E:FF:C3:E5 FE:B5:66:CE B7:55:EE:45" id="btS-zC-Tqu">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="znS-xG-agY">
-                    <rect key="frame" x="128" y="152" width="143" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2048-bit RSA" id="iMp-EU-YsO">
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <box autoresizesSubviews="NO" fixedFrame="YES" title="Fingerprint" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="i4v-s7-dyy">
-                    <rect key="frame" x="17" y="89" width="415" height="43"/>
-                    <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="413" height="27"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    </view>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </box>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Af4-9a-hvP">
-                    <rect key="frame" x="7" y="56" width="56" height="29"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate" id="dEW-15-gDH"/>
-                </imageView>
-                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3BE-pR-gKB">
-                    <rect key="frame" x="7" y="20" width="56" height="29"/>
-                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate" id="HF1-c2-oW8"/>
-                </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4M-2D-wcH">
-                    <rect key="frame" x="59" y="26" width="372" height="17"/>
+                    <rect key="frame" x="90" y="51" width="372" height="17"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Subkey Signed 2014-10-21 9:53:32 PM" id="APx-to-1bJ">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="znS-xG-agY">
+                    <rect key="frame" x="169" y="193" width="143" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2048-bit RSA" id="iMp-EU-YsO">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Af4-9a-hvP">
+                    <rect key="frame" x="38" y="91" width="56" height="29"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate" id="dEW-15-gDH"/>
+                </imageView>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3BE-pR-gKB">
+                    <rect key="frame" x="38" y="45" width="56" height="29"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate" id="HF1-c2-oW8"/>
+                </imageView>
+                <box autoresizesSubviews="NO" fixedFrame="YES" title="Fingerprint" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="i4v-s7-dyy">
+                    <rect key="frame" x="48" y="146" width="384" height="43"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="382" height="27"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2sE-JL-eaB">
+                                <rect key="frame" x="16" y="7" width="348" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0A3EFBA3 ABCCDE5F 5EFFC3E5 FEB566CE B755EE45" id="btS-zC-Tqu">
+                                    <font key="font" size="13" name="Monaco"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gbi-oz-s8F">
+                    <rect key="frame" x="295" y="186" width="140" height="32"/>
+                    <buttonCell key="cell" type="bevel" title="Compose Message" bezelStyle="regularSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3u4-21-ntA">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                        <connections>
+                            <action selector="composeMessage:" target="-2" id="WYJ-GL-Ve2"/>
+                        </connections>
+                    </buttonCell>
+                </button>
             </subviews>
-            <point key="canvasLocation" x="60" y="-66"/>
+            <point key="canvasLocation" x="60" y="-33"/>
         </customView>
     </objects>
     <resources>
         <image name="certificate" width="112" height="80"/>
+        <image name="certificate_background" width="535.81396484375" height="379.25582885742188"/>
     </resources>
 </document>

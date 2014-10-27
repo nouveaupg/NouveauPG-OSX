@@ -11,6 +11,7 @@
 		0429884F19F9A88700083E70 /* CertificateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429884E19F9A88700083E70 /* CertificateViewController.m */; };
 		0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429885019F9B9DB00083E70 /* ComposePanel.xib */; };
 		0429885419F9BB9C00083E70 /* ComposeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885319F9BB9C00083E70 /* ComposeWindowController.m */; };
+		0429885A19FC069600083E70 /* IdenticonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885919FC069600083E70 /* IdenticonImage.m */; };
 		04795ED419C0A1AD000A3142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04795ED319C0A1AD000A3142 /* Cocoa.framework */; };
 		04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04795EDC19C0A1AD000A3142 /* InfoPlist.strings */; };
 		04795EE019C0A1AD000A3142 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04795EDF19C0A1AD000A3142 /* main.m */; };
@@ -54,6 +55,8 @@
 		0429885019F9B9DB00083E70 /* ComposePanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ComposePanel.xib; sourceTree = "<group>"; };
 		0429885219F9BB9C00083E70 /* ComposeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeWindowController.h; sourceTree = "<group>"; };
 		0429885319F9BB9C00083E70 /* ComposeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeWindowController.m; sourceTree = "<group>"; };
+		0429885819FC069600083E70 /* IdenticonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdenticonImage.h; sourceTree = "<group>"; };
+		0429885919FC069600083E70 /* IdenticonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdenticonImage.m; sourceTree = "<group>"; };
 		04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NouveauPG-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795ED319C0A1AD000A3142 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		04795ED619C0A1AD000A3142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -177,6 +180,8 @@
 				0429885019F9B9DB00083E70 /* ComposePanel.xib */,
 				0429885219F9BB9C00083E70 /* ComposeWindowController.h */,
 				0429885319F9BB9C00083E70 /* ComposeWindowController.m */,
+				0429885819FC069600083E70 /* IdenticonImage.h */,
+				0429885919FC069600083E70 /* IdenticonImage.m */,
 			);
 			path = "NouveauPG-OSX";
 			sourceTree = "<group>";
@@ -352,6 +357,7 @@
 				04795EE719C0A1AD000A3142 /* AppDelegate.m in Sources */,
 				04C9638819CFC3F300A2446C /* EncryptedEnvelope.m in Sources */,
 				04C9638A19CFC3F300A2446C /* NSString+Base64.m in Sources */,
+				0429885A19FC069600083E70 /* IdenticonImage.m in Sources */,
 				04C9638C19CFC3F300A2446C /* OpenPGPMessage.m in Sources */,
 				04C9638919CFC3F300A2446C /* LiteralPacket.m in Sources */,
 				04C9638F19CFC3F300A2446C /* OpenPGPSignature.m in Sources */,

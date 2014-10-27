@@ -7,6 +7,7 @@
 //
 
 #import "CertificateViewController.h"
+#import "IdenticonImage.h"
 #import "AppDelegate.h"
 
 @interface CertificateViewController ()
@@ -15,12 +16,22 @@
 
 @implementation CertificateViewController
 
+-(void)setIdenticon: (NSInteger)identiconCode {
+    IdenticonImage *identiconImage = [[IdenticonImage alloc]initWithIdenticonCode:identiconCode];
+    [m_mainIdenticon setImage:identiconImage];
+}
+
 -(void)setUserId:(NSString *)userId {
     [m_userIdField setStringValue:userId];
 }
 
 -(void)setEmail:(NSString *)email {
-    [m_emailField setStringValue:email];
+    if(email) {
+        [m_emailField setStringValue:email];
+    }
+    else {
+        [m_emailField setStringValue:@""];
+    }
 }
 
 -(void)setPublicKey:(OpenPGPPublicKey *)publicKey {
