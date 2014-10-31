@@ -14,6 +14,7 @@
 #import "OpenPGPSignature.h"
 #import "Recipient.h"
 #import "ComposeWindowController.h"
+#import "NewIdentityPanel.h"
 
 @implementation AppDelegate
 
@@ -210,6 +211,11 @@
     if (![[self managedObjectContext] save:&error]) {
         [[NSApplication sharedApplication] presentError:error];
     }
+}
+
+-(IBAction)newIdentityPanel:(id)sender {
+    NewIdentityPanel *windowController = [[NewIdentityPanel alloc]initWithWindowNibName:@"NewIdentityPanel"];
+    [windowController presentNewIdentityPanel:self.window];
 }
 
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey {

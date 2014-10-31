@@ -34,6 +34,8 @@
 - (IBAction)addAction:(id)sender;
 - (IBAction)removeAction:(id)sender;
 
+-(IBAction)newIdentityPanel:(id)sender;
+
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey;
 
