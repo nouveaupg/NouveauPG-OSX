@@ -15,6 +15,7 @@
 #import "Recipient.h"
 #import "ComposeWindowController.h"
 #import "NewIdentityPanel.h"
+#import "IdenticonImage.h"
 
 @implementation AppDelegate
 
@@ -30,7 +31,7 @@
     
     OpenSSL_add_all_algorithms();
     
-    m_topLevelNodes = [NSArray arrayWithObjects:@"RECIPIENTS",@"IDENTITIES",@"MESSAGES", nil];
+    m_topLevelNodes = [NSArray arrayWithObjects:@"RECIPIENTS",@"MY IDENTITIES", nil];
     [m_outlineView reloadData];
     [m_outlineView sizeLastColumnToFit];
     [m_outlineView setFloatsGroupRows:NO];
@@ -324,6 +325,37 @@
     else if( [[m_children objectForKey:@"RECIPIENTS"] containsObject:item] ) {
         NSTableCellView *result = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
         [result.textField setStringValue:item];
+        
+        NSString *keyId = nil;
+        for (Recipient *each in recipients) {
+            if([each.name isEqualToString:item]) {
+                keyId = [NSString stringWithString:each.keyId];
+                break;
+            }
+        }
+        
+        if (keyId) {
+            NSInteger newIdenticonCode = 0;
+            
+            for (int i = 0; i < 8; i++) {
+                unichar c = [keyId characterAtIndex:i];
+                if ((int)c < 58) {
+                    newIdenticonCode |=  ((int)c-48);
+                }
+                else {
+                    newIdenticonCode |= ((int)c-55);
+                }
+                if (i < 7) {
+                    newIdenticonCode <<= 4;
+                }
+            }
+            
+            IdenticonImage *identicon = [[IdenticonImage alloc]initWithIdenticonCode:newIdenticonCode];
+            [result.imageView setImage:identicon];
+            
+            
+        }
+        
         return result;
     }
     return nil;
@@ -348,6 +380,20 @@
             CertificateViewController *viewController = [[CertificateViewController alloc]initWithNibName:@"CertificateView" bundle:[NSBundle mainBundle]];
             
             [m_placeholderView addSubview:viewController.view];
+            
+            [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
+                                                            attribute:NSLayoutAttributeLeading
+                                                            relatedBy:NSLayoutRelationEqual
+                                                               toItem:m_placeholderView
+                                                            attribute:NSLayoutAttributeLeft multiplier:1
+                                                             constant:0]];
+            [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
+                                                                          attribute:NSLayoutAttributeCenterX
+                                                                          relatedBy:NSLayoutRelationEqual
+                                                                             toItem:m_placeholderView
+                                                                          attribute:NSLayoutAttributeCenterX multiplier:1
+                                                                           constant:0]];
+            //[m_placeholderView addConstraint:leftConstraint];
             
             m_certificateViewController = viewController;
         }

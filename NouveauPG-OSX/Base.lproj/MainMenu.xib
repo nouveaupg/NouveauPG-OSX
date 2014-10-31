@@ -763,7 +763,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <customView fixedFrame="YES" id="dfG-se-JAu">
+                            <customView autoresizesSubviews="NO" fixedFrame="YES" id="dfG-se-JAu">
                                 <rect key="frame" x="158.5" y="0.0" width="321.5" height="310"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
