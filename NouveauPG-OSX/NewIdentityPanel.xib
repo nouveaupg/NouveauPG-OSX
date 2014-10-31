@@ -6,6 +6,13 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NewIdentityPanel">
             <connections>
+                <outlet property="m_emailField" destination="xYh-fc-db8" id="Usm-Cq-kXb"/>
+                <outlet property="m_leftButton" destination="15d-yl-aAT" id="DzH-sJ-Htg"/>
+                <outlet property="m_passwordField" destination="gff-el-IoC" id="9SH-cu-7rr"/>
+                <outlet property="m_passwordRepeatField" destination="v92-6v-6Dh" id="IET-pu-IMy"/>
+                <outlet property="m_passwordStrengthIndicator" destination="m67-sN-RGE" id="xRq-3U-h4e"/>
+                <outlet property="m_rightButton" destination="uXB-cX-df6" id="2K8-kY-SxY"/>
+                <outlet property="m_usernameField" destination="KiE-wR-3oK" id="yvs-j4-BvZ"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -108,6 +115,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="generateIdentity:" target="-2" id="wwB-Sw-m1j"/>
+                        </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15d-yl-aAT">
                         <rect key="frame" x="132" y="6" width="82" height="32"/>
@@ -118,6 +128,9 @@
 Gw
 </string>
                         </buttonCell>
+                        <connections>
+                            <action selector="dismissPanel:" target="-2" id="94N-TS-54h"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>

@@ -24,6 +24,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 @synthesize recipients;
+@synthesize identities;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {

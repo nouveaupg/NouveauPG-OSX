@@ -28,6 +28,7 @@
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 
 @property (strong,nonatomic) NSArray *recipients;
+@property (strong,nonatomic) NSArray *identities;
 
 - (IBAction)saveAction:(id)sender;
 - (IBAction)importFromClipboard:(id)sender;

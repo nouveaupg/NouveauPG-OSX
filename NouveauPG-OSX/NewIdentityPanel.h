@@ -8,6 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "OpenPGPPublicKey.h"
+#import "OpenPGPPacket.h"
+#import "OpenPGPMessage.h"
+
 @interface NewIdentityPanel : NSWindowController
 
 -(void)presentNewIdentityPanel: (NSWindow *)parent;

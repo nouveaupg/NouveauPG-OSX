@@ -12,8 +12,6 @@
 
 @implementation OpenPGPMessage
 
-#define kVersionString @"NouveauPG 1.10 (iOS)"
-
 #define kParsingHeaders 0
 #define kParsingContent 1
 #define kParsingChecksum 2
