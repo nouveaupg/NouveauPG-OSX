@@ -509,7 +509,13 @@
         NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
         for ( OpenPGPPacket *eachPacket in packets ) {
             if ([eachPacket packetTag] == 6 ) {
-                [self importRecipientFromCertificate:message];
+                if([self importRecipientFromCertificate:message]) {
+                    NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
+                    for (Recipient *each in recipients) {
+                        [newArray addObject:[[NSString alloc]initWithString:each.name]];
+                    }
+                    [m_children setObject:newArray forKey:@"RECIPIENTS"];
+                }
                 break;
             }
             
