@@ -414,7 +414,7 @@
                 NSLog(@"Could not use primary key because it is the wrong algo: %ld",(long)[selectedObject.primary publicKeyType]);
                 
                 NSAlert *alert = [NSAlert alertWithMessageText:@"Public key problem" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"NouveauPG cannot encrypt messages for this key because it does not support this type of public key. NouveauPG only supports RSA encrypt/sign keys."];
-                [alert beginSheetModalForWindow:self.window completionHandler:nil];
+                [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
             }
         }
         
@@ -586,7 +586,48 @@
 }
 
 - (IBAction)removeAction:(id)sender {
+    id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
+    id parent = [m_outlineView parentForItem:selectedItem];
     
+    if (selectedItem) {
+        if ([parent isEqualToString:@"RECIPIENTS"]) {
+            
+            Recipient *selectedObject = nil;
+            
+            for (Recipient *each in recipients) {
+                if ([[each name] isEqualToString:selectedItem]) {
+                    selectedObject = each;
+                }
+            }
+            
+            if (selectedObject) {
+                NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
+                [mutable removeObject:selectedObject];
+                recipients = [[NSArray alloc]initWithArray:mutable];
+                [m_outlineView reloadData];
+                
+                [self.managedObjectContext deleteObject:selectedObject];
+                
+                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient?"];
+                
+                [confirm beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+            }
+        }
+    }
+    else {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"No item selected" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"You must select a Recipient or Identity to delete."];
+        [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+    }
+}
+
+- (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
+    NSError *error;
+    if (returnCode == 1) {
+        [self.managedObjectContext save:&error];
+    }
+    else {
+        [self.managedObjectContext reset];
+    }
 }
 
 @end
