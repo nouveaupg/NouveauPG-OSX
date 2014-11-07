@@ -20,7 +20,6 @@
 @property NSInteger signatureType;
 @property NSInteger publicKeyAlgo;
 @property NSInteger hashAlgo;
-@property NSInteger signatureCreated;
 
 - (id) initWithPacket: (OpenPGPPacket *)packet;
 +(OpenPGPPacket *)signWithUserId:(NSString *)userId publicKey: (OpenPGPPublicKey *)key;

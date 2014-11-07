@@ -53,16 +53,18 @@
         userId = [NSString stringWithString:username];
     }
     
-    UserIDPacket *userIdPkt = [[UserIDPacket alloc]initWithString:userId];
+    NSData *userIdData = [NSData dataWithBytes:[userId UTF8String] length:[userId length]];
+    OpenPGPPacket *userIdPkt = [[OpenPGPPacket alloc]initWithPacketBody:userIdData tag:13 oldFormat:YES];
+    //UserIDPacket *userIdPkt = [[UserIDPacket alloc]initWithString:userId];
     
-    OpenPGPPacket *userIdSig = [OpenPGPSignature signString:userId withKey:primaryKey using:2];
+    OpenPGPPacket *userIdSig = [OpenPGPSignature signUserId:userId withPublicKey:primaryKey];
     OpenPGPPacket *subkeySig = [OpenPGPSignature signSubkey:subkey withPrivateKey:primaryKey];
     
     NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
     [packets addObject:[primaryKey exportPublicKey]];
     [packets addObject:userIdPkt];
-    [packets addObject:[subkey exportPublicKey]];
     [packets addObject:userIdSig];
+    [packets addObject:[subkey exportPublicKey]];
     [packets addObject:subkeySig];
     
     NSMutableData *publicKeyCertData = [[NSMutableData alloc]initWithCapacity:10000];
@@ -102,8 +104,8 @@
     
     [packets addObject:[primaryKey exportPrivateKey:password]];
     [packets addObject:userIdPkt];
-    [packets addObject:[subkey exportPrivateKey:password]];
     [packets addObject:userIdSig];
+    [packets addObject:[subkey exportPrivateKey:password]];
     [packets addObject:subkeySig];
     
     NSString *privateKeystore = [OpenPGPMessage privateKeystoreFromPacketChain:packets];

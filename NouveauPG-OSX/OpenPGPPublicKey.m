@@ -590,30 +590,43 @@
     if ([self hasPrivateKey]) {
         int frameSize = (BN_num_bits(m_rsaKey->n)+7)/8;
         unsigned char asn_sha1[15] = {0x30, 0x21, 0x30, 0x09, 0x06, 0x05, 0x2b, 0x0E, 0x03, 0x02, 0x1A, 0x05, 0x00, 0x04, 0x14};
-        unsigned char asn_sha256[18] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+        
+        unsigned char asn_sha256[19] = {0x30, 0x31, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
             0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01, 0x05,
             0x00, 0x04, 0x20};
-        unsigned char asn_sha512[18] = {0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
+        
+        unsigned char asn_sha512[19] = {0x30, 0x51, 0x30, 0x0d, 0x06, 0x09, 0x60, 0x86,
             0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03, 0x05,
             0x00, 0x04, 0x40};
+        
+        unsigned char *asn;
+        unsigned int asnLen;
+        
+        switch (len) {
+            case 32:
+                asnLen = 19;
+                asn = asn_sha256;
+                break;
+            case 64:
+                asnLen = 19;
+                asn = asn_sha512;
+                break;
+                
+            default:
+                asnLen = 15;
+                asn = asn_sha1;
+                break;
+        }
+        
         unsigned char *frame = malloc(frameSize);
-        
-        unsigned char *asn = asn_sha1;
-        if (len == 32) {
-            asn = asn_sha256;
-        }
-        if (len == 64) {
-            asn = asn_sha512;
-        }
-        
-        int paddingFill = frameSize - (len + 18);
+        int paddingFill = frameSize - (len + asnLen + 3);
         if (frame) {
             frame[0] = 0;
             frame[1] = 1;
             memset((frame+2),0xff, paddingFill);
             frame[2+paddingFill] = 0;
-            memcpy((frame+paddingFill+3), asn, sizeof(asn));
-            memcpy((frame+paddingFill+sizeof(asn)+3), hash, len);
+            memcpy((frame+paddingFill+3), asn, asnLen);
+            memcpy((frame+paddingFill+asnLen+3), hash, len);
             unsigned char *output = malloc(frameSize);
             if (output) {
                 int result = RSA_private_encrypt(frameSize, frame, output, m_rsaKey, RSA_NO_PADDING);

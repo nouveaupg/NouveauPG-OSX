@@ -420,9 +420,9 @@
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc]initWithDateFormat:@"%Y-%m-%d %H:%M:%S" allowNaturalLanguage:NO];
         
-        NSString *userIdDate =[formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:selectedObject.userIdSig.signatureCreated]];
+        NSString *userIdDate =[formatter stringFromDate:[NSDate date]];
         
-        NSString *subkeyDate =[formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:selectedObject.subkeySig.signatureCreated]];
+        NSString *subkeyDate =[formatter stringFromDate:[NSDate date]];
         
         
         
