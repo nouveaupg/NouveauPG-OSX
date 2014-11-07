@@ -281,9 +281,57 @@
     return theData;
 }
 
++ (NSString *)armouredMessageFromPacketChain: (NSArray *)packets type:(NSInteger)messageType {
+    NSString *beginBlock;
+    NSString *endBlock;
+    switch (messageType) {
+        case kPGPPublicCertificate:
+            beginBlock = @"-----BEGIN PGP PUBLIC KEY BLOCK-----\n";
+            endBlock = @"-----END PGP PUBLIC KEY BLOCK-----\n";
+            break;
+        case kPGPPrivateCertificate:
+            beginBlock = @"-----BEGIN PGP PRIVATE KEY BLOCK-----\n";
+            endBlock = @"-----END PGP PRIVATE KEY BLOCK-----\n";
+            break;
+            
+        default:
+            beginBlock = @"-----BEGIN PGP MESSAGE-----\n";
+            endBlock = @"-----END PGP MESSAGE-----\n";
+            break;
+    }
+    
+    NSMutableString *armouredText = [[NSMutableString alloc]initWithString:beginBlock];
+    [armouredText appendFormat:@"Version: %@\nComment: http://nouveauPG.com\n\n",kVersionString];
+    NSMutableData *data = [[NSMutableData alloc]init];
+    for (OpenPGPPacket *eachPacket in packets) {
+        [data appendData:[eachPacket packetData]];
+    }
+    [armouredText appendString:[data base64EncodedString]];
+    unsigned char crcData[3];
+    unsigned char *ptr = (unsigned char *)[data bytes];
+    long crc = 0xB704CEL;
+    for (int i = 0; i < [data length]; i++) {
+        crc ^= (*(ptr+i)) << 16;
+        for (int j = 0; j < 8; j++) {
+            crc <<= 1;
+            if (crc & 0x1000000) {
+                crc ^= 0x1864CFBL;
+            }
+        }
+    }
+    crc &= 0xFFFFFFL;
+    
+    crcData[0] = ( crc >> 16 ) & 0xff;
+    crcData[1] = ( crc >> 8 ) & 0xff;
+    crcData[2] = crc & 0xff;
+    NSData *privateCRC = [NSData dataWithBytes:crcData length:3];
+    [armouredText appendFormat:@"\n=%@\n%@",[privateCRC base64EncodedString],endBlock];
+    return armouredText;
+}
+
 + (NSString *)privateKeystoreFromPacketChain: (NSArray *)packets {
     NSMutableString *armouredText = [[NSMutableString alloc]initWithUTF8String:"-----BEGIN PGP PRIVATE KEY BLOCK-----\n"];
-    [armouredText appendFormat:@"Version: %@\n\n",kVersionString];
+    [armouredText appendFormat:@"Version: %@\nComment: http://nouveauPG.com\n\n",kVersionString];
     NSMutableData *data = [[NSMutableData alloc]init];
     for (OpenPGPPacket *eachPacket in packets) {
         [data appendData:[eachPacket packetData]];
