@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NewIdentityPanel">
@@ -49,7 +49,7 @@
                             <rect key="frame" x="1" y="1" width="289" height="122"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <progressIndicator fixedFrame="YES" maxValue="128" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="m67-sN-RGE">
+                                <progressIndicator fixedFrame="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="m67-sN-RGE">
                                     <rect key="frame" x="18" y="13" width="133" height="20"/>
                                 </progressIndicator>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R0H-7F-yim">
@@ -70,6 +70,9 @@
                                             <string>NSAllRomanInputSourcesLocaleIdentifier</string>
                                         </allowedInputSourceLocales>
                                     </secureTextFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="QFP-mF-Qs5"/>
+                                    </connections>
                                 </secureTextField>
                                 <secureTextField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gff-el-IoC">
                                     <rect key="frame" x="12" y="90" width="259" height="22"/>
@@ -81,6 +84,9 @@
                                             <string>NSAllRomanInputSourcesLocaleIdentifier</string>
                                         </allowedInputSourceLocales>
                                     </secureTextFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="vZx-R4-gcd"/>
+                                    </connections>
                                 </secureTextField>
                                 <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autorecalculatesCellSize="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X1c-T7-Mg9">
                                     <rect key="frame" x="159" y="14" width="112" height="38"/>
@@ -93,16 +99,19 @@
                                     </buttonCell>
                                     <cells>
                                         <column>
-                                            <buttonCell type="radio" title="2048-bit RSA" imagePosition="left" alignment="left" state="on" tag="1" inset="2" id="u1b-Gi-mVa">
+                                            <buttonCell type="radio" title="2048-bit RSA" imagePosition="left" alignment="left" state="on" tag="2048" inset="2" id="u1b-Gi-mVa">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
-                                            <buttonCell type="radio" title="4096-bit RSA" imagePosition="left" alignment="left" inset="2" id="9sa-k3-RHJ">
+                                            <buttonCell type="radio" title="4096-bit RSA" imagePosition="left" alignment="left" tag="4096" inset="2" id="9sa-k3-RHJ">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </column>
                                     </cells>
+                                    <connections>
+                                        <action selector="changeKeySize:" target="-2" id="MpY-P1-deD"/>
+                                    </connections>
                                 </matrix>
                             </subviews>
                         </view>
@@ -137,7 +146,6 @@ Gw
             <connections>
                 <outlet property="delegate" destination="-2" id="0bl-1N-AYu"/>
             </connections>
-            <point key="canvasLocation" x="90.5" y="148"/>
         </window>
     </objects>
 </document>

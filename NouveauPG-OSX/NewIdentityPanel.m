@@ -20,10 +20,13 @@
     IBOutlet NSProgressIndicator *m_passwordStrengthIndicator;
     IBOutlet NSButton *m_rightButton;
     IBOutlet NSButton *m_leftButton;
+    
+    NSInteger m_keyBits;
 }
 
 -(IBAction)dismissPanel:(id)sender;
 -(IBAction)generateIdentity:(id)sender;
+-(IBAction)changeKeySize:(id)sender;
 
 @end
 
@@ -35,13 +38,25 @@
     if ([[m_passwordField stringValue] isEqualToString:[m_passwordRepeatField stringValue]]) {
         password = [NSString stringWithString:[m_passwordField stringValue]];
     }
+    else {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Passwords don't match." defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@""];
+        [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        return;
+    }
     
     
     // validate input
     
-    OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:2048 isSubkey:NO];
-    OpenPGPPublicKey *subkey = [[OpenPGPPublicKey alloc]initWithKeyLength:2048 isSubkey:YES];
+    // generate the actual RSA keys
+    int keyBits = 2048;
+    if (m_keyBits == 4096) {
+        keyBits = 4096;
+    }
     
+    OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:keyBits isSubkey:NO];
+    OpenPGPPublicKey *subkey = [[OpenPGPPublicKey alloc]initWithKeyLength:keyBits isSubkey:YES];
+    
+    // formulate RFC 822 User ID if there is an e-mail address provided or else the name is the full user id
     NSString *username = [m_usernameField stringValue];
     NSString *email = [m_emailField stringValue];
     
@@ -55,8 +70,8 @@
     
     NSData *userIdData = [NSData dataWithBytes:[userId UTF8String] length:[userId length]];
     OpenPGPPacket *userIdPkt = [[OpenPGPPacket alloc]initWithPacketBody:userIdData tag:13 oldFormat:YES];
-    //UserIDPacket *userIdPkt = [[UserIDPacket alloc]initWithString:userId];
     
+    // sign user id and subkey
     OpenPGPPacket *userIdSig = [OpenPGPSignature signUserId:userId withPublicKey:primaryKey];
     OpenPGPPacket *subkeySig = [OpenPGPSignature signSubkey:subkey withPrivateKey:primaryKey];
     
@@ -67,38 +82,7 @@
     [packets addObject:[subkey exportPublicKey]];
     [packets addObject:subkeySig];
     
-    NSMutableData *publicKeyCertData = [[NSMutableData alloc]initWithCapacity:10000];
-    for (OpenPGPPacket *each in packets) {
-        [publicKeyCertData appendData:[each packetData]];
-    }
-
-    unsigned char *messageData = (unsigned char *)[publicKeyCertData bytes];
-    NSUInteger messageSize = [publicKeyCertData length];
-    // RFC 4880
-    
-    long crc = 0xB704CEL;
-    for (int i = 0; i < messageSize; i++) {
-        crc ^= (*(messageData+i)) << 16;
-        for (int j = 0; j < 8; j++) {
-            crc <<= 1;
-            if (crc & 0x1000000) {
-                crc ^= 0x1864CFBL;
-            }
-        }
-    }
-    crc &= 0xFFFFFFL;
-    
-    char data[3];
-    data[0] = ( crc >> 16 ) & 0xff;
-    data[1] = ( crc >> 8 ) & 0xff;
-    data[2] = crc & 0xff;
-    
-    NSData *crcData = [NSData dataWithBytes:data length:3];
-    NSMutableString *stringBuilder = [[NSMutableString alloc]initWithFormat:@"-----BEGIN PGP PUBLIC KEY BLOCK-----\nVersion: %@\n\n",kVersionString];
-    [stringBuilder appendString:[publicKeyCertData base64EncodedString]];
-    [stringBuilder appendFormat:@"\n=%@\n-----END PGP PUBLIC KEY BLOCK-----",[crcData base64EncodedString]];
-    
-    NSString *publicKeyCertificate = [[NSString alloc]initWithString:stringBuilder];
+    NSString *publicKeyCertificate = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPublicCertificate];
     
     [packets removeAllObjects];
     
@@ -108,10 +92,51 @@
     [packets addObject:[subkey exportPrivateKey:password]];
     [packets addObject:subkeySig];
     
-    NSString *privateKeystore = [OpenPGPMessage privateKeystoreFromPacketChain:packets];
+    NSString *privateKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPrivateCertificate];
     
     NSLog(@"%@\n\n%@",publicKeyCertificate,privateKeystore);
     
+}
+
+-(void)controlTextDidChange:(NSNotification *)notification {
+    NSString *passwordValue = [m_passwordField stringValue];
+    
+    NSCharacterSet *uppercase = [NSCharacterSet uppercaseLetterCharacterSet];
+    NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
+    NSCharacterSet *symbols = [NSCharacterSet symbolCharacterSet];
+    NSCharacterSet *punc = [NSCharacterSet punctuationCharacterSet];
+    
+    bool uppercaseFound = false;
+    bool digitsFound = false;
+    bool symbolsFound = false;
+    bool puncFound = false;
+    
+    for (int x = 0; x < [passwordValue length]; x++) {
+        unichar c = [passwordValue characterAtIndex:x];
+        if ([uppercase characterIsMember:c]) {
+            uppercaseFound = true;
+        }
+        if ([digits characterIsMember:c]) {
+            digitsFound = true;
+        }
+        if ([symbols characterIsMember:c]) {
+            symbolsFound = true;
+        }
+        if ([punc characterIsMember:c]) {
+            puncFound = true;
+        }
+    }
+    
+    
+    double progress = (double)[passwordValue length]/16.0;
+    [m_passwordStrengthIndicator setDoubleValue:progress];
+    
+    if ([[m_passwordRepeatField stringValue] isEqualToString:passwordValue]) {
+        [m_rightButton setKeyEquivalent:@"\r"];
+    }
+    else {
+        [m_rightButton setKeyEquivalent:@""];
+    }
 }
 
 -(IBAction)dismissPanel:(id)sender {
@@ -121,7 +146,6 @@
 -(void)presentNewIdentityPanel: (NSWindow *)parent {
     NSWindow *window = [self window];
     
-    [m_rightButton setKeyEquivalent:@"\r"];
     
     [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:nil contextInfo:nil];
     [NSApp runModalForWindow:window];
@@ -129,6 +153,11 @@
     
     [NSApp endSheet:window];
     [window orderOut:self];
+}
+
+-(IBAction)changeKeySize:(id)sender {
+    NSButtonCell *selectedCell = [sender selectedCell];
+    m_keyBits = [selectedCell tag];
 }
 
 - (void)windowDidLoad {
