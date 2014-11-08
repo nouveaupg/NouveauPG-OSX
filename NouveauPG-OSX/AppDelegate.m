@@ -418,17 +418,8 @@
             }
         }
         
-        NSDateFormatter *formatter = [[NSDateFormatter alloc]initWithDateFormat:@"%Y-%m-%d %H:%M:%S" allowNaturalLanguage:NO];
-        
-        NSString *userIdDate =[formatter stringFromDate:[NSDate date]];
-        
-        NSString *subkeyDate =[formatter stringFromDate:[NSDate date]];
-        
-        
-        
-        
-        [m_certificateViewController setPrimarySignature:[NSString stringWithFormat:@"User ID signed: %@",userIdDate]];
-        [m_certificateViewController setSubkeySignature:[NSString stringWithFormat:@"Subkey signed: %@",subkeyDate]];
+        [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
+        [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
         [m_certificateViewController setUserId:selectedObject.name];
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
