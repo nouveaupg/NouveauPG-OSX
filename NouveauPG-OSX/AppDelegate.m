@@ -616,6 +616,10 @@
     return false;
 }
 
+-(void)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd {
+    
+}
+
 #pragma mark UI actions
 
 - (IBAction)importFromClipboard:(id)sender {

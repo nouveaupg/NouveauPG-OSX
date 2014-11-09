@@ -41,5 +41,6 @@
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;
+-(void)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
 
 @end

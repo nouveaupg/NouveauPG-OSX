@@ -11,6 +11,7 @@
 #import "OpenPGPSignature.h"
 #import "NSString+Base64.h"
 #import "Identities.h"
+#import "AppDelegate.h"
 
 @interface NewIdentityPanel () {
     IBOutlet NSTextField *m_usernameField;
@@ -94,7 +95,11 @@
     
     NSString *privateKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPrivateCertificate];
     
+    
     NSLog(@"%@\n\n%@",publicKeyCertificate,privateKeystore);
+    
+    AppDelegate *appDelegate = [[NSApplication sharedApplication] delegate];
+    [appDelegate generateNewIdentity:userId keySize:keyBits password:password];
     
 }
 
