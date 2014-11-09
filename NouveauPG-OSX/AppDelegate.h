@@ -36,6 +36,7 @@
 - (IBAction)removeAction:(id)sender;
 
 -(IBAction)newIdentityPanel:(id)sender;
+-(IBAction)importFromFile:(id)sender;
 
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;

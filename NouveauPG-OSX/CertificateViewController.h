@@ -19,6 +19,10 @@
     IBOutlet NSTextField *m_publicKeyAlgoField;
     IBOutlet NSImageCell *m_mainIdenticon;
     IBOutlet NSTextField *m_keyIdField;
+    IBOutlet NSImageView *m_subkeyCertIcon;
+    IBOutlet NSImageView *m_userIdCertIcon;
+    IBOutlet NSTextField *m_userIdCertLabel;
+    IBOutlet NSTextField *m_subkeyCertLabel;
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;

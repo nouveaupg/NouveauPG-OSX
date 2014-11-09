@@ -78,6 +78,7 @@
 		04795EFC19C0A1AE000A3142 /* NouveauPG-OSXTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPG-OSXTests-Info.plist"; sourceTree = "<group>"; };
 		04795EFE19C0A1AE000A3142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04795F0019C0A1AE000A3142 /* NouveauPG_OSXTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NouveauPG_OSXTests.m; sourceTree = "<group>"; };
+		048D726F1A101C8100793F2F /* NouveauPG-OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "NouveauPG-OSX.entitlements"; sourceTree = "<group>"; };
 		04C9637619CFC3F300A2446C /* EncryptedEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptedEnvelope.h; sourceTree = "<group>"; };
 		04C9637719CFC3F300A2446C /* EncryptedEnvelope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncryptedEnvelope.m; sourceTree = "<group>"; };
 		04C9637819CFC3F300A2446C /* LiteralPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiteralPacket.h; sourceTree = "<group>"; };
@@ -171,6 +172,7 @@
 		04795ED919C0A1AD000A3142 /* NouveauPG-OSX */ = {
 			isa = PBXGroup;
 			children = (
+				048D726F1A101C8100793F2F /* NouveauPG-OSX.entitlements */,
 				04F17B4319D0838400B17752 /* CoreDataModel.xcdatamodeld */,
 				04C9637519CFC3C200A2446C /* OpenPGP */,
 				04C9636719CFC32900A2446C /* CoreData Model */,
@@ -309,6 +311,13 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "John Hill";
 				TargetAttributes = {
+					04795ECF19C0A1AD000A3142 = {
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
+					};
 					04795EF319C0A1AE000A3142 = {
 						TestTargetID = 04795ECF19C0A1AD000A3142;
 					};
@@ -513,6 +522,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NouveauPG-OSX/NouveauPG-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
@@ -527,6 +538,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NouveauPG-OSX/NouveauPG-OSX.entitlements";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";

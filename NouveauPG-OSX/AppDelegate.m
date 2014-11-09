@@ -220,6 +220,24 @@
     [windowController presentNewIdentityPanel:self.window];
 }
 
+-(IBAction)importFromFile:(id)sender {
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    
+    // display the panel
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSFileHandlingPanelOKButton) {
+            
+            // grab a reference to what has been selected
+            NSURL *theDocument = [[panel URLs]objectAtIndex:0];
+            
+            // write our file name to a label
+            NSString *theString = [NSString stringWithFormat:@"%@", theDocument];
+            NSLog(@"%@",theString);
+            
+        }
+    }];
+}
+
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId {
     
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
@@ -423,8 +441,57 @@
             }
         }
         
-        [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
-        [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
+        OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedObject.certificate];
+        
+        OpenPGPSignature *userIdSig;
+        OpenPGPSignature *subkeySig;
+        OpenPGPPublicKey *primaryKey;
+        OpenPGPPublicKey *subkey;
+        UserIDPacket *userIdPkt;
+        if ([message validChecksum]) {
+            NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
+            for (OpenPGPPacket *each in packets ) {
+                if ([each packetTag] == 6) {
+                    primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:each];
+                }
+                else if ([each packetTag] == 13) {
+                    userIdPkt = [[UserIDPacket alloc]initWithPacket:each];
+                }
+                else if ([each packetTag] == 14) {
+                    subkey = [[OpenPGPPublicKey alloc]initWithPacket:each];
+                }
+                else if([each packetTag] == 2) {
+                    OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:each];
+                    if (sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
+                        userIdSig = sig;
+                    }
+                    else if (sig.signatureType == 0x18) {
+                        subkeySig = sig;
+                    }
+                }
+            }
+        }
+        
+        if ([userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]) {
+            [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
+        }
+        else {
+            [m_certificateViewController setPrimarySignature:@"User ID not verified!"];
+        }
+        
+        if (subkeySig) {
+            if ([subkeySig validateSubkey:subkey withSigningKey:primaryKey]) {
+                [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
+            }
+            else {
+                [m_certificateViewController setSubkeySignature:@"Subkey not verified!"];
+            }
+        }
+        else {
+            [m_certificateViewController setSubkeySignature:nil];
+        }
+        
+        
         [m_certificateViewController setUserId:selectedObject.name];
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
@@ -490,8 +557,9 @@
         }
         
         // TODO: check certificate for errors before importing...
-        bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]
-        && [subkeySig validateSubkey:subkey withSigningKey:primaryKey];
+        bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]];
+        
+        //[subkeySig validateSubkey:subkey withSigningKey:primaryKey];
         
         unsigned char *fingerprint = [primaryKey fingerprintBytes];
         unsigned int d1,d2,d3,d4,d5;
@@ -560,13 +628,38 @@
         NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
         for ( OpenPGPPacket *eachPacket in packets ) {
             if ([eachPacket packetTag] == 6 ) {
-                if([self importRecipientFromCertificate:message]) {
-                    NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
-                    for (Recipient *each in recipients) {
-                        [newArray addObject:[[NSString alloc]initWithString:each.name]];
+                OpenPGPPublicKey *publicKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                NSString *keyId = [publicKey keyId];
+                bool bFound = false;
+                for (Recipient *each in recipients) {
+                    if ([[keyId uppercaseString] isEqualToString:each.keyId]) {
+                        NSLog(@"%@",each.keyId);
+                        bFound = true;
+                        break;
                     }
-                    [m_children setObject:newArray forKey:@"RECIPIENTS"];
                 }
+                
+                if (!bFound) {
+                    if([self importRecipientFromCertificate:message]) {
+                        NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
+                        for (Recipient *each in recipients) {
+                            [newArray addObject:[[NSString alloc]initWithString:each.name]];
+                        }
+                        [m_children setObject:newArray forKey:@"RECIPIENTS"];
+                        [m_outlineView reloadData];
+                    }
+                    else {
+                        NSAlert *alert = [NSAlert alertWithMessageText:@"Couldn't add certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Unspecified error occured when importing public key certificate. Public key certificate invalid or incompatible with NouveauPG."];
+                        [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                    }
+                    
+                }
+                else {
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"Already exists" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"An identity with the primary Key ID: %@ already exists.",keyId];
+                    [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                }
+                
+                
                 break;
             }
             
@@ -575,7 +668,8 @@
         }
     }
     else {
-        NSLog(@"Error: No valid OpenPGP message found on clipboard.");
+        NSAlert *alert = [NSAlert alertWithMessageText:@"No input" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"No valid OpenPGP message was found on the clipboard."];
+        [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
     }
 }
 

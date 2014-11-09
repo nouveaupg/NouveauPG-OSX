@@ -69,7 +69,13 @@
     [m_primarySignatureField setStringValue:signature];
 }
 -(void)setSubkeySignature: (NSString *)signature {
-    [m_subkeySignatureField setStringValue:signature];
+    if(signature) {
+        [m_subkeySignatureField setStringValue:signature];
+        [m_subkeyCertIcon setHidden:NO];
+    } else {
+        [m_subkeySignatureField setStringValue:@""];
+        [m_subkeyCertIcon setHidden:YES];
+    }
 }
 
 - (void)viewDidLoad {
