@@ -18,8 +18,10 @@
     IBOutlet NSTextField *m_subkeySignatureField;
     IBOutlet NSTextField *m_publicKeyAlgoField;
     IBOutlet NSImageCell *m_mainIdenticon;
+    IBOutlet NSTextField *m_keyIdField;
     
     OpenPGPPublicKey *m_publicKey;
+    NSString *m_userId;
 }
 
 -(void)setUserId:(NSString *)userId;
@@ -30,7 +32,11 @@
 -(void)setPublicKeyAlgo: (NSString *)publicKeyAlgo;
 -(void)setPublicKey:(OpenPGPPublicKey *)publicKey;
 -(void)setIdenticon: (NSInteger)identiconCode;
+-(void)setKeyId:(NSString *)keyId;
 
 -(IBAction)composeMessage:(id)sender;
+-(IBAction)publicKeyCertificate:(id)sender;
+
+@property (copy) NSString *certificate;
 
 @end

@@ -13,15 +13,18 @@
     IBOutlet NSButton *m_leftButton;
     IBOutlet NSButton *m_centerButton;
     IBOutlet NSButton *m_rightButton;
+    IBOutlet NSTextField *m_prompt;
     
     IBOutlet NSTextView *m_textView;
     
+    NSString *m_userId;
     bool encrypted;
     
     OpenPGPPublicKey *m_publicKey;
 }
 
--(void)presentComposePanel: (NSWindow *)parent withPublicKey:(OpenPGPPublicKey *)publicKey;
+-(void)presentComposePanel: (NSWindow *)parent withPublicKey:(OpenPGPPublicKey *)publicKey UserId:(NSString *)userId;
+-(void)presentPublicKeyCertPanel: (NSWindow *)parent publicKeyCertificate:(NSString *)certText UserId:(NSString *)userId;
 -(IBAction)dismiss:(id)sender;
 -(IBAction)leftButton:(id)sender;
 -(IBAction)centerButton:(id)sender;

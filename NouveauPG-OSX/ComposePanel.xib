@@ -7,6 +7,7 @@
         <customObject id="-2" userLabel="File's Owner" customClass="ComposeWindowController">
             <connections>
                 <outlet property="m_leftButton" destination="WWm-5U-KqD" id="wY4-mu-O8K"/>
+                <outlet property="m_prompt" destination="EXO-uO-PkI" id="dkJ-LC-hdr"/>
                 <outlet property="m_rightButton" destination="QzT-cL-F6Q" id="HW2-ex-LA7"/>
                 <outlet property="m_textView" destination="ej9-t6-Tci" id="T2E-7B-3mk"/>
                 <outlet property="window" destination="Vzo-me-KtL" id="IP0-m0-YVf"/>
@@ -28,7 +29,7 @@
                             <rect key="frame" x="1" y="1" width="238" height="133"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView ambiguous="YES" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="ej9-t6-Tci">
+                                <textView ambiguous="YES" importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="ej9-t6-Tci">
                                     <rect key="frame" x="0.0" y="0.0" width="246" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

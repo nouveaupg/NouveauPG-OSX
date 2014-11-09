@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="m_emailField" destination="ghA-xF-3a4" id="OrL-of-KYJ"/>
                 <outlet property="m_fingerprintField" destination="2sE-JL-eaB" id="M0d-fD-FWC"/>
+                <outlet property="m_keyIdField" destination="9Lj-LQ-1hh" id="e1W-gn-H03"/>
                 <outlet property="m_mainIdenticon" destination="kWN-2B-OjP" id="Hga-pD-Hu3"/>
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
@@ -43,6 +44,14 @@
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOn-AI-afk">
+                    <rect key="frame" x="84" y="50" width="148" height="20"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User ID signature verified." id="sdU-sR-5Kg">
+                        <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
+                        <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
@@ -105,12 +114,15 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="publicKeyCertificate:" target="-2" id="ZNJ-o6-Qeg"/>
+                    </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOn-AI-afk">
-                    <rect key="frame" x="84" y="50" width="148" height="20"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User ID signature verified." id="sdU-sR-5Kg">
-                        <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
-                        <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Lj-LQ-1hh">
+                    <rect key="frame" x="256" y="192" width="166" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="(0A5E5FEA)" id="DfO-ZB-Xa4">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>

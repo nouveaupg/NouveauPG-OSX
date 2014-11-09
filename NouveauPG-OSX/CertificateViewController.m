@@ -16,12 +16,15 @@
 
 @implementation CertificateViewController
 
+@synthesize certificate;
+
 -(void)setIdenticon: (NSInteger)identiconCode {
     IdenticonImage *identiconImage = [[IdenticonImage alloc]initWithIdenticonCode:identiconCode];
     [m_mainIdenticon setImage:identiconImage];
 }
 
 -(void)setUserId:(NSString *)userId {
+    m_userId = [[NSString alloc]initWithString:userId];
     [m_userIdField setStringValue:userId];
 }
 
@@ -38,9 +41,18 @@
     m_publicKey = publicKey;
 }
 
+-(void)setKeyId:(NSString *)keyId {
+    [m_keyIdField setStringValue:keyId];
+}
+
+-(IBAction)publicKeyCertificate:(id)sender {
+    AppDelegate *appDelegate = [NSApp delegate];
+    [appDelegate presentPublicKeyCertificate:certificate UserID:m_userId];
+}
+
 -(IBAction)composeMessage:(id)sender {
     AppDelegate *appDelegate = [NSApp delegate];
-    [appDelegate composeMessageForPublicKey:m_publicKey];
+    [appDelegate composeMessageForPublicKey:m_publicKey UserID:m_userId];
 }
 
 -(void)setPublicKeyAlgo:(NSString *)publicKeyAlgo {

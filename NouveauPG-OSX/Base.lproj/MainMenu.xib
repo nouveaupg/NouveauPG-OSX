@@ -677,17 +677,17 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="377"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <splitView ambiguous="YES" misplaced="YES" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ol-qn-Nkp">
-                        <rect key="frame" x="0.0" y="37" width="480" height="310"/>
+                    <splitView dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2ol-qn-Nkp">
+                        <rect key="frame" x="0.0" y="37" width="480" height="340"/>
                         <subviews>
                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="26" horizontalPageScroll="10" verticalLineScroll="26" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="6qS-0O-sBM">
-                                <rect key="frame" x="0.0" y="0.0" width="157.5" height="310"/>
+                                <rect key="frame" x="0.0" y="0.0" width="158" height="340"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                <clipView key="contentView" ambiguous="YES" misplaced="YES" drawsBackground="NO" id="pAe-Rh-5cv">
+                                <clipView key="contentView" drawsBackground="NO" id="pAe-Rh-5cv">
                                     <rect key="frame" x="1" y="1" width="286" height="308"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <outlineView appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" indentationPerLevel="16" outlineTableColumn="7CG-uR-35p" id="lgJ-bY-Pko">
+                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" indentationPerLevel="16" outlineTableColumn="7CG-uR-35p" id="lgJ-bY-Pko">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -764,7 +764,7 @@
                                 </scroller>
                             </scrollView>
                             <customView autoresizesSubviews="NO" fixedFrame="YES" id="dfG-se-JAu">
-                                <rect key="frame" x="158.5" y="0.0" width="321.5" height="310"/>
+                                <rect key="frame" x="159" y="0.0" width="321" height="340"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
                         </subviews>
@@ -773,17 +773,20 @@
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
-                    <button verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
-                        <rect key="frame" x="9" y="353" width="171" height="25"/>
-                        <buttonCell key="cell" type="roundTextured" title="Import from Clipboard" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nwU-a2-AdP">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
+                        <rect key="frame" x="64" y="8" width="150" height="19"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="171" id="YeC-H5-GyH"/>
+                        </constraints>
+                        <buttonCell key="cell" type="recessed" title="Import from Clipboard" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nwU-a2-AdP">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="systemBold" size="12"/>
                         </buttonCell>
                         <connections>
                             <action selector="importFromClipboard:" target="Voe-Tx-rLC" id="UIB-eU-vGC"/>
                         </connections>
                     </button>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="o06-96-Bch">
+                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o06-96-Bch">
                         <rect key="frame" x="9" y="8" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="21" id="4HE-Ei-Uml"/>
@@ -801,7 +804,6 @@
                         <rect key="frame" x="35" y="8" width="21" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="BsQ-Bl-f5C"/>
-                            <constraint firstAttribute="width" constant="21" id="dj7-TQ-yOk"/>
                         </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xxo-2s-1AZ">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -811,16 +813,29 @@
                             </connections>
                         </buttonCell>
                     </button>
+                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AiJ-Hs-Jr7">
+                        <rect key="frame" x="222" y="8" width="123" height="19"/>
+                        <buttonCell key="cell" type="recessed" title="Import from File..." bezelStyle="recessed" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QTg-VU-PP0">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="systemBold" size="12"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="2ol-qn-Nkp" secondAttribute="trailing" id="3un-HE-D3N"/>
                     <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" id="54T-y7-xgJ"/>
                     <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="o06-96-Bch" secondAttribute="trailing" constant="4" id="EGe-ml-g6m"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="34" id="F27-f0-XIY"/>
+                    <constraint firstItem="2ol-qn-Nkp" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="FOp-HU-zyq"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="PoA-hg-9Y0" secondAttribute="trailing" constant="8" symbolic="YES" id="GRU-GX-7Ik"/>
+                    <constraint firstItem="2ol-qn-Nkp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="Hwy-wz-vjN"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="10" id="PHK-ch-uQh"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="64" id="UBU-St-ojZ"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="VBT-QP-myW"/>
                     <constraint firstAttribute="bottom" secondItem="PoA-hg-9Y0" secondAttribute="bottom" constant="8" id="bjL-fF-Itb"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="centerY" secondItem="AiJ-Hs-Jr7" secondAttribute="centerY" id="caS-L6-RkN"/>
                     <constraint firstAttribute="trailing" secondItem="2ol-qn-Nkp" secondAttribute="trailing" id="eZr-pK-6QJ"/>
-                    <constraint firstItem="2ol-qn-Nkp" firstAttribute="top" secondItem="tlu-MQ-7cL" secondAttribute="bottom" constant="8" id="fgU-HD-gRj"/>
-                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="9" id="wWE-Tu-hef"/>
+                    <constraint firstItem="AiJ-Hs-Jr7" firstAttribute="leading" secondItem="tlu-MQ-7cL" secondAttribute="trailing" constant="8" symbolic="YES" id="gda-8g-xCq"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" id="gxz-cN-Juf"/>
                     <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="o06-96-Bch" secondAttribute="top" id="ybR-D5-nWl"/>
                 </constraints>
             </view>

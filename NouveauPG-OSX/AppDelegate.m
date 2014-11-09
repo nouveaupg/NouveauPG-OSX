@@ -220,10 +220,15 @@
     [windowController presentNewIdentityPanel:self.window];
 }
 
--(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey {
+-(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId {
     
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
-    [windowController presentComposePanel:self.window withPublicKey:publicKey];
+    [windowController presentComposePanel:self.window withPublicKey:publicKey UserId:userId];
+}
+
+-(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId {
+    ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+    [windowController presentPublicKeyCertPanel:self.window publicKeyCertificate:certificate UserId:userId];
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
@@ -424,6 +429,8 @@
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
+        [m_certificateViewController setKeyId:[NSString stringWithFormat:@"(Key ID: %@)",selectedObject.keyId]];
+        m_certificateViewController.certificate = selectedObject.certificate;
         
         NSInteger newIdenticonCode = 0;
         

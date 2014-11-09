@@ -35,6 +35,8 @@
         [m_textView selectAll:self];
         [m_rightButton setTitle:@"Copy"];
         [m_leftButton setHidden:NO];
+        [m_leftButton setTitle:@"Save as file..."];
+        [m_prompt setStringValue:[NSString stringWithFormat:@"Encrypted message for %@",m_userId]];
         
         encrypted = true;
     }
@@ -50,7 +52,29 @@
     [NSApp stopModal];
 }
 
-- (void)presentComposePanel:(NSWindow *)parent withPublicKey: (OpenPGPPublicKey *)publicKey {
+-(void)presentPublicKeyCertPanel: (NSWindow *)parent publicKeyCertificate:(NSString *)certText UserId:(NSString *)userId {
+    NSWindow *window = [self window];
+    
+    //[parent beginCriticalSheet:window completionHandler:^(NSModalResponse returnCode) {
+    //    NSLog(@"completionHandler called");
+    //}];
+    m_userId = [[NSString alloc]initWithString:userId];
+    [m_prompt setStringValue:[NSString stringWithFormat:@"Public key certificate for %@",userId]];
+    [m_rightButton setKeyEquivalent:@"\r"];
+    [m_rightButton setTitle:@"Copy"];
+    [m_leftButton setTitle:@"Save to file..."];
+    [m_leftButton setHidden:NO];
+    [m_textView setString:certText];
+    
+    [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:@selector(dismiss:) contextInfo:nil];
+    [NSApp runModalForWindow:window];
+    // sheet is up here...
+    
+    [NSApp endSheet:window];
+    [window orderOut:self];
+}
+
+- (void)presentComposePanel:(NSWindow *)parent withPublicKey: (OpenPGPPublicKey *)publicKey UserId:(NSString *)userId {
     NSWindow *window = [self window];
     
     m_publicKey = publicKey;
@@ -58,7 +82,12 @@
     //[parent beginCriticalSheet:window completionHandler:^(NSModalResponse returnCode) {
     //    NSLog(@"completionHandler called");
     //}];
+    m_userId = [[NSString alloc]initWithString:userId];
+    [m_prompt setStringValue:[NSString stringWithFormat:@"Compose secret message for %@",userId]];
     [m_rightButton setKeyEquivalent:@"\r"];
+    [m_leftButton setTitle:@"Load from file..."];
+    [m_leftButton setHidden:NO];
+    
     [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:@selector(dismiss:) contextInfo:nil];
     [NSApp runModalForWindow:window];
     // sheet is up here...
