@@ -50,7 +50,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOn-AI-afk">
-                    <rect key="frame" x="84" y="50" width="148" height="20"/>
+                    <rect key="frame" x="84" y="40" width="148" height="20"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User ID signature verified." id="sdU-sR-5Kg">
                         <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
                         <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -58,7 +58,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4M-2D-wcH">
-                    <rect key="frame" x="274" y="50" width="148" height="20"/>
+                    <rect key="frame" x="274" y="40" width="148" height="20"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Subkey signature verified." id="APx-to-1bJ">
                         <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
                         <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -73,26 +73,16 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nTj-ma-2BO">
-                    <rect key="frame" x="53" y="143" width="179" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Compose Message" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zyO-lS-p6O">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="composeMessage:" target="-2" id="9TC-dc-tpz"/>
-                    </connections>
-                </button>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2UY-La-j4S">
-                    <rect key="frame" x="51" y="49" width="27" height="23"/>
+                    <rect key="frame" x="51" y="39" width="27" height="23"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="userid" id="ez3-T6-aPT"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdR-0g-747">
-                    <rect key="frame" x="250" y="48" width="18" height="24"/>
+                    <rect key="frame" x="250" y="38" width="18" height="24"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="subkey" id="TrM-sO-KDo"/>
                 </imageView>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Fingerprint" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="i4v-s7-dyy">
-                    <rect key="frame" x="48" y="83" width="384" height="43"/>
+                    <rect key="frame" x="48" y="66" width="384" height="43"/>
                     <view key="contentView">
                         <rect key="frame" x="1" y="1" width="382" height="27"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -111,7 +101,7 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a43-S7-XPo">
-                    <rect key="frame" x="250" y="143" width="173" height="25"/>
+                    <rect key="frame" x="253" y="145" width="173" height="25"/>
                     <buttonCell key="cell" type="roundTextured" title="Public Key Certificate" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YlT-NG-95C">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -128,6 +118,30 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
+                    <rect key="frame" x="253" y="115" width="173" height="25"/>
+                    <buttonCell key="cell" type="squareTextured" title="Private Keystore" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
+                    <rect key="frame" x="51" y="115" width="181" height="25"/>
+                    <buttonCell key="cell" type="squareTextured" title="Decrypt Message" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                </button>
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nTj-ma-2BO">
+                    <rect key="frame" x="53" y="145" width="179" height="25"/>
+                    <buttonCell key="cell" type="roundTextured" title="Compose Message" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zyO-lS-p6O">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="composeMessage:" target="-2" id="9TC-dc-tpz"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="60" y="-33"/>
         </customView>

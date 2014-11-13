@@ -45,17 +45,12 @@
         return;
     }
     
-    
     // validate input
-    
-    // generate the actual RSA keys
+
     int keyBits = 2048;
     if (m_keyBits == 4096) {
         keyBits = 4096;
     }
-    
-    OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:keyBits isSubkey:NO];
-    OpenPGPPublicKey *subkey = [[OpenPGPPublicKey alloc]initWithKeyLength:keyBits isSubkey:YES];
     
     // formulate RFC 822 User ID if there is an e-mail address provided or else the name is the full user id
     NSString *username = [m_usernameField stringValue];
@@ -68,35 +63,6 @@
     else {
         userId = [NSString stringWithString:username];
     }
-    
-    NSData *userIdData = [NSData dataWithBytes:[userId UTF8String] length:[userId length]];
-    OpenPGPPacket *userIdPkt = [[OpenPGPPacket alloc]initWithPacketBody:userIdData tag:13 oldFormat:YES];
-    
-    // sign user id and subkey
-    OpenPGPPacket *userIdSig = [OpenPGPSignature signUserId:userId withPublicKey:primaryKey];
-    OpenPGPPacket *subkeySig = [OpenPGPSignature signSubkey:subkey withPrivateKey:primaryKey];
-    
-    NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
-    [packets addObject:[primaryKey exportPublicKey]];
-    [packets addObject:userIdPkt];
-    [packets addObject:userIdSig];
-    [packets addObject:[subkey exportPublicKey]];
-    [packets addObject:subkeySig];
-    
-    NSString *publicKeyCertificate = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPublicCertificate];
-    
-    [packets removeAllObjects];
-    
-    [packets addObject:[primaryKey exportPrivateKey:password]];
-    [packets addObject:userIdPkt];
-    [packets addObject:userIdSig];
-    [packets addObject:[subkey exportPrivateKey:password]];
-    [packets addObject:subkeySig];
-    
-    NSString *privateKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPrivateCertificate];
-    
-    
-    NSLog(@"%@\n\n%@",publicKeyCertificate,privateKeystore);
     
     AppDelegate *appDelegate = [[NSApplication sharedApplication] delegate];
     [appDelegate generateNewIdentity:userId keySize:keyBits password:password];

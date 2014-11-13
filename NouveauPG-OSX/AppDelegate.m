@@ -16,6 +16,7 @@
 #import "ComposeWindowController.h"
 #import "NewIdentityPanel.h"
 #import "IdenticonImage.h"
+#import "Identities.h"
 
 @implementation AppDelegate
 
@@ -87,6 +88,20 @@
         [newArray addObject:eachRecipient.name];
     }
     [m_children setObject:newArray forKey:@"RECIPIENTS"];
+    
+    fetchRequest = [[NSFetchRequest alloc] init];
+    entity = [NSEntityDescription entityForName:@"Identities"
+                                              inManagedObjectContext:ctx];
+    [fetchRequest setEntity:entity];
+    
+    self.identities = [ctx executeFetchRequest:fetchRequest error:&error];
+    NSLog(@"Loaded %lu identites from datastore.",(unsigned long)[self.identities count]);
+    
+    newArray = [[NSMutableArray alloc]init];
+    for (Identities *each in identities) {
+        [newArray addObject:each.name];
+    }
+    [m_children setObject:newArray forKey:@"MY IDENTITIES"];
 }
 
 // -------------------------------------------------------------------------------
@@ -305,12 +320,21 @@
         NSString *returnValue =  [[m_children objectForKey:item] objectAtIndex:index];
         return returnValue;
     }
+    else if( [item isEqualToString:@"MY IDENTITIES"] ) {
+        NSString *returnValue = [[m_children objectForKey:item] objectAtIndex:index];
+        return returnValue;
+    }
     return @"";
 }
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item {
     if ([item isEqualToString:@"RECIPIENTS"]) {
         if ([recipients count] > 0) {
+            return YES;
+        }
+    }
+    else if ([item isEqualToString:@"MY IDENTITIES"]) {
+        if ([identities count] > 0) {
             return YES;
         }
     }
@@ -323,6 +347,9 @@
         return [m_topLevelNodes count];
     }
     else if([item isEqualToString:@"RECIPIENTS"]) {
+        return [[m_children objectForKey:item] count];
+    }
+    else if ([item isEqualToString:@"MY IDENTITIES"]) {
         return [[m_children objectForKey:item] count];
     }
     return 0;
@@ -379,6 +406,46 @@
             
             
         }
+        
+        
+        
+        return result;
+    }
+    else if( [[m_children objectForKey:@"MY IDENTITIES"] containsObject:item] ) {
+        NSTableCellView *result = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
+        [result.textField setStringValue:item];
+        
+        NSString *keyId = nil;
+        for (Identities *each in identities) {
+            if([each.name isEqualToString:item]) {
+                keyId = [NSString stringWithString:each.keyId];
+                break;
+            }
+        }
+        
+        if (keyId) {
+            NSInteger newIdenticonCode = 0;
+            
+            for (int i = 0; i < 8; i++) {
+                unichar c = [keyId characterAtIndex:i];
+                if ((int)c < 58) {
+                    newIdenticonCode |=  ((int)c-48);
+                }
+                else {
+                    newIdenticonCode |= ((int)c-55);
+                }
+                if (i < 7) {
+                    newIdenticonCode <<= 4;
+                }
+            }
+            
+            IdenticonImage *identicon = [[IdenticonImage alloc]initWithIdenticonCode:newIdenticonCode];
+            [result.imageView setImage:identicon];
+            
+            
+        }
+        
+        
         
         return result;
     }
@@ -520,6 +587,7 @@
     NSLog(@"Selection did change.");
 }
 
+#pragma mark importing to Core Data
 
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate {
     NSLog(@"Importing Recipient from public key certificate.");
@@ -556,7 +624,6 @@
             }
         }
         
-        // TODO: check certificate for errors before importing...
         bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]];
         
         //[subkeySig validateSubkey:subkey withSigningKey:primaryKey];
@@ -616,8 +683,79 @@
     return false;
 }
 
--(void)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd {
+
+-(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd {
+    OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:bits isSubkey:NO];
+    OpenPGPPublicKey *subkey = [[OpenPGPPublicKey alloc]initWithKeyLength:bits isSubkey:YES];
+    OpenPGPPacket *userIdPkt = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:[userID UTF8String] length:[userID length]] tag:13 oldFormat:NO];
     
+    OpenPGPPacket *userIdSigPkt = [OpenPGPSignature signUserId:userID withPublicKey:primaryKey];
+    OpenPGPPacket *subkeySigPkt = [OpenPGPSignature signSubkey:subkey withPrivateKey:primaryKey];
+    
+    NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
+    [packets addObject:[primaryKey exportPublicKey]];
+    [packets addObject:userIdPkt];
+    [packets addObject:userIdSigPkt];
+    [packets addObject:[subkey exportPublicKey]];
+    [packets addObject:subkeySigPkt];
+    
+    NSString *publicKeyCertificate = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPublicCertificate];
+    [packets removeAllObjects];
+    
+    [packets addObject:[primaryKey exportPrivateKey:passwd]];
+    [packets addObject:userIdPkt];
+    [packets addObject:userIdSigPkt];
+    [packets addObject:[subkey exportPrivateKey:passwd]];
+    [packets addObject:subkeySigPkt];
+    
+    NSString *privateKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPrivateCertificate];
+    
+    NSManagedObjectContext *ctx = [self managedObjectContext];
+    Identities *newIdentity = [NSEntityDescription insertNewObjectForEntityForName:@"Identities" inManagedObjectContext:ctx];
+    newIdentity.keyId = [[primaryKey keyId] uppercaseString];
+    newIdentity.created = [NSDate date];
+    newIdentity.publicCertificate = publicKeyCertificate;
+    newIdentity.privateKeystore = privateKeystore;
+    
+    unsigned char *fingerprint = [primaryKey fingerprintBytes];
+    unsigned int d1,d2,d3,d4,d5;
+    d1 = fingerprint[0] << 24 | fingerprint[1] << 16 | fingerprint[2] << 8 | fingerprint[3];
+    d2 = fingerprint[4] << 24 | fingerprint[5] << 16 | fingerprint[6] << 8 | fingerprint[7];
+    d3 = fingerprint[8] << 24 | fingerprint[9] << 16 | fingerprint[10] << 8 | fingerprint[11];
+    d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
+    d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
+    
+    newIdentity.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
+    
+    NSRange firstBracket = [userID rangeOfString:@"<"];
+    if (firstBracket.location != NSNotFound) {
+        NSString *nameOnly = [userID substringToIndex:firstBracket.location];
+        NSRange secondBracket =[userID rangeOfString:@">"];
+        NSUInteger len = secondBracket.location - firstBracket.location - 1;
+        NSString *emailOnly = [userID substringWithRange:NSMakeRange(firstBracket.location+1, len)];
+        
+        newIdentity.name = nameOnly;
+        newIdentity.email = emailOnly;
+    }
+    else {
+        // If the UserID doesn't conform to RFC 2822, we don't attempt to pull out the e-mail address
+        newIdentity.name = userID;
+    }
+    
+    NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:identities];
+    [editable addObject:newIdentity];
+    identities = [[NSArray alloc]initWithArray:editable];
+    
+    NSError *error;
+    
+    [ctx save:&error];
+    if (error) {
+        NSLog(@"Core Data Error: %@",[error description]);
+        
+        return false;
+    }
+    
+    return true;
 }
 
 #pragma mark UI actions
