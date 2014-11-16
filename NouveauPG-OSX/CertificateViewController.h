@@ -21,6 +21,8 @@
     IBOutlet NSTextField *m_keyIdField;
     IBOutlet NSImageView *m_subkeyCertIcon;
     IBOutlet NSImageView *m_userIdCertIcon;
+    IBOutlet NSButton *m_decryptButton;
+    IBOutlet NSButton *m_privateCertButton;
     IBOutlet NSTextField *m_userIdCertLabel;
     IBOutlet NSTextField *m_subkeyCertLabel;
     
@@ -37,6 +39,7 @@
 -(void)setPublicKey:(OpenPGPPublicKey *)publicKey;
 -(void)setIdenticon: (NSInteger)identiconCode;
 -(void)setKeyId:(NSString *)keyId;
+-(void)setPrivateCertificate:(bool)isPrivate;
 
 -(IBAction)composeMessage:(id)sender;
 -(IBAction)publicKeyCertificate:(id)sender;

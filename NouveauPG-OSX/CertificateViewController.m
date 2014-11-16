@@ -78,6 +78,17 @@
     }
 }
 
+-(void)setPrivateCertificate:(bool)isPrivate {
+    if (isPrivate) {
+        [m_decryptButton setHidden:NO];
+        [m_privateCertButton setHidden:NO];
+    }
+    else {
+        [m_decryptButton setHidden:YES];
+        [m_privateCertButton setHidden:YES];
+    }
+}
+
 - (void)viewDidLoad {
     //[super viewDidLoad];
     // Do view setup here.

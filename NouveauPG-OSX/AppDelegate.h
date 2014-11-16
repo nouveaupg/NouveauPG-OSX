@@ -43,4 +43,6 @@
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
 
+-(void)setupCertificateSubview;
+
 @end

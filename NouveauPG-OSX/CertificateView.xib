@@ -6,11 +6,13 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CertificateViewController">
             <connections>
+                <outlet property="m_decryptButton" destination="WSJ-QT-dMN" id="Zbx-ZH-UdQ"/>
                 <outlet property="m_emailField" destination="ghA-xF-3a4" id="OrL-of-KYJ"/>
                 <outlet property="m_fingerprintField" destination="2sE-JL-eaB" id="M0d-fD-FWC"/>
                 <outlet property="m_keyIdField" destination="9Lj-LQ-1hh" id="e1W-gn-H03"/>
                 <outlet property="m_mainIdenticon" destination="kWN-2B-OjP" id="Hga-pD-Hu3"/>
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
+                <outlet property="m_privateCertButton" destination="TKg-kT-1l1" id="1fK-aR-40b"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
                 <outlet property="m_subkeyCertIcon" destination="fdR-0g-747" id="LZA-fX-m0g"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
@@ -120,14 +122,14 @@
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
                     <rect key="frame" x="253" y="115" width="173" height="25"/>
-                    <buttonCell key="cell" type="squareTextured" title="Private Keystore" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
+                    <buttonCell key="cell" type="squareTextured" title="Private Keystore" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
                     <rect key="frame" x="51" y="115" width="181" height="25"/>
-                    <buttonCell key="cell" type="squareTextured" title="Decrypt Message" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" enabled="NO" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
+                    <buttonCell key="cell" type="squareTextured" title="Decrypt Message" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>

@@ -475,26 +475,8 @@
             }
         }
         
-        if([[m_placeholderView subviews] firstObject] == nil) {
-            CertificateViewController *viewController = [[CertificateViewController alloc]initWithNibName:@"CertificateView" bundle:[NSBundle mainBundle]];
-            
-            [m_placeholderView addSubview:viewController.view];
-            
-            [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
-                                                            attribute:NSLayoutAttributeLeading
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:m_placeholderView
-                                                            attribute:NSLayoutAttributeLeft multiplier:1
-                                                             constant:0]];
-            [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
-                                                                          attribute:NSLayoutAttributeCenterX
-                                                                          relatedBy:NSLayoutRelationEqual
-                                                                             toItem:m_placeholderView
-                                                                          attribute:NSLayoutAttributeCenterX multiplier:1
-                                                                           constant:0]];
-            //[m_placeholderView addConstraint:leftConstraint];
-            
-            m_certificateViewController = viewController;
+        if (!m_certificateViewController) {
+            [self setupCertificateSubview];
         }
         
         if ([selectedObject.subkey publicKeyType] == 1) {
@@ -568,6 +550,7 @@
         
         
         [m_certificateViewController setUserId:selectedObject.name];
+        [m_certificateViewController setPrivateCertificate:NO];
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
@@ -592,10 +575,105 @@
         [m_certificateViewController setIdenticon:newIdenticonCode];
     }
     else if([parent isEqualToString:@"MY IDENTITIES"]) {
+        Identities *selectedObject = nil;
         
+        for (Identities *each in identities) {
+            if ([[each keyId] isEqualToString:selectedItem]) {
+                selectedObject = each;
+            }
+        }
+        
+        if (selectedObject) {
+            if (!m_certificateViewController) {
+                [self setupCertificateSubview];
+            }
+        }
+        
+        OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedObject.publicCertificate];
+        
+        OpenPGPSignature *userIdSig;
+        OpenPGPSignature *subkeySig;
+        OpenPGPPublicKey *primaryKey;
+        OpenPGPPublicKey *subkey;
+        UserIDPacket *userIdPkt;
+        if ([message validChecksum]) {
+            NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
+            for (OpenPGPPacket *each in packets ) {
+                if ([each packetTag] == 6) {
+                    primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:each];
+                }
+                else if ([each packetTag] == 13) {
+                    userIdPkt = [[UserIDPacket alloc]initWithPacket:each];
+                }
+                else if ([each packetTag] == 14) {
+                    subkey = [[OpenPGPPublicKey alloc]initWithPacket:each];
+                }
+                else if([each packetTag] == 2) {
+                    OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:each];
+                    if (sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
+                        userIdSig = sig;
+                    }
+                    else if (sig.signatureType == 0x18) {
+                        subkeySig = sig;
+                    }
+                }
+            }
+        }
+        
+        NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)primaryKey.publicKeySize];
+        
+        [m_certificateViewController setUserId:selectedObject.name];
+        [m_certificateViewController setPrivateCertificate:YES];
+        [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+        [m_certificateViewController setEmail:selectedObject.email];
+        [m_certificateViewController setFingerprint:selectedObject.fingerprint];
+        [m_certificateViewController setKeyId:[NSString stringWithFormat:@"(Key ID: %@)",selectedObject.keyId]];
+        m_certificateViewController.certificate = selectedObject.publicCertificate;
+        
+        NSInteger newIdenticonCode = 0;
+        
+        NSString *keyId = selectedObject.keyId;
+        for (int i = 0; i < 8; i++) {
+            unichar c = [keyId characterAtIndex:i];
+            if ((int)c < 58) {
+                newIdenticonCode |=  ((int)c-48);
+            }
+            else {
+                newIdenticonCode |= ((int)c-55);
+            }
+            if (i < 7) {
+                newIdenticonCode <<= 4;
+            }
+        }
+        [m_certificateViewController setIdenticon:newIdenticonCode];
     }
     
     NSLog(@"Selection did change.");
+}
+
+-(void)setupCertificateSubview {
+    if([[m_placeholderView subviews] firstObject] == nil) {
+        CertificateViewController *viewController = [[CertificateViewController alloc]initWithNibName:@"CertificateView" bundle:[NSBundle mainBundle]];
+        
+        [m_placeholderView addSubview:viewController.view];
+        
+        [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
+                                                                      attribute:NSLayoutAttributeLeading
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:m_placeholderView
+                                                                      attribute:NSLayoutAttributeLeft multiplier:1
+                                                                       constant:0]];
+        [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
+                                                                      attribute:NSLayoutAttributeCenterX
+                                                                      relatedBy:NSLayoutRelationEqual
+                                                                         toItem:m_placeholderView
+                                                                      attribute:NSLayoutAttributeCenterX multiplier:1
+                                                                       constant:0]];
+        //[m_placeholderView addConstraint:leftConstraint];
+        
+        m_certificateViewController = viewController;
+    }
+
 }
 
 #pragma mark importing to Core Data
