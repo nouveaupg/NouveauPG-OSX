@@ -85,7 +85,7 @@
     
     NSMutableArray *newArray = [[NSMutableArray alloc]init];
     for ( Recipient *eachRecipient in recipients ) {
-        [newArray addObject:eachRecipient.name];
+        [newArray addObject:eachRecipient.keyId];
     }
     [m_children setObject:newArray forKey:@"RECIPIENTS"];
     
@@ -99,7 +99,7 @@
     
     newArray = [[NSMutableArray alloc]init];
     for (Identities *each in identities) {
-        [newArray addObject:each.name];
+        [newArray addObject:each.keyId];
     }
     [m_children setObject:newArray forKey:@"MY IDENTITIES"];
 }
@@ -375,15 +375,19 @@
     }
     else if( [[m_children objectForKey:@"RECIPIENTS"] containsObject:item] ) {
         NSTableCellView *result = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
-        [result.textField setStringValue:item];
+        
         
         NSString *keyId = nil;
+        NSString *name = nil;
         for (Recipient *each in recipients) {
-            if([each.name isEqualToString:item]) {
+            if([each.keyId isEqualToString:item]) {
                 keyId = [NSString stringWithString:each.keyId];
+                name = [NSString stringWithString:each.name];
                 break;
             }
         }
+        
+        [result.textField setStringValue:name];
         
         if (keyId) {
             NSInteger newIdenticonCode = 0;
@@ -413,15 +417,19 @@
     }
     else if( [[m_children objectForKey:@"MY IDENTITIES"] containsObject:item] ) {
         NSTableCellView *result = [outlineView makeViewWithIdentifier:@"DataCell" owner:self];
-        [result.textField setStringValue:item];
+        
         
         NSString *keyId = nil;
+        NSString *name = nil;
         for (Identities *each in identities) {
-            if([each.name isEqualToString:item]) {
+            if([each.keyId isEqualToString:item]) {
+                name = [NSString stringWithString:each.name];
                 keyId = [NSString stringWithString:each.keyId];
                 break;
             }
         }
+        
+        [result.textField setStringValue:name];
         
         if (keyId) {
             NSInteger newIdenticonCode = 0;
@@ -462,7 +470,7 @@
         Recipient *selectedObject = nil;
         
         for (Recipient *each in recipients) {
-            if ([[each name] isEqualToString:selectedItem]) {
+            if ([[each keyId] isEqualToString:selectedItem]) {
                 selectedObject = each;
             }
         }
@@ -582,6 +590,9 @@
             }
         }
         [m_certificateViewController setIdenticon:newIdenticonCode];
+    }
+    else if([parent isEqualToString:@"MY IDENTITIES"]) {
+        
     }
     
     NSLog(@"Selection did change.");
