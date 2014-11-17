@@ -84,14 +84,14 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="subkey" id="TrM-sO-KDo"/>
                 </imageView>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Fingerprint" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="i4v-s7-dyy">
-                    <rect key="frame" x="48" y="66" width="384" height="43"/>
+                    <rect key="frame" x="40" y="66" width="396" height="43"/>
                     <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="382" height="27"/>
+                        <rect key="frame" x="1" y="1" width="394" height="27"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2sE-JL-eaB">
-                                <rect key="frame" x="16" y="7" width="348" height="17"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0A3EFBA3 ABCCDE5F 5EFFC3E5 FEB566CE B755EE45" id="btS-zC-Tqu">
+                                <rect key="frame" x="16" y="7" width="358" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="0A3EFBA3:0A3EFBA3:0A3EFBA3:0A3EFBA3:0A3EFBA3" id="btS-zC-Tqu">
                                     <font key="font" size="13" name="Monaco"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

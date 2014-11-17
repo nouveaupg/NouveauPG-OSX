@@ -62,7 +62,17 @@
 }
 
 -(void)setFingerprint: (NSString *)fingerprint {
-    [m_fingerprintField setStringValue:fingerprint];
+    NSMutableString *formattedFingerprint = [[NSMutableString alloc]initWithCapacity:24];
+
+    for( int x = 0; x < 40; x++ ) {
+        [formattedFingerprint appendFormat:@"%c",[fingerprint characterAtIndex:x]];
+        int t = x + 1;
+        if (t > 0 && (t % 8) == 0 && t < 40) {
+            [formattedFingerprint appendFormat:@":"];
+        }
+    }
+    
+    [m_fingerprintField setStringValue:formattedFingerprint];
 }
 
 -(void)setPrimarySignature: (NSString *)signature {
