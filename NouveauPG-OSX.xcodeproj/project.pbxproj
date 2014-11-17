@@ -38,6 +38,8 @@
 		04F17B4E19D0952900B17752 /* Message.m in Sources */ = {isa = PBXBuildFile; fileRef = 04F17B4D19D0952900B17752 /* Message.m */; };
 		A80BF6E01A03FD92003393FA /* NewIdentityPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = A80BF6DE1A03FD92003393FA /* NewIdentityPanel.m */; };
 		A80BF6E11A03FD92003393FA /* NewIdentityPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A80BF6DF1A03FD92003393FA /* NewIdentityPanel.xib */; };
+		A86AE8021A1A80160028108C /* PasswordWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A86AE8001A1A80160028108C /* PasswordWindow.m */; };
+		A86AE8031A1A80160028108C /* PasswordWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A86AE8011A1A80160028108C /* PasswordWindow.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +109,9 @@
 		A80BF6DD1A03FD92003393FA /* NewIdentityPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewIdentityPanel.h; sourceTree = "<group>"; };
 		A80BF6DE1A03FD92003393FA /* NewIdentityPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewIdentityPanel.m; sourceTree = "<group>"; };
 		A80BF6DF1A03FD92003393FA /* NewIdentityPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NewIdentityPanel.xib; sourceTree = "<group>"; };
+		A86AE7FF1A1A80160028108C /* PasswordWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PasswordWindow.h; sourceTree = "<group>"; };
+		A86AE8001A1A80160028108C /* PasswordWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PasswordWindow.m; sourceTree = "<group>"; };
+		A86AE8011A1A80160028108C /* PasswordWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PasswordWindow.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,17 +186,7 @@
 				04795EE819C0A1AD000A3142 /* MainMenu.xib */,
 				04795EEE19C0A1AD000A3142 /* Images.xcassets */,
 				04795EDA19C0A1AD000A3142 /* Supporting Files */,
-				0429884219F99FCC00083E70 /* CertificateView.xib */,
-				0429884D19F9A88700083E70 /* CertificateViewController.h */,
-				0429884E19F9A88700083E70 /* CertificateViewController.m */,
-				0429885019F9B9DB00083E70 /* ComposePanel.xib */,
-				0429885219F9BB9C00083E70 /* ComposeWindowController.h */,
-				0429885319F9BB9C00083E70 /* ComposeWindowController.m */,
-				0429885819FC069600083E70 /* IdenticonImage.h */,
-				0429885919FC069600083E70 /* IdenticonImage.m */,
-				A80BF6DD1A03FD92003393FA /* NewIdentityPanel.h */,
-				A80BF6DE1A03FD92003393FA /* NewIdentityPanel.m */,
-				A80BF6DF1A03FD92003393FA /* NewIdentityPanel.xib */,
+				A86AE8041A1A802D0028108C /* User Interface */,
 			);
 			path = "NouveauPG-OSX";
 			sourceTree = "<group>";
@@ -262,6 +257,27 @@
 				04C9638719CFC3F300A2446C /* UserIDPacket.m */,
 			);
 			name = OpenPGP;
+			sourceTree = "<group>";
+		};
+		A86AE8041A1A802D0028108C /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				0429884219F99FCC00083E70 /* CertificateView.xib */,
+				0429884D19F9A88700083E70 /* CertificateViewController.h */,
+				0429884E19F9A88700083E70 /* CertificateViewController.m */,
+				0429885019F9B9DB00083E70 /* ComposePanel.xib */,
+				0429885219F9BB9C00083E70 /* ComposeWindowController.h */,
+				0429885319F9BB9C00083E70 /* ComposeWindowController.m */,
+				0429885819FC069600083E70 /* IdenticonImage.h */,
+				0429885919FC069600083E70 /* IdenticonImage.m */,
+				A80BF6DD1A03FD92003393FA /* NewIdentityPanel.h */,
+				A80BF6DE1A03FD92003393FA /* NewIdentityPanel.m */,
+				A80BF6DF1A03FD92003393FA /* NewIdentityPanel.xib */,
+				A86AE7FF1A1A80160028108C /* PasswordWindow.h */,
+				A86AE8001A1A80160028108C /* PasswordWindow.m */,
+				A86AE8011A1A80160028108C /* PasswordWindow.xib */,
+			);
+			name = "User Interface";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,6 +369,7 @@
 				04795EEF19C0A1AD000A3142 /* Images.xcassets in Resources */,
 				0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */,
 				04795EE419C0A1AD000A3142 /* Credits.rtf in Resources */,
+				A86AE8031A1A80160028108C /* PasswordWindow.xib in Resources */,
 				04795EEA19C0A1AD000A3142 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +391,7 @@
 			files = (
 				04795EE719C0A1AD000A3142 /* AppDelegate.m in Sources */,
 				04C9638819CFC3F300A2446C /* EncryptedEnvelope.m in Sources */,
+				A86AE8021A1A80160028108C /* PasswordWindow.m in Sources */,
 				04C9638A19CFC3F300A2446C /* NSString+Base64.m in Sources */,
 				A80BF6E01A03FD92003393FA /* NewIdentityPanel.m in Sources */,
 				0429885A19FC069600083E70 /* IdenticonImage.m in Sources */,

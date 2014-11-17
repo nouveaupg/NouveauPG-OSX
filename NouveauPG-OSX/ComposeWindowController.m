@@ -74,6 +74,43 @@
     [window orderOut:self];
 }
 
+-(void)presentPrivateKeyCertPanel: (NSWindow *)parent certificate:(NSString *)certText UserId:(NSString *)userId {
+    NSWindow *window = [self window];
+    
+    m_userId = [[NSString alloc]initWithString:userId];
+    [m_prompt setStringValue:[NSString stringWithFormat:@"Private keystore for %@",userId]];
+    [m_textView setString:certText];
+    [m_rightButton setKeyEquivalent:@"\r"];
+    [m_rightButton setTitle:@"Copy"];
+    [m_leftButton setTitle:@"Save as file..."];
+    [m_leftButton setHidden:NO];
+    
+    [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:@selector(dismiss:) contextInfo:nil];
+    [NSApp runModalForWindow:window];
+    // sheet is up here...
+    
+    [NSApp endSheet:window];
+    [window orderOut:self];
+}
+
+-(void)presentDecryptPanel: (NSWindow *)parent keyId: (NSString *)keyId userId:(NSString *)userId {
+    NSWindow *window = [self window];
+    
+    m_userId = [[NSString alloc]initWithString:userId];
+    [m_prompt setStringValue:[NSString stringWithFormat:@"Paste OpenPGP message to decrypt for %@",userId]];
+    [m_rightButton setKeyEquivalent:@"\r"];
+    [m_rightButton setTitle:@"Decrypt"];
+    [m_leftButton setTitle:@"Load from file..."];
+    [m_leftButton setHidden:NO];
+    
+    [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:@selector(dismiss:) contextInfo:nil];
+    [NSApp runModalForWindow:window];
+    // sheet is up here...
+    
+    [NSApp endSheet:window];
+    [window orderOut:self];
+}
+
 - (void)presentComposePanel:(NSWindow *)parent withPublicKey: (OpenPGPPublicKey *)publicKey UserId:(NSString *)userId {
     NSWindow *window = [self window];
     

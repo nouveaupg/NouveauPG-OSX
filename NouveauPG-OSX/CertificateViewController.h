@@ -28,6 +28,7 @@
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;
+    NSString *m_keyId;
 }
 
 -(void)setUserId:(NSString *)userId;
@@ -43,6 +44,8 @@
 
 -(IBAction)composeMessage:(id)sender;
 -(IBAction)publicKeyCertificate:(id)sender;
+-(IBAction)decryptButton:(id)sender;
+-(IBAction)privateKeyCertificate:(id)sender;
 
 @property (copy) NSString *certificate;
 

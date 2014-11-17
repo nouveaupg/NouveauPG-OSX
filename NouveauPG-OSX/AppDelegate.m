@@ -17,6 +17,7 @@
 #import "NewIdentityPanel.h"
 #import "IdenticonImage.h"
 #import "Identities.h"
+#import "PasswordWindow.h"
 
 @implementation AppDelegate
 
@@ -554,7 +555,7 @@
         [m_certificateViewController setPublicKeyAlgo:selectedObject.publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
-        [m_certificateViewController setKeyId:[NSString stringWithFormat:@"(Key ID: %@)",selectedObject.keyId]];
+        [m_certificateViewController setKeyId:selectedObject.keyId];
         m_certificateViewController.certificate = selectedObject.certificate;
         
         NSInteger newIdenticonCode = 0;
@@ -627,7 +628,7 @@
         [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
-        [m_certificateViewController setKeyId:[NSString stringWithFormat:@"(Key ID: %@)",selectedObject.keyId]];
+        [m_certificateViewController setKeyId:selectedObject.keyId];
         m_certificateViewController.certificate = selectedObject.publicCertificate;
         
         NSInteger newIdenticonCode = 0;
@@ -772,6 +773,41 @@
     return false;
 }
 
+-(void)presentPrivateKeyCertificate:(NSString *)keyId {
+    Identities *selectedIdentity = nil;
+    for (Identities *each in identities ) {
+        NSLog(@"%@",each.keyId);
+        if ([each.keyId isEqualToString:keyId]) {
+            selectedIdentity = each;
+        }
+    }
+    
+    if (selectedIdentity) {
+        ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+        [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
+    }
+    else {
+        NSLog(@"Key ID: %@ not found.",keyId);
+    }
+}
+
+-(void)presentDecryptSheet:(NSString *)keyId {
+    Identities *selectedIdentity = nil;
+    for (Identities *each in identities ) {
+        NSLog(@"%@",each.keyId);
+        if ([each.keyId isEqualToString:keyId]) {
+            selectedIdentity = each;
+        }
+    }
+    
+    if (selectedIdentity) {
+        ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+        [windowController presentDecryptPanel:self.window keyId:selectedIdentity.keyId userId:selectedIdentity.name];
+    }
+    else {
+        NSLog(@"Key ID: %@ not found.",keyId);
+    }
+}
 
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd {
     OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:bits isSubkey:NO];

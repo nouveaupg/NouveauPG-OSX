@@ -18,6 +18,16 @@
 
 @synthesize certificate;
 
+-(IBAction)decryptButton:(id)sender {
+    AppDelegate *app = [[NSApplication sharedApplication] delegate];
+    [app presentDecryptSheet:m_keyId];
+}
+
+-(IBAction)privateKeyCertificate:(id)sender {
+    AppDelegate *app = [[NSApplication sharedApplication] delegate];
+    [app presentPrivateKeyCertificate:m_keyId];
+}
+
 -(void)setIdenticon: (NSInteger)identiconCode {
     IdenticonImage *identiconImage = [[IdenticonImage alloc]initWithIdenticonCode:identiconCode];
     [m_mainIdenticon setImage:identiconImage];
@@ -42,7 +52,8 @@
 }
 
 -(void)setKeyId:(NSString *)keyId {
-    [m_keyIdField setStringValue:keyId];
+    m_keyId = [[NSString alloc]initWithString:keyId];
+    [m_keyIdField setStringValue:[NSString stringWithFormat:@"(Key ID: %@)",keyId]];
 }
 
 -(IBAction)publicKeyCertificate:(id)sender {
@@ -62,7 +73,7 @@
 }
 
 -(void)setFingerprint: (NSString *)fingerprint {
-    NSMutableString *formattedFingerprint = [[NSMutableString alloc]initWithCapacity:24];
+    NSMutableString *formattedFingerprint = [[NSMutableString alloc]initWithCapacity:50];
 
     for( int x = 0; x < 40; x++ ) {
         [formattedFingerprint appendFormat:@"%c",[fingerprint characterAtIndex:x]];

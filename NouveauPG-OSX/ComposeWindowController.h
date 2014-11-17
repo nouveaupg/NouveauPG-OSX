@@ -25,6 +25,9 @@
 
 -(void)presentComposePanel: (NSWindow *)parent withPublicKey:(OpenPGPPublicKey *)publicKey UserId:(NSString *)userId;
 -(void)presentPublicKeyCertPanel: (NSWindow *)parent publicKeyCertificate:(NSString *)certText UserId:(NSString *)userId;
+-(void)presentPrivateKeyCertPanel: (NSWindow *)parent certificate:(NSString *)certText UserId:(NSString *)userId;
+-(void)presentDecryptPanel: (NSWindow *)parent keyId: (NSString *)keyId userId:(NSString *)userId;
+
 -(IBAction)dismiss:(id)sender;
 -(IBAction)leftButton:(id)sender;
 -(IBAction)centerButton:(id)sender;
