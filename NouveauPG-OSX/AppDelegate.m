@@ -257,11 +257,13 @@
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId {
     
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+    windowController.state = kComposePanelStateComposeMessage;
     [windowController presentComposePanel:self.window withPublicKey:publicKey UserId:userId];
 }
 
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId {
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+    windowController.state = kComposePanelStateExportCertificate;
     [windowController presentPublicKeyCertPanel:self.window publicKeyCertificate:certificate UserId:userId];
 }
 
@@ -803,6 +805,7 @@
     
     if (selectedIdentity) {
         ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+        windowController.state = kComposePanelStateEncryptMessage;
         [windowController presentDecryptPanel:self.window keyId:selectedIdentity.keyId userId:selectedIdentity.name];
     }
     else {

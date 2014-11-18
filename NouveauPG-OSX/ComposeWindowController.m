@@ -17,7 +17,71 @@
 @implementation ComposeWindowController
 
 -(IBAction)leftButton:(id)sender {
-    
+    if(_state == kComposePanelStateEncryptMessage) {
+        // save encrypted, 'armoured' message
+        
+        NSSavePanel *panelSave = [NSSavePanel savePanel];
+        [panelSave setPrompt:@"Save"];
+        [panelSave setNameFieldStringValue:@"output.asc"];
+        
+        NSInteger result = [panelSave runModal];
+        
+        if (result) {
+            NSString *outputString = [m_textView string];
+            NSError *error;
+            [outputString writeToURL:[panelSave URL] atomically:NO encoding:NSUTF8StringEncoding error:&error];
+            
+            if (error) {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"File save error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error description]];
+                [alert runModal];
+            }
+            
+            [NSApp stopModal];
+        }
+        
+    }
+    else if(_state == kComposePanelStateExportCertificate) {
+        NSSavePanel *panelSave = [NSSavePanel savePanel];
+        [panelSave setPrompt:@"Save"];
+        NSString *defaultFilename = [NSString stringWithFormat:@"certificate.asc"];
+        [panelSave setNameFieldStringValue:defaultFilename];
+        
+        NSInteger result = [panelSave runModal];
+        
+        if (result) {
+            NSString *outputString = [m_textView string];
+            NSError *error;
+            [outputString writeToURL:[panelSave URL] atomically:NO encoding:NSUTF8StringEncoding error:&error];
+            
+            if (error) {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"File save error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error description]];
+                [alert runModal];
+            }
+            
+            [NSApp stopModal];
+        }
+    }
+    else if(_state == kComposePanelStateExportKeystore) {
+        NSSavePanel *panelSave = [NSSavePanel savePanel];
+        [panelSave setPrompt:@"Save"];
+        NSString *defaultFilename = [NSString stringWithFormat:@"keystore.asc"];
+        [panelSave setNameFieldStringValue:defaultFilename];
+        
+        NSInteger result = [panelSave runModal];
+        
+        if (result) {
+            NSString *outputString = [m_textView string];
+            NSError *error;
+            [outputString writeToURL:[panelSave URL] atomically:NO encoding:NSUTF8StringEncoding error:&error];
+            
+            if (error) {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"File save error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error description]];
+                [alert runModal];
+            }
+            
+            [NSApp stopModal];
+        }
+    }
 }
 
 -(IBAction)centerButton:(id)sender {
