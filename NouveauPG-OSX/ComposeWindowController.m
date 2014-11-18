@@ -82,6 +82,33 @@
             [NSApp stopModal];
         }
     }
+    else if(_state == kComposePanelStateComposeMessage) {
+        NSOpenPanel *panel = [NSOpenPanel openPanel];
+        NSInteger result = [panel runModal];
+        if (result) {
+            NSError *error;
+            NSString *inputString = [[NSString alloc]initWithContentsOfURL:[panel URL] encoding:NSUTF8StringEncoding error:&error];
+            
+            if (!error) {
+                LiteralPacket *literal = [[LiteralPacket alloc]initWithUTF8String:inputString];
+                EncryptedEnvelope *envelope = [[EncryptedEnvelope alloc]initWithLiteralPacket:literal publicKey:m_publicKey];
+                
+                [m_textView setString:[envelope armouredMessage]];
+                [m_textView setEditable:NO];
+                [m_textView selectAll:self];
+                [m_rightButton setTitle:@"Copy"];
+                [m_leftButton setHidden:NO];
+                [m_leftButton setTitle:@"Save as file..."];
+                [m_prompt setStringValue:[NSString stringWithFormat:@"Encrypted message for %@",m_userId]];
+                
+                _state = kComposePanelStateEncryptMessage;
+            }
+            else {
+                NSLog(@"Error opening file.");
+            }
+            
+        }
+    }
 }
 
 -(IBAction)centerButton:(id)sender {
