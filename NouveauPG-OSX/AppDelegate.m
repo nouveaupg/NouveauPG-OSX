@@ -784,6 +784,7 @@
     
     if (selectedIdentity) {
         ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+        windowController.state = kComposePanelStateExportKeystore;
         [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
     }
     else {

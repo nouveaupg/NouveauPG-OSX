@@ -25,11 +25,11 @@
 }
 
 -(IBAction)rightButton:(id)sender {
-    
-    if (!encrypted) {
+    if (_state == kComposePanelStateComposeMessage) {
         NSString *inputString = [NSString stringWithString:[m_textView string]];
         LiteralPacket *literal = [[LiteralPacket alloc]initWithUTF8String:inputString];
         EncryptedEnvelope *envelope = [[EncryptedEnvelope alloc]initWithLiteralPacket:literal publicKey:m_publicKey];
+        
         [m_textView setString:[envelope armouredMessage]];
         [m_textView setEditable:NO];
         [m_textView selectAll:self];
@@ -38,7 +38,7 @@
         [m_leftButton setTitle:@"Save as file..."];
         [m_prompt setStringValue:[NSString stringWithFormat:@"Encrypted message for %@",m_userId]];
         
-        encrypted = true;
+        _state = kComposePanelStateEncryptMessage;
     }
     else {
         [m_textView selectAll:self];
@@ -97,7 +97,7 @@
     NSWindow *window = [self window];
     
     m_userId = [[NSString alloc]initWithString:userId];
-    [m_prompt setStringValue:[NSString stringWithFormat:@"Paste OpenPGP message to decrypt for %@",userId]];
+    [m_prompt setStringValue:@"Paste OpenPGP message below"];
     [m_rightButton setKeyEquivalent:@"\r"];
     [m_rightButton setTitle:@"Decrypt"];
     [m_leftButton setTitle:@"Load from file..."];

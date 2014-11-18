@@ -9,6 +9,13 @@
 #import <Cocoa/Cocoa.h>
 #import "OpenPGPPublicKey.h"
 
+#define kComposePanelStateComposeMessage 1
+#define kComposePanelStateEncryptMessage 2
+#define kComposePanelStateExportKeystore 3
+#define kComposePanelStateExportCertificate 4
+#define kComposePanelStateDecryptMessage 5
+#define kComposePanelStateReadMessage 6
+
 @interface ComposeWindowController : NSWindowController {
     IBOutlet NSButton *m_leftButton;
     IBOutlet NSButton *m_centerButton;
@@ -32,5 +39,7 @@
 -(IBAction)leftButton:(id)sender;
 -(IBAction)centerButton:(id)sender;
 -(IBAction)rightButton:(id)sender;
+
+@property (assign,nonatomic) NSInteger state;
 
 @end
