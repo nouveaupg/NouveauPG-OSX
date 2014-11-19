@@ -130,6 +130,85 @@
     return FALSE;
 }
 
+-(OpenPGPPacket *)exportPrivateKeyUnencrypted {
+    OpenPGPPacket *privateKeyPacket = nil;
+    int modulusBytes = (BN_num_bits(m_rsaKey->n)+7)/8;
+    int exponentBytes = (BN_num_bits(m_rsaKey->e)+7)/8;
+    int secretExponentBytes = (BN_num_bits(m_rsaKey->d)+7)/8;
+    int secretPrimeP = (BN_num_bits(m_rsaKey->p)+7)/8;
+    int secretPrimeQ = (BN_num_bits(m_rsaKey->q)+7)/8;
+    int secretInvQModP = (BN_num_bits(m_rsaKey->iqmp)+7)/8;
+    
+    // 10 = version byte + 4 timestamp bytes + public algo byte + lengths for n and e MPI's
+    size_t packetLen = 10 + modulusBytes + exponentBytes;
+    // 11 = s2k byte + lengths for 4 MPI's (8 bytes) + 2 checksum bytes
+    packetLen += 11 + secretExponentBytes + secretPrimeP + secretPrimeQ + secretInvQModP;
+    size_t offset = 0;
+    unsigned char *packetBody = malloc(packetLen);
+    if (packetBody) {
+        packetBody[0] = 4;
+        packetBody[1] = m_generatedTimestamp >> 24;
+        packetBody[2] = (m_generatedTimestamp >> 16) & 0xff;
+        packetBody[3] = (m_generatedTimestamp >> 8) & 0xff;
+        packetBody[4] = m_generatedTimestamp & 0xff;
+        packetBody[5] = 1;
+        packetBody[6] = BN_num_bits(m_rsaKey->n) >> 8;
+        packetBody[7] = BN_num_bits(m_rsaKey->n) & 0xff;
+        BN_bn2bin(m_rsaKey->n, (packetBody + 8));
+        offset += modulusBytes;
+        packetBody[8+offset] = BN_num_bits(m_rsaKey->e) >> 8;
+        packetBody[9+offset] = BN_num_bits(m_rsaKey->e) & 0xff;
+        offset += 10;
+        BN_bn2bin(m_rsaKey->e, (packetBody + offset));
+        offset += (BN_num_bits(m_rsaKey->e) + 7)/8;
+        
+        // secret section
+        
+        packetBody[offset++] = 0;
+        
+        size_t secretOffset = offset;
+        
+        packetBody[offset++] = BN_num_bits(m_rsaKey->d) >> 8;
+        packetBody[offset++] = BN_num_bits(m_rsaKey->d) & 0xff;
+        BN_bn2bin(m_rsaKey->d, (packetBody + offset));
+        offset +=  secretExponentBytes;
+        
+        packetBody[offset++] = BN_num_bits(m_rsaKey->p) >> 8;
+        packetBody[offset++] = BN_num_bits(m_rsaKey->p) & 0xff;
+        BN_bn2bin(m_rsaKey->p, (packetBody + offset));
+        offset += secretPrimeP;
+        
+        packetBody[offset++] = BN_num_bits(m_rsaKey->q) >> 8;
+        packetBody[offset++] = BN_num_bits(m_rsaKey->q) & 0xff;
+        BN_bn2bin(m_rsaKey->q, (packetBody + offset));
+        offset += secretPrimeQ;
+        
+        packetBody[offset++] = BN_num_bits(m_rsaKey->iqmp) >> 8;
+        packetBody[offset++] = BN_num_bits(m_rsaKey->iqmp) & 0xff;
+        BN_bn2bin(m_rsaKey->iqmp, (packetBody + offset));
+        offset += secretInvQModP;
+        
+        // 8 = 2 byte length field for each MPI (8 bytes total)
+        unsigned long long checksum = 0;
+        size_t secretLen = secretExponentBytes + secretInvQModP + secretPrimeP + secretPrimeQ + 8;
+        for (size_t x = secretOffset; x < offset; x++) {
+            checksum += packetBody[x];
+        }
+        unsigned int chkvalue = checksum % 65536;
+        packetBody[offset++] = (chkvalue >> 8) & 0xff;
+        packetBody[offset++] = chkvalue & 0xff;
+        
+        if (m_subkey) {
+            privateKeyPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:7 oldFormat:YES];
+        }
+        else {
+            privateKeyPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:5 oldFormat:YES];
+        }
+    }
+    
+    return privateKeyPacket;
+}
+
 -(OpenPGPPacket *)exportPrivateKey: (NSString *)passphrase {
     OpenPGPPacket *privateKeyPacket = nil;
     int modulusBytes = (BN_num_bits(m_rsaKey->n)+7)/8;

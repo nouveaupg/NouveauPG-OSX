@@ -43,6 +43,7 @@
 -(NSData *)decryptSignature: (NSData *)encryptedSig;
 -(bool)decryptKey: (NSString *)passphrase;
 -(bool)isEncrypted;
+-(OpenPGPPacket *)exportPrivateKeyUnencrypted;
 
 @property (copy) NSString *keyId;
 @property NSInteger publicKeyType;
