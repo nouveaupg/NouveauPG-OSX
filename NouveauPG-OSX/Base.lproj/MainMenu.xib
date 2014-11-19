@@ -21,11 +21,11 @@
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
-                <menuItem title="NouveauPG-OSX" id="1Xt-HY-uBw">
+                <menuItem title="NouveauPG" id="1Xt-HY-uBw">
                     <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="NouveauPG-OSX" systemMenu="apple" id="uQy-DD-JDr">
+                    <menu key="submenu" title="NouveauPG" systemMenu="apple" id="uQy-DD-JDr">
                         <items>
-                            <menuItem title="About NouveauPG-OSX" id="5kV-Vb-QxS">
+                            <menuItem title="About NouveauPG for OSX" id="5kV-Vb-QxS">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
@@ -39,7 +39,7 @@
                                 <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                            <menuItem title="Hide NouveauPG-OSX" keyEquivalent="h" id="Olw-nP-bQN">
+                            <menuItem title="Hide NouveauPG" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
                                     <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
                                 </connections>
@@ -57,7 +57,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                            <menuItem title="Quit NouveauPG-OSX" keyEquivalent="q" id="4sb-4s-VLi">
+                            <menuItem title="Quit NouveauPG" keyEquivalent="q" id="4sb-4s-VLi">
                                 <connections>
                                     <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
                                 </connections>
@@ -610,25 +610,6 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="View" id="H8h-7b-M4v">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <menu key="submenu" title="View" id="HyV-fh-RgO">
-                        <items>
-                            <menuItem title="Show Toolbar" keyEquivalent="t" id="snW-S8-Cw5">
-                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                <connections>
-                                    <action selector="toggleToolbarShown:" target="-1" id="BXY-wc-z0C"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Customize Toolbar…" id="1UK-8n-QPP">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="runToolbarCustomizationPalette:" target="-1" id="pQI-g3-MTW"/>
-                                </connections>
-                            </menuItem>
-                        </items>
-                    </menu>
-                </menuItem>
                 <menuItem title="Window" id="aUF-d1-5bR">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
@@ -658,7 +639,7 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
                         <items>
-                            <menuItem title="NouveauPG-OSX Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                            <menuItem title="NouveauPG Help" keyEquivalent="?" id="FKE-Sm-Kum">
                                 <connections>
                                     <action selector="showHelp:" target="-1" id="y7X-2Q-9no"/>
                                 </connections>
@@ -668,7 +649,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="NouveauPG-OSX" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+        <window title="NouveauPG" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" texturedBackground="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="335" y="390" width="480" height="377"/>
@@ -773,11 +754,8 @@
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
-                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tlu-MQ-7cL">
                         <rect key="frame" x="64" y="8" width="150" height="19"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="171" id="YeC-H5-GyH"/>
-                        </constraints>
                         <buttonCell key="cell" type="recessed" title="Import from Clipboard" bezelStyle="recessed" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="nwU-a2-AdP">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="systemBold" size="12"/>
@@ -786,11 +764,10 @@
                             <action selector="importFromClipboard:" target="Voe-Tx-rLC" id="UIB-eU-vGC"/>
                         </connections>
                     </button>
-                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o06-96-Bch">
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="o06-96-Bch">
                         <rect key="frame" x="9" y="8" width="21" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="21" id="4HE-Ei-Uml"/>
-                            <constraint firstAttribute="height" constant="21" id="d15-5E-hiu"/>
+                            <constraint firstAttribute="width" constant="21" id="nst-31-BSf"/>
                         </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSAddTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="iNz-F3-uC0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -800,10 +777,10 @@
                             <action selector="newIdentityPanel:" target="Voe-Tx-rLC" id="hAa-3K-eNR"/>
                         </connections>
                     </button>
-                    <button misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PoA-hg-9Y0">
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="PoA-hg-9Y0">
                         <rect key="frame" x="35" y="8" width="21" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="BsQ-Bl-f5C"/>
+                            <constraint firstAttribute="width" constant="21" id="zeU-8l-wcC"/>
                         </constraints>
                         <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSRemoveTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xxo-2s-1AZ">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -813,7 +790,7 @@
                             </connections>
                         </buttonCell>
                     </button>
-                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AiJ-Hs-Jr7">
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AiJ-Hs-Jr7">
                         <rect key="frame" x="222" y="8" width="123" height="19"/>
                         <buttonCell key="cell" type="recessed" title="Import from File..." bezelStyle="recessed" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QTg-VU-PP0">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -825,21 +802,22 @@
                     </button>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="o06-96-Bch" firstAttribute="top" secondItem="PoA-hg-9Y0" secondAttribute="top" id="2QP-CT-HUN"/>
                     <constraint firstAttribute="trailing" secondItem="2ol-qn-Nkp" secondAttribute="trailing" id="3un-HE-D3N"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" id="54T-y7-xgJ"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="o06-96-Bch" secondAttribute="trailing" constant="4" id="EGe-ml-g6m"/>
+                    <constraint firstAttribute="bottom" secondItem="o06-96-Bch" secondAttribute="bottom" constant="8" id="58z-UP-A2P"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="FOp-HU-zyq"/>
-                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="PoA-hg-9Y0" secondAttribute="trailing" constant="8" symbolic="YES" id="GRU-GX-7Ik"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="Hwy-wz-vjN"/>
-                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="10" id="PHK-ch-uQh"/>
-                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="64" id="UBU-St-ojZ"/>
+                    <constraint firstItem="AiJ-Hs-Jr7" firstAttribute="leading" secondItem="tlu-MQ-7cL" secondAttribute="trailing" constant="8" symbolic="YES" id="SrW-Ph-cNQ"/>
                     <constraint firstItem="2ol-qn-Nkp" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="VBT-QP-myW"/>
-                    <constraint firstAttribute="bottom" secondItem="PoA-hg-9Y0" secondAttribute="bottom" constant="8" id="bjL-fF-Itb"/>
-                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="centerY" secondItem="AiJ-Hs-Jr7" secondAttribute="centerY" id="caS-L6-RkN"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="10" id="WxL-cz-cFq"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="leading" secondItem="o06-96-Bch" secondAttribute="trailing" constant="5" id="bOx-lN-lvL"/>
                     <constraint firstAttribute="trailing" secondItem="2ol-qn-Nkp" secondAttribute="trailing" id="eZr-pK-6QJ"/>
-                    <constraint firstItem="AiJ-Hs-Jr7" firstAttribute="leading" secondItem="tlu-MQ-7cL" secondAttribute="trailing" constant="8" symbolic="YES" id="gda-8g-xCq"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" id="gxz-cN-Juf"/>
-                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="top" secondItem="o06-96-Bch" secondAttribute="top" id="ybR-D5-nWl"/>
+                    <constraint firstItem="o06-96-Bch" firstAttribute="top" secondItem="2ol-qn-Nkp" secondAttribute="bottom" constant="8" symbolic="YES" id="efE-SW-R1D"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="leading" secondItem="PoA-hg-9Y0" secondAttribute="trailing" constant="8" symbolic="YES" id="jcK-Hn-Tcv"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="bottom" secondItem="o06-96-Bch" secondAttribute="bottom" id="mQi-xw-NlZ"/>
+                    <constraint firstItem="o06-96-Bch" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="9" id="sab-vh-sD2"/>
+                    <constraint firstItem="tlu-MQ-7cL" firstAttribute="baseline" secondItem="AiJ-Hs-Jr7" secondAttribute="baseline" id="sn0-F3-ANW"/>
+                    <constraint firstItem="PoA-hg-9Y0" firstAttribute="centerY" secondItem="tlu-MQ-7cL" secondAttribute="centerY" id="tm0-WV-dsJ"/>
                 </constraints>
             </view>
         </window>

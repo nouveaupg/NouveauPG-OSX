@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
     </dependencies>
@@ -103,8 +103,8 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a43-S7-XPo">
-                    <rect key="frame" x="253" y="145" width="173" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Public Key Certificate" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YlT-NG-95C">
+                    <rect key="frame" x="250" y="150" width="176" height="30"/>
+                    <buttonCell key="cell" type="squareTextured" title="Public Key Certificate" bezelStyle="texturedSquare" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YlT-NG-95C">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -121,7 +121,7 @@
                     </textFieldCell>
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
-                    <rect key="frame" x="253" y="115" width="173" height="25"/>
+                    <rect key="frame" x="250" y="115" width="176" height="30"/>
                     <buttonCell key="cell" type="squareTextured" title="Private Keystore" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -131,7 +131,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
-                    <rect key="frame" x="51" y="115" width="181" height="25"/>
+                    <rect key="frame" x="51" y="115" width="194" height="30"/>
                     <buttonCell key="cell" type="squareTextured" title="Decrypt Message" bezelStyle="texturedSquare" imagePosition="overlaps" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -141,8 +141,8 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nTj-ma-2BO">
-                    <rect key="frame" x="53" y="145" width="179" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Compose Message" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zyO-lS-p6O">
+                    <rect key="frame" x="53" y="150" width="192" height="30"/>
+                    <buttonCell key="cell" type="squareTextured" title="Compose Message" bezelStyle="texturedSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zyO-lS-p6O">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
