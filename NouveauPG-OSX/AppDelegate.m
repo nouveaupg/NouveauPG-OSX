@@ -805,7 +805,7 @@
     
     if (selectedIdentity) {
         ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
-        windowController.state = kComposePanelStateEncryptMessage;
+        windowController.state = kComposePanelStateDecryptMessage;
         [windowController presentDecryptPanel:self.window keyId:selectedIdentity.keyId userId:selectedIdentity.name];
     }
     else {

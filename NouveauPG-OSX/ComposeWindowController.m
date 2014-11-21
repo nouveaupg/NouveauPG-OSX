@@ -7,6 +7,7 @@
 //
 
 #import "ComposeWindowController.h"
+#import "PasswordWindow.h"
 #import "LiteralPacket.h"
 #import "EncryptedEnvelope.h"
 
@@ -130,6 +131,10 @@
         [m_prompt setStringValue:[NSString stringWithFormat:@"Encrypted message for %@",m_userId]];
         
         _state = kComposePanelStateEncryptMessage;
+    }
+    else if( _state == kComposePanelStateDecryptMessage ) {
+        PasswordWindow *passwdWindow = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
+        [passwdWindow presentPasswordPrompt:@"Enter password for private key" privateKey:m_publicKey window:self.window];
     }
     else {
         [m_textView selectAll:self];
