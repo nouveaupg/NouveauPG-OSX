@@ -98,6 +98,24 @@
     self.identities = [ctx executeFetchRequest:fetchRequest error:&error];
     NSLog(@"Loaded %lu identites from datastore.",(unsigned long)[self.identities count]);
     
+    for(Identities *each in identities) {
+        OpenPGPMessage *cert = [[OpenPGPMessage alloc]initWithArmouredText:each.privateKeystore];
+        if ([cert validChecksum]) {
+            for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:cert]) {
+                if ([eachPacket packetTag] == 5) {
+                    each.primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                }
+                else if ([eachPacket packetTag] == 7) {
+                    each.secondaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                }
+            }
+        }
+        else {
+            NSLog(@"Invalid Public Key certificate for recipient: %@",each.name);
+        }
+    }
+
+    
     newArray = [[NSMutableArray alloc]init];
     for (Identities *each in identities) {
         [newArray addObject:each.keyId];
@@ -542,12 +560,15 @@
         if (subkeySig) {
             if ([subkeySig validateSubkey:subkey withSigningKey:primaryKey]) {
                 [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
+                [m_certificateViewController setPublicKey:subkey];
             }
             else {
                 [m_certificateViewController setSubkeySignature:@"Subkey not verified!"];
+                [m_certificateViewController setPublicKey:primaryKey];
             }
         }
         else {
+            [m_certificateViewController setPublicKey:primaryKey];
             [m_certificateViewController setSubkeySignature:nil];
         }
         
@@ -631,6 +652,8 @@
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
         [m_certificateViewController setKeyId:selectedObject.keyId];
+        
+        [m_certificateViewController setPublicKey:subkey];
         m_certificateViewController.certificate = selectedObject.publicCertificate;
         
         NSInteger newIdenticonCode = 0;

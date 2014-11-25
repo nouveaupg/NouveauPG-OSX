@@ -34,6 +34,7 @@
 -(void)presentPublicKeyCertPanel: (NSWindow *)parent publicKeyCertificate:(NSString *)certText UserId:(NSString *)userId;
 -(void)presentPrivateKeyCertPanel: (NSWindow *)parent certificate:(NSString *)certText UserId:(NSString *)userId;
 -(void)presentDecryptPanel: (NSWindow *)parent keyId: (NSString *)keyId userId:(NSString *)userId;
+-(OpenPGPPublicKey *)validateOpenPGPMessage;
 
 -(IBAction)dismiss:(id)sender;
 -(IBAction)leftButton:(id)sender;
