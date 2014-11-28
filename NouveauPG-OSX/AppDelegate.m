@@ -260,13 +260,66 @@
     // display the panel
     [panel beginWithCompletionHandler:^(NSInteger result) {
         if (result == NSFileHandlingPanelOKButton) {
-            
+            NSError *error;
             // grab a reference to what has been selected
             NSURL *theDocument = [[panel URLs]objectAtIndex:0];
             
-            // write our file name to a label
+            // write our file name to NSLog
             NSString *theString = [NSString stringWithFormat:@"%@", theDocument];
             NSLog(@"%@",theString);
+            
+            NSString *importData = [NSString stringWithContentsOfURL:theDocument encoding:NSUTF8StringEncoding error:&error];
+            
+            if (importData && !error) {
+                OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:importData];
+                // validate OpenPGPMessage
+                if ([message validChecksum]) {
+                    NSInteger messageType = 0;
+                    
+                    OpenPGPPublicKey *primaryKey;
+                    OpenPGPPublicKey *subkey;
+                    OpenPGPSignature *primarySig;
+                    OpenPGPSignature *subkeySig;
+                    UserIDPacket *userIdPkt;
+                    
+                    for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:message]) {
+                        if ([eachPacket packetTag] == 6) {
+                            messageType = 1;
+                            
+                            primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                        }
+                        else if([eachPacket packetTag] == 5) {
+                            messageType = 2;
+                            
+                            primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                        }
+                        else if([eachPacket packetTag] == 1 ) {
+                            messageType = 3;
+                            break;
+                        }
+                    }
+                    
+                    NSAlert *alert;
+                    
+                    switch (messageType) {
+                        case 1:
+                            [self importRecipientFromCertificate:message];
+                            break;
+                            
+                        default:
+                            alert = [NSAlert alertWithMessageText:@"Error importing file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"A valid OpenPGP was not found in the selected file."];
+                            [alert runModal];
+                            break;
+                    }
+                    NSLog(@"Found valid OpenPGPMessage.");
+                }
+                else {
+                    NSLog(@"Invalid OpenPGPMessage.");
+                }
+            }
+            else {
+                NSLog(@"Error importing file: %@", [error description]);
+            }
             
         }
     }];
