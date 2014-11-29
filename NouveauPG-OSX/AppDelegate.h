@@ -10,6 +10,7 @@
 #import "OpenPGPMessage.h"
 #import "OpenPGPPublicKey.h"
 #import "CertificateViewController.h"
+#import "Identities.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
@@ -38,6 +39,7 @@
 -(IBAction)newIdentityPanel:(id)sender;
 -(IBAction)importFromFile:(id)sender;
 
+-(Identities *)identityForKeyId:(NSString *)keyId;
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;

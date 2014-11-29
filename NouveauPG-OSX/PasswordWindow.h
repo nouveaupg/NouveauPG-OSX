@@ -10,7 +10,12 @@
 
 #import "OpenPGPPublicKey.h"
 
+#define kPasswordWindowStateUnlockIdentity 1
+#define kPasswordWindowStateChangePassword 2
+
 @interface PasswordWindow : NSWindowController
+
+@property (assign) NSInteger state;
 
 -(IBAction)confirmButton:(id)sender;
 -(IBAction)cancelButton:(id)sender;

@@ -7,6 +7,8 @@
 //
 
 #import "PasswordWindow.h"
+#import "AppDelegate.h"
+#import "Identities.h"
 
 @interface PasswordWindow () {
     IBOutlet NSTextField *m_promptField;
@@ -20,17 +22,39 @@
 
 @implementation PasswordWindow
 
+@synthesize state;
+
 -(IBAction)cancelButton:(id)sender {
     [NSApp stopModal];
 }
 
 -(IBAction)confirmButton:(id)sender {
-    
+    if (state == kPasswordWindowStateUnlockIdentity) {
+        NSString *password = [m_passwordField stringValue];
+        if ([m_privateKey decryptKey:password]) {
+            AppDelegate *app = [[NSApplication sharedApplication] delegate];
+            Identities *selected = [app identityForKeyId:m_privateKey.keyId];
+            
+            if ([selected.secondaryKey isEncrypted]) {
+                if ([selected.secondaryKey decryptKey:password]) {
+                    NSLog(@"Subkey decrypted.");
+                }
+                else {
+                    NSLog(@"Error: could not decrypt subkey.");
+                }
+                [NSApp stopModal];
+            }
+            else {
+                NSLog(@"Info: Subkey not encrypted.");
+            }
+        }
+    }
 }
 
 -(void)presentPasswordPrompt:(NSString *)prompt privateKey:(OpenPGPPublicKey *)privateKey window:(NSWindow *)parent {
     NSWindow *window = [self window];
     m_privateKey = privateKey;
+    state = kPasswordWindowStateUnlockIdentity;
     
     [m_promptField setStringValue:prompt];
     [m_repeatPasswordField setHidden:YES];

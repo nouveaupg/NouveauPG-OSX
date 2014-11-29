@@ -16,7 +16,6 @@
 #import "ComposeWindowController.h"
 #import "NewIdentityPanel.h"
 #import "IdenticonImage.h"
-#import "Identities.h"
 #import "PasswordWindow.h"
 
 @implementation AppDelegate
@@ -722,6 +721,19 @@
 }
 
 #pragma mark Helper methods
+
+-(Identities *)identityForKeyId:(NSString *)keyId {
+    Identities *identity = nil;
+    
+    for (Identities *each in identities) {
+        if ([[[each keyId] uppercaseString] isEqualToString:[keyId uppercaseString]]) {
+            identity = each;
+            break;
+        }
+    }
+    
+    return identity;
+}
 
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd {
     OpenPGPPublicKey *primaryKey = [[OpenPGPPublicKey alloc]initWithKeyLength:bits isSubkey:NO];
