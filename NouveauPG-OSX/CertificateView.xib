@@ -16,6 +16,7 @@
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
                 <outlet property="m_subkeyCertIcon" destination="fdR-0g-747" id="LZA-fX-m0g"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
+                <outlet property="m_unlockButton" destination="Dq8-3D-D8g" id="drs-Ms-WP3"/>
                 <outlet property="m_userIdCertIcon" destination="2UY-La-j4S" id="oqV-GP-o7d"/>
                 <outlet property="m_userIdField" destination="MwE-FP-kPH" id="isk-lh-zzv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="IPr-ek-9dI"/>
@@ -150,7 +151,7 @@
                         <action selector="decryptButton:" target="-2" id="bna-T3-V6M"/>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
+                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
                     <rect key="frame" x="393" y="185" width="33" height="30"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

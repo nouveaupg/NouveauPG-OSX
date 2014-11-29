@@ -38,6 +38,7 @@
 -(IBAction)newIdentityPanel:(id)sender;
 -(IBAction)importFromFile:(id)sender;
 
+-(void)presentPasswordPrompt: (NSString *)identityKeyId;
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;

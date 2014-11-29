@@ -25,6 +25,7 @@
     IBOutlet NSButton *m_privateCertButton;
     IBOutlet NSTextField *m_userIdCertLabel;
     IBOutlet NSTextField *m_subkeyCertLabel;
+    IBOutlet NSButton *m_unlockButton;
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;
