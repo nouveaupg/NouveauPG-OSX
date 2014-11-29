@@ -188,9 +188,11 @@
         
         bool isEncrypted = [encryptionKey isEncrypted];
         if (isEncrypted) {
-            if ([encryptionKey decryptKey:@""]) {
+            bool result = [encryptionKey decryptKey:@""];
+            if (result) {
                 unsigned char *sessionKey = NULL;
                 OpenPGPMessage *encryptedMessage = [[OpenPGPMessage alloc]initWithArmouredText:[m_textView string]];
+                NSMutableArray *encryptedPackets = [[NSMutableArray alloc]initWithCapacity:1];
                 if ([encryptedMessage validChecksum]) {
                     for (OpenPGPPacket *each in [OpenPGPPacket packetsFromMessage:encryptedMessage]) {
                         if ([each packetTag] == 1) {
@@ -199,13 +201,38 @@
                             if ([[each packetData] length] >= 271) {
                                 unsigned int declaredBits = (*(ptr + 13) << 8) | (*(ptr + 14) & 0xff);
                                 sessionKey = [encryptionKey decryptBytes:(ptr+15) length:(declaredBits + 7)/8];
-                                break;
                             }
                             
+                        }
+                        else if( [each packetTag] == 18 ) {
+                            OpenPGPEncryptedPacket *newPacket = [[OpenPGPEncryptedPacket alloc]initWithData:[each packetData]];
+                            [encryptedPackets addObject:newPacket];
                         }
                     }
                     if (sessionKey) {
                         // decrypt the message with the session key.
+                        
+                        NSMutableData *outputData = [[NSMutableData alloc] init];
+                        for( OpenPGPEncryptedPacket *each in encryptedPackets ) {
+                            OpenPGPPacket *resultantPacket = [each decryptWithSessionKey:sessionKey algo:7];
+                            LiteralPacket *newLiteral = [[LiteralPacket alloc]initWithData:[resultantPacket packetData]];
+                            [outputData appendData:[newLiteral content]];
+                        }
+                        
+                        if ([outputData length] > 0) {
+                            NSString *stringData = [[NSString alloc]initWithData:outputData encoding:NSUTF8StringEncoding];
+                            if (stringData) {
+                                [m_textView setString:stringData];
+                                
+                                [m_textView selectAll:self];
+                                [m_prompt setStringValue:@"Decrypted message"];
+                                [m_rightButton setTitle:@"Copy"];
+                                [m_leftButton setTitle:@"Save as file..."];
+                                
+                                _state = kComposePanelStateReadMessage;
+                            }
+                        }
+
                     }
                 }
                 else {

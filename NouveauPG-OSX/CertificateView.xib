@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6250"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CertificateViewController">
@@ -37,16 +36,16 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="kWN-2B-OjP"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MwE-FP-kPH">
-                    <rect key="frame" x="169" y="243" width="303" height="21"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User Id: First Last" id="z0u-no-5oC">
+                    <rect key="frame" x="169" y="243" width="259" height="21"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="User Id: First Last" id="z0u-no-5oC">
                         <font key="font" size="15" name="ArialRoundedMTBold"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ghA-xF-3a4">
-                    <rect key="frame" x="169" y="227" width="227" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
+                    <rect key="frame" x="169" y="227" width="259" height="17"/>
+                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -123,7 +122,7 @@
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
                     <rect key="frame" x="250" y="115" width="176" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Private Keystore" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
+                    <buttonCell key="cell" type="roundTextured" title="Private Keystore" bezelStyle="texturedRounded" image="tiny_lock" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
@@ -143,13 +142,20 @@
                 </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
                     <rect key="frame" x="53" y="115" width="192" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Decrypt Message" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
+                    <buttonCell key="cell" type="roundTextured" title="Decrypt Message" bezelStyle="texturedRounded" image="tiny_lock" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
                         <action selector="decryptButton:" target="-2" id="bna-T3-V6M"/>
                     </connections>
+                </button>
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
+                    <rect key="frame" x="393" y="185" width="33" height="30"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
                 </button>
             </subviews>
             <point key="canvasLocation" x="60" y="-33"/>
@@ -158,6 +164,7 @@
     <resources>
         <image name="certificate_background" width="535.81396484375" height="379.25582885742188"/>
         <image name="subkey" width="25" height="37"/>
+        <image name="tiny_lock" width="14" height="20"/>
         <image name="userid" width="57.913043975830078" height="56.347827911376953"/>
     </resources>
 </document>
