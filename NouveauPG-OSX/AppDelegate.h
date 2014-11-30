@@ -31,13 +31,15 @@
 @property (strong,nonatomic) NSArray *recipients;
 @property (strong,nonatomic) NSArray *identities;
 
-- (IBAction)saveAction:(id)sender;
-- (IBAction)importFromClipboard:(id)sender;
-- (IBAction)addAction:(id)sender;
-- (IBAction)removeAction:(id)sender;
-
+-(IBAction)saveAction:(id)sender;
+-(IBAction)importFromClipboard:(id)sender;
+-(IBAction)addAction:(id)sender;
+-(IBAction)removeAction:(id)sender;
+-(IBAction)lockIdentity:(id)sender;
 -(IBAction)newIdentityPanel:(id)sender;
 -(IBAction)importFromFile:(id)sender;
+
+-(void)refreshCertificateViewController;
 
 -(Identities *)identityForKeyId:(NSString *)keyId;
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;

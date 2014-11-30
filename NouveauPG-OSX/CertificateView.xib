@@ -10,13 +10,13 @@
                 <outlet property="m_emailField" destination="ghA-xF-3a4" id="OrL-of-KYJ"/>
                 <outlet property="m_fingerprintField" destination="2sE-JL-eaB" id="M0d-fD-FWC"/>
                 <outlet property="m_keyIdField" destination="9Lj-LQ-1hh" id="e1W-gn-H03"/>
+                <outlet property="m_lockButton" destination="Dq8-3D-D8g" id="fW6-Yj-j9g"/>
                 <outlet property="m_mainIdenticon" destination="kWN-2B-OjP" id="Hga-pD-Hu3"/>
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
                 <outlet property="m_privateCertButton" destination="TKg-kT-1l1" id="1fK-aR-40b"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
                 <outlet property="m_subkeyCertIcon" destination="fdR-0g-747" id="LZA-fX-m0g"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
-                <outlet property="m_unlockButton" destination="Dq8-3D-D8g" id="drs-Ms-WP3"/>
                 <outlet property="m_userIdCertIcon" destination="2UY-La-j4S" id="oqV-GP-o7d"/>
                 <outlet property="m_userIdField" destination="MwE-FP-kPH" id="isk-lh-zzv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="IPr-ek-9dI"/>
@@ -157,6 +157,9 @@
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
                     </buttonCell>
+                    <connections>
+                        <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
+                    </connections>
                 </button>
             </subviews>
             <point key="canvasLocation" x="60" y="-33"/>

@@ -47,6 +47,21 @@
     }
 }
 
+-(void)setIdentityLocked:(bool)locked {
+    if (locked) {
+        [m_lockButton setHidden:YES];
+        
+        [m_decryptButton setImage:[NSImage imageNamed:@"tiny_lock"]];
+        [m_privateCertButton setImage:[NSImage imageNamed:@"tiny_lock"]];
+    }
+    else {
+        [m_lockButton setHidden:NO];
+        
+        [m_decryptButton setImage:nil];
+        [m_privateCertButton setImage:nil];
+    }
+}
+
 -(void)setPublicKey:(OpenPGPPublicKey *)publicKey {
     m_publicKey = publicKey;
 }
@@ -108,6 +123,11 @@
         [m_decryptButton setHidden:YES];
         [m_privateCertButton setHidden:YES];
     }
+}
+
+-(IBAction)lockIdentity:(id)sender {
+    AppDelegate *app = [[NSApplication sharedApplication] delegate];
+    [app lockIdentity:sender];
 }
 
 - (void)viewDidLoad {

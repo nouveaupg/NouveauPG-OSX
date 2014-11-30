@@ -42,6 +42,8 @@
                 else {
                     NSLog(@"Error: could not decrypt subkey.");
                 }
+                
+                [app refreshCertificateViewController];
                 [NSApp stopModal];
             }
             else {

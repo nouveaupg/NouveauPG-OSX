@@ -536,6 +536,7 @@
         for (Recipient *each in recipients) {
             if ([[each keyId] isEqualToString:selectedItem]) {
                 selectedObject = each;
+                break;
             }
         }
         
@@ -721,6 +722,29 @@
 }
 
 #pragma mark Helper methods
+
+-(void)refreshCertificateViewController {
+    id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
+    id parent = [m_outlineView parentForItem:selectedItem];
+    
+    if ([parent isEqualToString:@"RECIPIENTS"]) {
+        
+    }
+    else if ([parent isEqualToString:@"MY IDENTITIES"]) {
+        Identities *selectedIdentity = [self identityForKeyId:selectedItem];
+        if (selectedIdentity) {
+            if ([selectedIdentity.primaryKey isEncrypted]) {
+                [m_certificateViewController setIdentityLocked:YES];
+            }
+            else {
+                [m_certificateViewController setIdentityLocked:NO];
+            }
+        }
+        else {
+            // TODO: hide certificate
+        }
+    }
+}
 
 -(Identities *)identityForKeyId:(NSString *)keyId {
     Identities *identity = nil;
@@ -1066,6 +1090,30 @@
 
 - (IBAction)addAction:(id)sender {
     
+}
+
+- (IBAction)lockIdentity:(id)sender {
+    // note this is not wired, the action is bubbled up from CertificateViewController
+    id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
+    id parent = [m_outlineView parentForItem:selectedItem];
+    
+    if (selectedItem) {
+        if ([parent isEqualToString:@"MY IDENTITIES"]) {
+            Identities *selectedObject = [self identityForKeyId:selectedItem];
+            
+            OpenPGPMessage *keystoreMessage = [[OpenPGPMessage alloc]initWithArmouredText:selectedObject.privateKeystore];
+            for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:keystoreMessage] ) {
+                if( [eachPacket packetTag] == 5 ) {
+                    selectedObject.primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                }
+                else if( [eachPacket packetTag] == 7 ) {
+                    selectedObject.secondaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                }
+            }
+            
+            [m_certificateViewController setIdentityLocked:YES];
+        }
+    }
 }
 
 - (IBAction)removeAction:(id)sender {
