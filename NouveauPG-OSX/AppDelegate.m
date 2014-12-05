@@ -303,10 +303,16 @@
         NSLog(@"%@",each.keyId);
         if ([each.keyId isEqualToString:keyId]) {
             selectedIdentity = each;
+            break;
         }
     }
     
     if (selectedIdentity) {
+        if ([selectedIdentity.primaryKey isEncrypted]) {
+            [self presentPasswordPrompt:selectedIdentity.keyId];
+            return;
+        }
+        
         ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
         windowController.state = kComposePanelStateExportKeystore;
         [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
