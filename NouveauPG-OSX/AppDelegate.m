@@ -1064,7 +1064,7 @@
                     if([self importRecipientFromCertificate:message]) {
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
                         for (Recipient *each in recipients) {
-                            [newArray addObject:[[NSString alloc]initWithString:each.name]];
+                            [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
                         }
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
@@ -1132,17 +1132,14 @@
             Recipient *selectedObject = nil;
             
             for (Recipient *each in recipients) {
-                if ([[each name] isEqualToString:selectedItem]) {
+                if ([[each keyId] isEqualToString:selectedItem]) {
                     selectedObject = each;
+                    break;
                 }
             }
             
             if (selectedObject) {
-                NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
-                [mutable removeObject:selectedObject];
-                recipients = [[NSArray alloc]initWithArray:mutable];
-                [m_outlineView reloadData];
-                
+                m_pendingItem = [[NSString alloc]initWithString:selectedItem];
                 [self.managedObjectContext deleteObject:selectedObject];
                 
                 NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient?"];
@@ -1163,8 +1160,18 @@
     NSError *error;
     if (returnCode == 1) {
         [self.managedObjectContext save:&error];
+        
+        NSMutableArray *treeArray = [[NSMutableArray alloc]initWithCapacity:10];
+        for (NSString *each in [m_children objectForKey:@"RECIPIENTS"] ) {
+            if (![each isEqualToString:m_pendingItem]) {
+                [treeArray addObject:[[NSString alloc]initWithString:each]];
+            }
+        }
+        [m_children setObject:treeArray forKey:@"RECIPIENTS"];
+        [m_outlineView reloadData];
     }
     else {
+        m_pendingItem = nil;
         [self.managedObjectContext reset];
     }
 }
