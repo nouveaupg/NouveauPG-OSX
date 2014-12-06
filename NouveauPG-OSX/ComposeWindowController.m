@@ -109,6 +109,8 @@
             }
             else {
                 NSLog(@"Error opening file.");
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Error opening file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not open file selected. NouveauPG only supports plain text files."];
+                [alert runModal];
             }
             
         }
