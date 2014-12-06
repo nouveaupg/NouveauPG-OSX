@@ -122,6 +122,8 @@
     else {
         [m_decryptButton setHidden:YES];
         [m_privateCertButton setHidden:YES];
+        
+        [m_lockButton setHidden:YES];
     }
 }
 

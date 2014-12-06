@@ -471,7 +471,7 @@
                     
                     
                     keyId = [[NSString stringWithFormat:@"%02x%02x%02x%02x",digest[16],digest[17],digest[18],digest[19]] copy];
-                    NSLog(@"KeyID: %@",keyId);
+                    NSLog(@"Initialized RSA Key ID: %@",keyId);
 
                     
                 }
@@ -564,7 +564,7 @@
                     memcpy(m_fingerprint, digest, 20);
                     
                     self.keyId = [NSString stringWithFormat:@"%02x%02x%02x%02x",digest[16],digest[17],digest[18],digest[19]];
-                    NSLog(@"KeyID: %@",keyId);
+                    NSLog(@"Initialized RSA Key ID: %@",keyId);
                 }
                 else {
                     publicKeyType = - 1;

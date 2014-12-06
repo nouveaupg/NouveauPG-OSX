@@ -11,6 +11,7 @@
 #import "OpenPGPPublicKey.h"
 #import "CertificateViewController.h"
 #import "Identities.h"
+#import "Recipient.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
@@ -49,6 +50,7 @@
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;
 -(void)presentPrivateKeyCertificate:(NSString *)keyId;
 -(void)presentDecryptSheet:(NSString *)keyId;
+-(Recipient *)recipientForKeyId:(NSString *)keyId;
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
 
 -(void)setupCertificateSubview;

@@ -12,7 +12,6 @@
 #import "UserIDPacket.h"
 #import "OpenPGPPublicKey.h"
 #import "OpenPGPSignature.h"
-#import "Recipient.h"
 #import "ComposeWindowController.h"
 #import "NewIdentityPanel.h"
 #import "IdenticonImage.h"
@@ -694,11 +693,9 @@
             }
         }
         
-        NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)primaryKey.publicKeySize];
         
         [m_certificateViewController setUserId:selectedObject.name];
         [m_certificateViewController setPrivateCertificate:YES];
-        [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
         [m_certificateViewController setEmail:selectedObject.email];
         [m_certificateViewController setFingerprint:selectedObject.fingerprint];
         [m_certificateViewController setKeyId:selectedObject.keyId];
@@ -723,6 +720,11 @@
         }
         [m_certificateViewController setIdenticon:newIdenticonCode];
     }
+    else {
+        [m_certificateViewController.view removeFromSuperview];
+        m_certificateViewController = nil;
+    }
+    [self refreshCertificateViewController];
     
     NSLog(@"Selection did change.");
 }
@@ -734,11 +736,20 @@
     id parent = [m_outlineView parentForItem:selectedItem];
     
     if ([parent isEqualToString:@"RECIPIENTS"]) {
+        [m_certificateViewController setPrivateCertificate:NO];
         
+        Recipient *selectedRecipient = [self recipientForKeyId:selectedItem];
+        if (selectedRecipient) {
+            NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedRecipient.primary.publicKeySize];
+            [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+        }
     }
     else if ([parent isEqualToString:@"MY IDENTITIES"]) {
         Identities *selectedIdentity = [self identityForKeyId:selectedItem];
         if (selectedIdentity) {
+            NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedIdentity.primaryKey.publicKeySize];
+            [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+            
             if ([selectedIdentity.primaryKey isEncrypted]) {
                 [m_certificateViewController setIdentityLocked:YES];
             }
@@ -750,6 +761,19 @@
             // TODO: hide certificate
         }
     }
+}
+
+-(Recipient *)recipientForKeyId:(NSString *)keyId {
+    Recipient *recipient = nil;
+    
+    for (Recipient *each in recipients) {
+        if ([[[each keyId] uppercaseString] isEqualToString:[keyId uppercaseString]]) {
+            recipient = each;
+            break;
+        }
+    }
+    
+    return recipient;
 }
 
 -(Identities *)identityForKeyId:(NSString *)keyId {
@@ -1169,6 +1193,9 @@
         }
         [m_children setObject:treeArray forKey:@"RECIPIENTS"];
         [m_outlineView reloadData];
+        
+        [m_certificateViewController.view removeFromSuperview];
+        m_certificateViewController = nil;
     }
     else {
         m_pendingItem = nil;

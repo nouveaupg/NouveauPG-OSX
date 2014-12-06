@@ -122,7 +122,9 @@
     NSUInteger offset = 0;
     while(newPacket) {
         offset += [newPacket length];
+#ifdef DEBUG_PACKET
         NSLog(@"%.02f%% of %lu bytes processed.",(double)offset/(double)[messageData length] * 100.f,[messageData length]);
+#endif
         if( offset < [messageData length] ) {
             newPacket = [[OpenPGPPacket alloc]initWithData:[NSData dataWithBytes:(ptr+offset) length:messageLength - offset]];
             if (newPacket) {
@@ -161,7 +163,9 @@
                     packet_length = ((*(ptr+1) - 192) << 8) + ( *(ptr+2)) + 192 + 3;
                 }
                 else {
+#ifdef DEBUG_PACKET
                     NSLog(@"Partial packet header length encoding.");
+#endif
                     // partial encoding
                     unsigned int offset = 2;
                     unsigned int partialBodyLen = 1 << (*(ptr+1) & 0x1F);
@@ -195,7 +199,9 @@
                     return nil;
                 }
                 m_packetData = [[NSData alloc]initWithBytes:ptr length:packet_length];
+#ifdef DEBUG_PACKET
                 NSLog(@"Found new format packet with tag %ld and %d bytes.",m_packetTag,packet_length);
+#endif
             }
             else {
                 newPacketFormat = false;
@@ -219,9 +225,13 @@
                     return nil;
                 }
                 m_packetData = [[NSData alloc]initWithBytes:ptr length:packet_length];
+#ifdef DEBUG_PACKET
                 NSLog(@"Found old format packet with tag %ld and %d bytes.",m_packetTag,packet_length);
+#endif
             }
+#ifdef DEBUG_PACKET
             NSLog(@"Overall packet length: %lu", [m_packetData length]);
+#endif
         }
         else {
             // not a valid packet if it doesn't start with a 1 bit
