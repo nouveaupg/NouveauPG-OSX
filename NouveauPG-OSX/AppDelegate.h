@@ -20,6 +20,7 @@
     
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;
+    NSString *m_pendingItem;
 }
 
 @property (assign) IBOutlet NSWindow *window;
