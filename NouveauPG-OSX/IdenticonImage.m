@@ -53,7 +53,10 @@
     [self lockFocus];
     // Drawing code
     CGContextRef context = [[NSGraphicsContext currentContext] graphicsPort];
-    
+    CGAffineTransform flipVertical = CGAffineTransformMake(
+                                                           1, 0, 0, -1, 0, self.size.height
+                                                           );
+    CGContextConcatCTM(context, flipVertical);
     
     CGLayerRef topLeftPatch = CGLayerCreateWithContext(context, self.size, NULL);
     CGContextRef gtx = CGLayerGetContext(topLeftPatch);
