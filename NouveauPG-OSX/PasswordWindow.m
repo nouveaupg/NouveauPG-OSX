@@ -30,9 +30,9 @@
 
 -(IBAction)confirmButton:(id)sender {
     if (state == kPasswordWindowStateUnlockIdentity) {
+        AppDelegate *app = [[NSApplication sharedApplication] delegate];
         NSString *password = [m_passwordField stringValue];
         if ([m_privateKey decryptKey:password]) {
-            AppDelegate *app = [[NSApplication sharedApplication] delegate];
             Identities *selected = [app identityForKeyId:m_privateKey.keyId];
             
             if ([selected.secondaryKey isEncrypted]) {
@@ -49,6 +49,10 @@
             else {
                 NSLog(@"Info: Subkey not encrypted.");
             }
+        }
+        else {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Couldn't unlock identity" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Incorrect password. Try a different password."];
+            [alert runModal];
         }
     }
 }
