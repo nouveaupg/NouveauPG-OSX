@@ -506,6 +506,8 @@
         offset++;
         output = malloc(16);
         memcpy(output, unencryptedBuffer+offset, 16);
+        memset(unencryptedBuffer, len, 0x0);
+        free(unencryptedBuffer);
         return output;
     }
     return NULL;
@@ -715,6 +717,10 @@
                     NSData *outputData = [NSData dataWithBytes:output length:frameSize];
                     free(output);
                     return outputData;
+                }
+                else {
+                    NSLog(@"Error: could not encrypt");
+                    free(output);
                 }
             }
             else {
