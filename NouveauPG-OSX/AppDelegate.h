@@ -22,6 +22,7 @@
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;
     NSString *m_pendingItem;
+    NSString *m_rootNode;
 }
 
 @property (assign) IBOutlet NSWindow *window;

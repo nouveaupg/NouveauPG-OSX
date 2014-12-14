@@ -65,7 +65,13 @@
     }
     
     AppDelegate *appDelegate = [[NSApplication sharedApplication] delegate];
-    [appDelegate generateNewIdentity:userId keySize:keyBits password:password];
+    bool success = [appDelegate generateNewIdentity:userId keySize:keyBits password:password];
+    [NSApp stopModal];
+    
+    if (!success) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Could not create identity" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"An error occurred while attempting to create a new identity."];
+        [alert runModal];
+    }
     
 }
 

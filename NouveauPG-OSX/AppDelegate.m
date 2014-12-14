@@ -859,6 +859,14 @@
         
         return false;
     }
+    else {
+        NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[identities count]];
+        for( Identities *each in identities ) {
+            [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+        }
+        [m_children setObject:newArray forKey:@"MY IDENTITIES"];
+        [m_outlineView reloadData];
+    }
     
     return true;
 }
@@ -868,7 +876,7 @@
         CertificateViewController *viewController = [[CertificateViewController alloc]initWithNibName:@"CertificateView" bundle:[NSBundle mainBundle]];
         
         [m_placeholderView addSubview:viewController.view];
-        
+        /*
         [m_placeholderView addConstraint:[NSLayoutConstraint constraintWithItem:viewController.view
                                                                       attribute:NSLayoutAttributeLeading
                                                                       relatedBy:NSLayoutRelationEqual
@@ -881,6 +889,7 @@
                                                                          toItem:m_placeholderView
                                                                       attribute:NSLayoutAttributeCenterX multiplier:1
                                                                        constant:0]];
+         */
         //[m_placeholderView addConstraint:leftConstraint];
         
         m_certificateViewController = viewController;
@@ -1077,7 +1086,7 @@
                 NSString *keyId = [publicKey keyId];
                 bool bFound = false;
                 for (Recipient *each in recipients) {
-                    if ([[keyId uppercaseString] isEqualToString:each.keyId]) {
+                    if ([[keyId uppercaseString] isEqualToString:[each.keyId uppercaseString]]) {
                         NSLog(@"%@",each.keyId);
                         bFound = true;
                         break;
@@ -1164,9 +1173,24 @@
             
             if (selectedObject) {
                 m_pendingItem = [[NSString alloc]initWithString:selectedItem];
+                m_rootNode = [[NSString alloc]initWithString:parent];
                 [self.managedObjectContext deleteObject:selectedObject];
                 
                 NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient?"];
+                
+                [confirm beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+            }
+        }
+        else if( [parent isEqualToString:@"MY IDENTITIES"]) {
+            Identities *selectedObject = [self identityForKeyId:selectedItem];
+            
+            if (selectedObject) {
+                m_pendingItem = [[NSString alloc]initWithString:selectedItem];
+                m_rootNode = [[NSString alloc]initWithString:parent];
+                
+                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient %@?",selectedObject.name];
+                
+                [self.managedObjectContext deleteObject:selectedObject];
                 
                 [confirm beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
             }
@@ -1186,12 +1210,13 @@
         [self.managedObjectContext save:&error];
         
         NSMutableArray *treeArray = [[NSMutableArray alloc]initWithCapacity:10];
-        for (NSString *each in [m_children objectForKey:@"RECIPIENTS"] ) {
+        for (NSString *each in [m_children objectForKey:m_rootNode] ) {
             if (![each isEqualToString:m_pendingItem]) {
                 [treeArray addObject:[[NSString alloc]initWithString:each]];
             }
         }
-        [m_children setObject:treeArray forKey:@"RECIPIENTS"];
+        [m_children setObject:treeArray forKey:m_rootNode];
+        
         [m_outlineView reloadData];
         
         [m_certificateViewController.view removeFromSuperview];
