@@ -78,6 +78,8 @@
 -(void)controlTextDidChange:(NSNotification *)notification {
     NSString *passwordValue = [m_passwordField stringValue];
     
+    int diversity = 26;
+    
     NSCharacterSet *uppercase = [NSCharacterSet uppercaseLetterCharacterSet];
     NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
     NSCharacterSet *symbols = [NSCharacterSet symbolCharacterSet];
@@ -104,9 +106,34 @@
         }
     }
     
-    
-    double progress = (double)[passwordValue length]/16.0;
-    [m_passwordStrengthIndicator setDoubleValue:progress];
+    if (uppercaseFound) {
+        diversity += 26;
+    }
+    if (digitsFound) {
+        diversity += 10;
+    }
+    if (symbolsFound) {
+        diversity += 14;
+    }
+    if (puncFound) {
+        diversity += 26;
+    }
+
+    BIGNUM *base = BN_new();
+    BN_set_word(base, diversity);
+    BIGNUM *count = BN_new();
+    BN_set_word(count, [passwordValue length]);
+    BIGNUM *result = BN_new();
+    BN_CTX *temp = BN_CTX_new();
+    BN_exp(result, base, count, temp);
+    BN_CTX_free(temp);
+    BN_free(count);
+    BN_free(base);
+
+    double entropy = BN_num_bits(result);
+    BN_free(result);
+
+    [m_passwordStrengthIndicator setDoubleValue:entropy/128];
     
     if ([[m_passwordRepeatField stringValue] isEqualToString:passwordValue]) {
         [m_rightButton setKeyEquivalent:@"\r"];

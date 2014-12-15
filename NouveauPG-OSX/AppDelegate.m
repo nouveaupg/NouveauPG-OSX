@@ -817,7 +817,7 @@
     
     NSManagedObjectContext *ctx = [self managedObjectContext];
     Identities *newIdentity = [NSEntityDescription insertNewObjectForEntityForName:@"Identities" inManagedObjectContext:ctx];
-    newIdentity.keyId = [[primaryKey keyId] uppercaseString];
+    newIdentity.keyId = [[NSString alloc] initWithString:[[primaryKey keyId] uppercaseString]];
     newIdentity.created = [NSDate date];
     newIdentity.publicCertificate = publicKeyCertificate;
     newIdentity.privateKeystore = privateKeystore;
@@ -847,6 +847,9 @@
         newIdentity.name = userID;
     }
     
+    newIdentity.primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:[primaryKey exportPrivateKey:passwd]];
+    newIdentity.secondaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:[subkey exportPrivateKey:passwd]];
+    
     NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:identities];
     [editable addObject:newIdentity];
     identities = [[NSArray alloc]initWithArray:editable];
@@ -862,7 +865,9 @@
     else {
         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[identities count]];
         for( Identities *each in identities ) {
-            [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+            if (each.keyId) {
+                [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+            }
         }
         [m_children setObject:newArray forKey:@"MY IDENTITIES"];
         [m_outlineView reloadData];
@@ -933,11 +938,13 @@
                             messageType = 1;
                             
                             primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                            break;
                         }
                         else if([eachPacket packetTag] == 5) {
                             messageType = 2;
                             
                             primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+                            break;
                         }
                         else if([eachPacket packetTag] == 1 ) {
                             messageType = 3;
@@ -947,24 +954,29 @@
                     
                     NSAlert *alert;
                     
-                    switch (messageType) {
-                        case 1:
-                            [self importRecipientFromCertificate:message];
-                            break;
-                            
-                        default:
-                            alert = [NSAlert alertWithMessageText:@"Error importing file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"A valid OpenPGP was not found in the selected file."];
-                            [alert runModal];
-                            break;
+                    if (messageType == 1) {
+                        if([self importRecipientFromCertificate:message]) {
+                            NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:20];
+                            for (Recipient *each in recipients) {
+                                [newArray addObject:each.keyId];
+                            }
+                            [m_children setObject:newArray forKey:@"RECIPIENTS"];
+                            [m_outlineView reloadData];
+                        }
                     }
-                    NSLog(@"Found valid OpenPGPMessage.");
+                    else {
+                        alert = [NSAlert alertWithMessageText:@"Error importing file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"A valid OpenPGP was not found in the selected file."];
+                        [alert runModal];
+                    }
                 }
                 else {
-                    NSLog(@"Invalid OpenPGPMessage.");
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"Error importing file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Selected file did not contain a valid OpenPGP message."];
+                    [alert runModal];
                 }
             }
             else {
-                NSLog(@"Error importing file: %@", [error description]);
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Error importing file" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error description]];
+                [alert runModal];
             }
             
         }
@@ -1097,7 +1109,10 @@
                     if([self importRecipientFromCertificate:message]) {
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
                         for (Recipient *each in recipients) {
-                            [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+                            if (each.keyId) {
+                                [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+                            }
+                            
                         }
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
