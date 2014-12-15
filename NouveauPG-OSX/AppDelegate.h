@@ -21,6 +21,7 @@
     
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;
+    NSManagedObject *m_pendingObject;
     NSString *m_pendingItem;
     NSString *m_rootNode;
 }

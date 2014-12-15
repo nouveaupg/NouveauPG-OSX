@@ -1187,6 +1187,7 @@
             }
             
             if (selectedObject) {
+                m_pendingObject = selectedObject;
                 m_pendingItem = [[NSString alloc]initWithString:selectedItem];
                 m_rootNode = [[NSString alloc]initWithString:parent];
                 [self.managedObjectContext deleteObject:selectedObject];
@@ -1200,6 +1201,7 @@
             Identities *selectedObject = [self identityForKeyId:selectedItem];
             
             if (selectedObject) {
+                m_pendingObject = selectedObject;
                 m_pendingItem = [[NSString alloc]initWithString:selectedItem];
                 m_rootNode = [[NSString alloc]initWithString:parent];
                 
@@ -1224,6 +1226,17 @@
     if (returnCode == 1) {
         [self.managedObjectContext save:&error];
         
+        if( [m_rootNode isEqualToString:@"RECIPIENTS"] ) {
+            NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
+            [mutable removeObject:m_pendingObject];
+            recipients = [[NSArray alloc]initWithArray:mutable];
+        }
+        else if( [m_rootNode isEqualToString:@"MY IDENTITIES"] ) {
+            NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:identities];
+            [mutable removeObject:m_pendingObject];
+            identities = [[NSArray alloc]initWithArray:mutable];
+        }
+        
         NSMutableArray *treeArray = [[NSMutableArray alloc]initWithCapacity:10];
         for (NSString *each in [m_children objectForKey:m_rootNode] ) {
             if (![each isEqualToString:m_pendingItem]) {
@@ -1239,6 +1252,9 @@
     }
     else {
         m_pendingItem = nil;
+        m_pendingObject = nil;
+        m_rootNode = nil;
+        
         [self.managedObjectContext reset];
     }
 }

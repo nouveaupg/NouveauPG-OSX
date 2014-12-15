@@ -562,6 +562,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
 				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-OSX-Info.plist";
+				OTHER_LDFLAGS = "-lcrypto";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
