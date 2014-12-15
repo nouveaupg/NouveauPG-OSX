@@ -312,9 +312,55 @@
             return;
         }
         
-        ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
-        windowController.state = kComposePanelStateExportKeystore;
-        [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
+        OpenPGPMessage *publicCertMessage = [[OpenPGPMessage alloc]initWithArmouredText:selectedIdentity.publicCertificate];
+        OpenPGPSignature *sig;
+        OpenPGPPacket *primarySigPacket;
+        OpenPGPPacket *secondarySigPacket;
+        OpenPGPPacket *userIdPacket;
+        
+        NSString *unencryptedKeystore = nil;
+        
+        if ([publicCertMessage validChecksum]) {
+            for (OpenPGPPacket *each in [OpenPGPPacket packetsFromMessage:publicCertMessage]) {
+                if ([each packetTag] == 13) {
+                    userIdPacket = [[OpenPGPPacket alloc]initWithData:[each packetData]];
+                }
+                else if( [each packetTag] == 2 ) {
+                    sig = [[OpenPGPSignature alloc]initWithPacket:each];
+                    if (sig.signatureType == 0x13) {
+                        primarySigPacket = [[OpenPGPPacket alloc]initWithData:[each packetData]];;
+                    }
+                    else if(sig.signatureType == 0x18) {
+                        secondarySigPacket = [[OpenPGPPacket alloc]initWithData:[each packetData]];
+                    }
+                }
+            }
+            
+            NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
+            [packets addObject:[selectedIdentity.primaryKey exportPrivateKeyUnencrypted]];
+            [packets addObject:primarySigPacket];
+            [packets addObject:userIdPacket];
+            [packets addObject:[selectedIdentity.secondaryKey exportPrivateKeyUnencrypted]];
+            [packets addObject:secondarySigPacket];
+            
+            unencryptedKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kPGPPrivateCertificate];
+        }
+        else {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not read public certificate (invalid OpenPGP message)"];
+            [alert runModal];
+            return;
+        }
+        
+        if (unencryptedKeystore) {
+            ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+            windowController.state = kComposePanelStateExportKeystore;
+            [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
+        }
+        else {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not export unencrypted keystore."];
+            [alert runModal];
+        }
+        
     }
     else {
         NSLog(@"Key ID: %@ not found.",keyId);
