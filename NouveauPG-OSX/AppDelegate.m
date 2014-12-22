@@ -23,6 +23,10 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+#define kMessageTypeEncrypted 1
+#define kMessageTypeCertificate 2
+#define kMessageTypeKeystore 3
+
 @synthesize recipients;
 @synthesize identities;
 
@@ -777,6 +781,53 @@
 
 #pragma mark Helper methods
 
++(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage {
+    if ([encryptedMessage validChecksum]) {
+        for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:encryptedMessage]) {
+            if ([eachPacket packetTag] == 1) {
+                unsigned char *ptr = (unsigned char *)[[eachPacket packetData] bytes];
+                NSUInteger packetLen = [[eachPacket packetData] length];
+                if (packetLen > 13) {
+                    if (ptr[3] != 3) {
+                        NSLog(@"Wrong version for Public-Key Encrypted Session Packet. Expected 3, actual %d",ptr[3]);
+                        return nil;
+                    }
+                    if (ptr[12] != 1) {
+                        NSLog(@"Unsupported public key type.");
+                        return nil;
+                    }
+                    NSString *keyId = [NSString stringWithFormat:@"%02x%02x%02x%02x",ptr[8],ptr[9],ptr[10],ptr[11]];
+                    AppDelegate *app = [[NSApplication sharedApplication]delegate];
+                    
+                    OpenPGPPublicKey *found = nil;
+                    for (Identities *each in app.identities) {
+                        if ([keyId isEqualToString:each.keyId]) {
+                            NSLog(@"Primary key found: %@",keyId);
+                            found = each.primaryKey;
+                            break;
+                        }
+                        else if([keyId isEqualToString:each.secondaryKey.keyId]) {
+                            NSLog(@"Subkey found: %@", keyId);
+                            found = each.secondaryKey;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        NSLog(@"Key ID: %@ not found in keychain",keyId);
+                    }
+                    return found;
+                }
+            }
+        }
+    }
+    else {
+        NSLog(@"No valid OpenPGP message found.");
+    }
+
+    
+    return nil;
+}
+
 -(void)refreshCertificateViewController {
     id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
     id parent = [m_outlineView parentForItem:selectedItem];
@@ -949,6 +1000,14 @@
 }
 
 #pragma mark importing to Core Data
+
+-(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore {
+    return false;
+}
+
+-(bool)importEncryptedMessage:(OpenPGPMessage *)message {
+    return false;
+}
 
 
 -(IBAction)importFromFile:(id)sender {
@@ -1135,11 +1194,14 @@
     
     OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:clipboardText];
     
+    int messageType = 0;
+    
     if ([message validChecksum]) {
         NSLog(@"OpenPGP message found on clipboard.");
         NSArray *packets = [OpenPGPPacket packetsFromMessage:message];
         for ( OpenPGPPacket *eachPacket in packets ) {
             if ([eachPacket packetTag] == 6 ) {
+                messageType = kMessageTypeCertificate;
                 OpenPGPPublicKey *publicKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
                 NSString *keyId = [publicKey keyId];
                 bool bFound = false;
@@ -1175,6 +1237,39 @@
                 }
                 
                 
+                break;
+            }
+            else if( [eachPacket packetTag] == 1 ) {
+                OpenPGPPublicKey *keyUsed = [AppDelegate validateEncryptedMessage:message];
+                if (keyUsed) {
+                    Identities *usedIdentity = nil;
+                    for (Identities *eachIdentity in identities) {
+                        if ([[eachIdentity.primaryKey keyId]isEqualToString:keyUsed.keyId] || [[eachIdentity.secondaryKey keyId] isEqualToString:keyUsed.keyId]) {
+                            usedIdentity = eachIdentity;
+                            break;
+                        }
+                    }
+                    for (NSString *eachKeyId in [m_children objectForKey:@"MY IDENTITIES"]) {
+                        if ([eachKeyId isEqualToString:usedIdentity.keyId]) {
+                            NSInteger row = [m_outlineView rowForItem:eachKeyId];
+                            [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
+                            
+                            break;
+                        }
+                    }
+                    
+                    if([keyUsed isEncrypted]) {
+                        NSAlert *alert = [NSAlert alertWithMessageText:@"Identity locked" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The identity used to decrypt this message is locked. Unlock the identity and try importing the message again."];
+                        [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                    }
+                    else {
+                        // present decrypted message
+                    }
+                }
+                else {
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"Can't decrypt message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The secret key needed to decrypt the OpenPGP message on the clipboard was not found in the Identities keychain."];
+                    [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+                }
                 break;
             }
             

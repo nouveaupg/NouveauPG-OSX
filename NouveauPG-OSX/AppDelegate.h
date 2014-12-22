@@ -48,12 +48,16 @@
 -(Identities *)identityForKeyId:(NSString *)keyId;
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
+-(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore;
+-(bool)importEncryptedMessage:(OpenPGPMessage *)message;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;
 -(void)presentPrivateKeyCertificate:(NSString *)keyId;
 -(void)presentDecryptSheet:(NSString *)keyId;
 -(Recipient *)recipientForKeyId:(NSString *)keyId;
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
+
++(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage;
 
 -(void)setupCertificateSubview;
 
