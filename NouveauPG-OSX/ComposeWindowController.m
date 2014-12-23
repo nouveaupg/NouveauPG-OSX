@@ -376,6 +376,29 @@
     [window orderOut:self];
 }
 
+-(void)presentDecryptedMessage: (NSWindow *)parent owner: (NSString *)keyId encryptedMessage: (NSString *)message {
+    NSWindow *window = [self window];
+    AppDelegate *app = [[NSApplication sharedApplication]delegate];
+    Identities *identity = [app identityForKeyId:keyId];
+    [m_prompt setStringValue:[NSString stringWithFormat:@"Decrypted message for %@",identity.name]];
+    [m_rightButton setKeyEquivalent:@"\r"];
+    [m_rightButton setTitle:@"Copy"];
+    
+    [m_leftButton setTitle:@"Save to file..."];
+    [m_leftButton setHidden:NO];
+    
+    
+    
+    [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:@selector(dismiss:) contextInfo:nil];
+    [m_textView setString:message];
+    [self rightButton:nil];
+    [NSApp runModalForWindow:window];
+    // sheet is up here...
+    
+    [NSApp endSheet:window];
+    [window orderOut:self];
+}
+
 - (void)presentComposePanel:(NSWindow *)parent withPublicKey: (OpenPGPPublicKey *)publicKey UserId:(NSString *)userId {
     NSWindow *window = [self window];
     

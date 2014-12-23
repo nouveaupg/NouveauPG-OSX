@@ -1264,6 +1264,11 @@
                     }
                     else {
                         // present decrypted message
+                        ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
+                        windowController.state = kComposePanelStateDecryptMessage;
+                        
+                        [windowController presentDecryptedMessage:self.window owner:usedIdentity.keyId encryptedMessage:clipboardText];
+                        
                     }
                 }
                 else {
