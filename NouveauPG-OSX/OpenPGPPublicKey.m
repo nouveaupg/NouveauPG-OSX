@@ -443,15 +443,73 @@
                         ptr+= 10;
                         memcpy(m_iv, ptr, 16);
                         offset += 28;
+                        
+                        unsigned char *encryptedBuffer;
+                        size_t encryptedBufferLen = [[keyPacket packetData]length] - offset;
+                        encryptedBuffer = malloc(encryptedBufferLen);
+                        if (encryptedBuffer) {
+                            memcpy(encryptedBuffer, (unsigned char *)([[keyPacket packetData] bytes]+offset), encryptedBufferLen);
+                            m_encryptedKey = [[NSData alloc]initWithBytes:encryptedBuffer length:encryptedBufferLen];
+                            free(encryptedBuffer);
+                        }
                     }
-                    unsigned char *encryptedBuffer;
-                    size_t encryptedBufferLen = [[keyPacket packetData]length] - offset;
-                    encryptedBuffer = malloc(encryptedBufferLen);
-                    if (encryptedBuffer) {
-                        memcpy(encryptedBuffer, (unsigned char *)([[keyPacket packetData] bytes]+offset), encryptedBufferLen);
-                        m_encryptedKey = [[NSData alloc]initWithBytes:encryptedBuffer length:encryptedBufferLen];
-                        free(encryptedBuffer);
+                    else if( *ptr == 0 ) {
+                        // unencrypted key
+                        // secret exponent d
+                        int secretExponentBits = 0;
+                        ptr++;
+                        
+                        secretExponentBits = *ptr;
+                        secretExponentBits <<= 8;
+                        ptr++;
+                        secretExponentBits |= *ptr;
+                        
+                        BIGNUM *bn = BN_new();
+                        mpi_len = (secretExponentBits + 7) / 8;
+                        BN_bin2bn(ptr, mpi_len, bn);
+                        m_rsaKey->d = bn;
+                        
+                        ptr += mpi_len;
+                        // secret prime P
+                        bn = BN_new();
+                        int secretPrimePBits = *ptr;
+                        secretPrimePBits <<= 8;
+                        ptr++;
+                        secretPrimePBits |= *ptr;
+                        
+                        mpi_len = (secretPrimePBits + 7) / 8;
+                        BN_bin2bn(ptr, mpi_len, bn);
+                        m_rsaKey->p = bn;
+                        //assert(BN_num_bits(m_rsaKey->p) == secretPrimePBits);
+                        
+                        ptr += mpi_len;
+                        bn = BN_new();
+                        // secret prime Q
+                        int secretPrimeQBits = *ptr;
+                        secretPrimeQBits <<= 8;
+                        ptr++;
+                        secretPrimeQBits |= *ptr;
+                        
+                        mpi_len = (secretPrimeQBits + 7) / 8;
+                        BN_bin2bn(ptr, mpi_len, bn);
+                        m_rsaKey->q = bn;
+                        //assert(BN_num_bits(m_rsaKey->q) == secretPrimeQBits);
+                        
+                        ptr += mpi_len;
+                        bn = BN_new();
+                        // inverse of p % q
+                        int inverseBits = *ptr;
+                        inverseBits <<= 8;
+                        ptr++;
+                        inverseBits |= *ptr;
+                        
+                        mpi_len = (inverseBits + 7) / 8;
+                        BN_bin2bn(ptr, mpi_len, bn);
+                        m_rsaKey->iqmp = bn;
+                        //assert(BN_num_bits(m_rsaKey->iqmp) == inverseBits);
+                        
                     }
+                    
                     
                     OpenPGPPacket *publicKeyPacket = [self exportPublicKey];
                     
@@ -471,7 +529,13 @@
                     
                     
                     keyId = [[NSString stringWithFormat:@"%02x%02x%02x%02x",digest[16],digest[17],digest[18],digest[19]] copy];
-                    NSLog(@"Initialized RSA Key ID: %@",keyId);
+                    
+                    if(m_encryptedKey) {
+                        NSLog(@"Initialized encrypted RSA Key ID: %@",keyId);
+                    }
+                    else {
+                        NSLog(@"Initialized unencrypted RSA Key ID: %@",keyId);
+                    }
 
                     
                 }
