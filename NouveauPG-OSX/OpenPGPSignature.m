@@ -102,6 +102,12 @@
                         break;
                         
                     case 3:
+                        timestamp = *(ptr+2) << 24;
+                        timestamp |= *(ptr+3) << 16;
+                        timestamp |= *(ptr+4) << 8;
+                        timestamp |= *(ptr+5);
+                        
+                        m_expiryTime = timestamp;
                         break;
                 }
                 
