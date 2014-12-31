@@ -18,6 +18,21 @@
 
 @synthesize certificate;
 
+-(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp {
+    if (keyId == nil) {
+        [m_subkeyCertLabel setHidden:YES];
+        return;
+    }
+    [m_subkeyCertLabel setHidden:NO];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    
+    NSString *format = [NSString stringWithFormat:@"Subkey: %@ (signed %@)",keyId,[formatter stringFromDate:timestamp]];
+    [m_subkeyCertLabel setStringValue:format];
+}
+
 -(IBAction)decryptButton:(id)sender {
     AppDelegate *app = [[NSApplication sharedApplication] delegate];
     [app presentDecryptSheet:m_keyId];
@@ -77,6 +92,14 @@
 }
 
 -(IBAction)composeMessage:(id)sender {
+    NSDate *now = [NSDate date];
+    if ([now isGreaterThan:m_expirationDate]) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Certificate expired" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"This certificate has expired and should not be used."];
+        [alert runModal];
+        
+        return;
+    }
+    
     AppDelegate *appDelegate = [NSApp delegate];
     [appDelegate composeMessageForPublicKey:m_publicKey UserID:m_userId];
 }
@@ -130,6 +153,24 @@
 -(IBAction)lockIdentity:(id)sender {
     AppDelegate *app = [[NSApplication sharedApplication] delegate];
     [app lockIdentity:sender];
+}
+
+-(void)setValidSince:(NSDate *)created until:(NSDate *)expires {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    
+    m_creationDate = [created copy];
+    [m_createdLabel setStringValue:[formatter stringFromDate:created]];
+    
+    if (m_expirationDate) {
+        m_expirationDate = [expires copy];
+        [m_expireLabel setStringValue:[formatter stringFromDate:expires]];
+    }
+    else {
+        [m_expireLabel setStringValue:@"Never"];
+    }
+    
 }
 
 - (void)viewDidLoad {

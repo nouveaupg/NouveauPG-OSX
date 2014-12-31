@@ -14,6 +14,9 @@
     NSData *m_hashedSubpacketData;
     NSData *m_unhashedSubpacketData;
     NSData *m_signature;
+    
+    NSTimeInterval m_creationTime;
+    NSTimeInterval m_expiryTime;
 }
 
 @property NSInteger signatureVersion;
@@ -33,5 +36,7 @@
 
 -(bool) validateWithPublicKey: (OpenPGPPublicKey *)signingKey userId: (NSString *)uid;
 -(bool) validateSubkey: (OpenPGPPublicKey *)subkey withSigningKey: (OpenPGPPublicKey *)signingKey;
+-(NSDate *)dateSigned;
+-(NSDate *)dateExpires;
 
 @end

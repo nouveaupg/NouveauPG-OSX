@@ -24,12 +24,17 @@
     IBOutlet NSButton *m_decryptButton;
     IBOutlet NSButton *m_privateCertButton;
     IBOutlet NSTextField *m_userIdCertLabel;
+    IBOutlet NSTextField *m_createdLabel;
+    IBOutlet NSTextField *m_expireLabel;
     IBOutlet NSTextField *m_subkeyCertLabel;
     IBOutlet NSButton *m_lockButton;
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;
     NSString *m_keyId;
+    
+    NSDate *m_creationDate;
+    NSDate *m_expirationDate;
 }
 
 -(void)setUserId:(NSString *)userId;
@@ -43,6 +48,8 @@
 -(void)setKeyId:(NSString *)keyId;
 -(void)setPrivateCertificate:(bool)isPrivate;
 -(void)setIdentityLocked:(bool)locked;
+-(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp;
+-(void)setValidSince:(NSDate *)created until:(NSDate *)expires;
 
 -(IBAction)composeMessage:(id)sender;
 -(IBAction)publicKeyCertificate:(id)sender;

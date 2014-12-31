@@ -88,6 +88,23 @@
             while (len > 0) {
                 NSUInteger subpacketLength = *ptr;
                 NSLog(@"Hashed subpacket tag: %d; length: %ld",*(ptr+1),len);
+                int tag = *(ptr + 1);
+                unsigned int timestamp = 0;
+                
+                switch (tag) {
+                    case 2:
+                        timestamp = *(ptr+2) << 24;
+                        timestamp |= *(ptr+3) << 16;
+                        timestamp |= *(ptr+4) << 8;
+                        timestamp |= *(ptr+5);
+                        
+                        m_creationTime = timestamp;
+                        break;
+                        
+                    case 3:
+                        break;
+                }
+                
                 ptr += subpacketLength + 1;
                 len -= subpacketLength + 1;
             }
@@ -795,6 +812,20 @@
     }
     
     return outputPacket;
+}
+
+-(NSDate *)dateSigned {
+    if( m_creationTime == 0 ) {
+        return nil;
+    }
+    return [NSDate dateWithTimeIntervalSince1970:m_creationTime];
+}
+
+-(NSDate *)dateExpires {
+    if (m_expiryTime == 0) {
+        return nil;
+    }
+    return [NSDate dateWithTimeIntervalSince1970:m_expiryTime];
 }
 
 @end

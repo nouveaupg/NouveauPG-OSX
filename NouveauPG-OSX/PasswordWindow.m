@@ -29,8 +29,8 @@
 }
 
 -(IBAction)confirmButton:(id)sender {
+    AppDelegate *app = [[NSApplication sharedApplication] delegate];
     if (state == kPasswordWindowStateUnlockIdentity) {
-        AppDelegate *app = [[NSApplication sharedApplication] delegate];
         NSString *password = [m_passwordField stringValue];
         if ([m_privateKey decryptKey:password]) {
             Identities *selected = [app identityForKeyId:m_privateKey.keyId];
@@ -55,6 +55,22 @@
             [alert runModal];
         }
     }
+    else if( state == kPasswordWindowStateImportIdentity ) {
+        if ([[m_passwordField stringValue]isEqualToString:[m_repeatPasswordField stringValue]]) {
+            if([app encryptIdentityWithPassword:[m_passwordField stringValue]]) {
+                NSLog(@"PasswordWindowController: Successfully imported certificate.");
+            }
+            else {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Did not import identity"];
+                [alert runModal];
+            }
+            [NSApp stopModal];
+        }
+        else {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Can't import identity" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Passwords don't match"];
+            [alert runModal];
+        }
+    }
 }
 
 -(void)presentPasswordPrompt:(NSString *)prompt privateKey:(OpenPGPPublicKey *)privateKey window:(NSWindow *)parent {
@@ -74,10 +90,18 @@
 }
 
 -(void)presentChangePasswordPrompt:(NSString *)prompt privateKey:(OpenPGPPublicKey *)privateKey window:(NSWindow *)parent {
-    m_privateKey = privateKey;
+    NSWindow *window = [self window];
+    state = kPasswordWindowStateImportIdentity;
     
     [m_promptField setStringValue:prompt];
     [m_repeatPasswordField setHidden:NO];
+    
+    [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:nil contextInfo:nil];
+    [NSApp runModalForWindow:window];
+    // sheet is up here...
+    
+    [NSApp endSheet:window];
+    [window orderOut:self];
 }
 
 - (void)windowDidLoad {

@@ -24,6 +24,14 @@
     NSManagedObject *m_pendingObject;
     NSString *m_pendingItem;
     NSString *m_rootNode;
+    
+    // Incoming keystore objects
+    
+    OpenPGPPublicKey *m_primaryKey;
+    OpenPGPPublicKey *m_secondaryKey;
+    NSString *m_userId;
+    OpenPGPPacket *m_userIdSigPkt;
+    OpenPGPPacket *m_subkeySigPkt;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -49,6 +57,7 @@
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
 -(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore;
+-(bool)encryptIdentityWithPassword: (NSString *)password;
 -(bool)importEncryptedMessage:(OpenPGPMessage *)message;
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId;
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId;

@@ -12,6 +12,7 @@
 
 #define kPasswordWindowStateUnlockIdentity 1
 #define kPasswordWindowStateChangePassword 2
+#define kPasswordWindowStateImportIdentity 3
 
 @interface PasswordWindow : NSWindowController
 

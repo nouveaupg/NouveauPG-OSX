@@ -358,7 +358,7 @@
         if (unencryptedKeystore) {
             ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
             windowController.state = kComposePanelStateExportKeystore;
-            [windowController presentPrivateKeyCertPanel:self.window certificate:selectedIdentity.privateKeystore UserId:selectedIdentity.name];
+            [windowController presentPrivateKeyCertPanel:self.window certificate:unencryptedKeystore UserId:selectedIdentity.name];
         }
         else {
             NSAlert *alert = [NSAlert alertWithMessageText:@"Error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not export unencrypted keystore."];
@@ -836,7 +836,35 @@
         [m_certificateViewController setPrivateCertificate:NO];
         
         Recipient *selectedRecipient = [self recipientForKeyId:selectedItem];
+        OpenPGPPublicKey *primaryKey;
+        OpenPGPSignature *primarySig;
+        OpenPGPSignature *secondarySig;
         if (selectedRecipient) {
+            OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedRecipient.certificate];
+            for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:message]) {
+                if ([eachPacket packetTag] == 2) {
+                    OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
+                    if (sig.signatureType == 0x18) {
+                        secondarySig = sig;
+                    }
+                    else if(sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
+                        primarySig = sig;
+                    }
+                }
+                else if ([eachPacket packetTag] == 6) {
+                    primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
+            }
+            
+            [m_certificateViewController setValidSince:[primarySig dateSigned] until:[primarySig dateExpires]];
+            
+            if (secondarySig) {
+                [m_certificateViewController setSubkeyKeyId:[primaryKey.keyId uppercaseString] signed:[primarySig dateSigned]];
+            }
+            else {
+                [m_certificateViewController setSubkeyKeyId:nil signed:0];
+            }
+            
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedRecipient.primary.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
         }
@@ -846,6 +874,7 @@
         if (selectedIdentity) {
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedIdentity.primaryKey.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+            [m_certificateViewController setSubkeyKeyId:nil signed:0];
             
             if ([selectedIdentity.primaryKey isEncrypted]) {
                 [m_certificateViewController setIdentityLocked:YES];
@@ -1001,7 +1030,61 @@
 
 #pragma mark importing to Core Data
 
+-(bool)encryptIdentityWithPassword: (NSString *)password {
+    return false;
+}
+
 -(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore {
+    m_primaryKey = m_secondaryKey = nil;
+    m_userId = nil;
+    m_userIdSigPkt = m_subkeySigPkt = nil;
+    
+    for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:keystore]) {
+        if ([eachPacket packetTag] == 5) {
+             m_primaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+        }
+        else if([eachPacket packetTag] == 7) {
+            m_secondaryKey = [[OpenPGPPublicKey alloc]initWithEncryptedPacket:eachPacket];
+        }
+        else if([eachPacket packetTag] == 13) {
+            UserIDPacket *userIdPkt = [[UserIDPacket alloc]initWithPacket:eachPacket];
+            m_userId = [[NSString alloc]initWithString:[userIdPkt stringValue]];
+        }
+        else if([eachPacket packetTag] == 2) {
+            OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
+            if (sig.signatureType == 0x13) {
+                m_userIdSigPkt = [[OpenPGPPacket alloc]initWithData:[eachPacket packetData]];
+            }
+            else if(sig.signatureType == 0x18) {
+                m_subkeySigPkt = [[OpenPGPPacket alloc]initWithData:[eachPacket packetData]];
+            }
+        }
+    }
+    
+    if (m_primaryKey && m_userId) {
+        // check to see if we already have this KeyID in the identities keychain
+        bool found = false;
+        for(Identities *eachIdentity in identities) {
+            if ([[eachIdentity.keyId uppercaseString] isEqualToString:[m_primaryKey.keyId uppercaseString]]) {
+                found = true;
+                break;
+            }
+        }
+        
+        if (found) {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Can't import identity" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"An identity with the KeyId %@ already exists in the Identities keychain. Delete it before importing this identity.",[m_primaryKey.keyId uppercaseString]];
+            [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+        }
+        else {
+            // prompt for password
+            PasswordWindow *windowController = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
+            NSString *prompt = [NSString stringWithFormat:@"Importing identity \"%@\": enter a password to protect from unauthorized use.",m_userId];
+            [windowController presentChangePasswordPrompt:prompt privateKey:m_primaryKey window:self.window];
+            
+            return true;
+        }
+    }
+    
     return false;
 }
 
@@ -1275,6 +1358,11 @@
                     NSAlert *alert = [NSAlert alertWithMessageText:@"Can't decrypt message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The secret key needed to decrypt the OpenPGP message on the clipboard was not found in the Identities keychain."];
                     [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
                 }
+                break;
+            }
+            else if( [eachPacket packetTag] == 5 ) {
+                [self importIdentityFromKeystore:message];
+                
                 break;
             }
             
