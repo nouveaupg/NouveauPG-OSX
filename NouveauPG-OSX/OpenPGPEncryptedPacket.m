@@ -38,54 +38,11 @@
     EVP_cleanup();
     
     unsigned char *payload = unencryptedBuffer + 18;
-    unsigned char *mdc;
-    size_t szPayload;
+    size_t szPayload = outputLength - 18;
     
-    if (*payload == 0xcb) {
-        // found literal packet
-        if (*(payload+1) < 192) {
-            szPayload = *(payload+1);
-            szPayload += 2;
-        }
-        else if( *(payload+1) < 224 ) {
-            szPayload = ((*(payload + 1) - 192)<<8) + *(payload + 2) + 192;
-            szPayload += 3;
-        }
-        else if( *(payload+1) == 0xff ) {
-            szPayload = *(payload + 2) << 24 | ((*(payload + 3) & 0xff) << 16);
-            szPayload |= (*(payload + 4) & 0xff) << 8;
-            szPayload |= *(payload + 5) & 0xff;
-            szPayload += 6;
-        }
-        else {
-            NSLog(@"Partial length header");
-            szPayload = 0;
-        }
-    }
-    mdc = payload + szPayload;
-    
-    SHA_CTX *hashContext = malloc(sizeof(SHA_CTX));
-    SHA_Init(hashContext);
-    SHA_Update(hashContext, payload, szPayload + 2);
-    SHA_Final(digest, hashContext);
-    free(hashContext);
-    //SHA1(payload, szPayload+2, digest);
-
-    if (memcmp(mdc, digest, 20)==0) {
-        // TODO: doesn't work but NBD
-        NSLog(@"Message validated.");
-    }
-    
-        OpenPGPPacket *newPacket = [[OpenPGPPacket alloc]initWithData:[NSData dataWithBytes:unencryptedBuffer+18 length:szPayload]];
-        
-        if (newPacket) {
-            return newPacket;
-        }
-        
-    
-
-    
-    return nil;
+    OpenPGPPacket *packet = [[OpenPGPPacket alloc]initWithData:[NSData dataWithBytes:payload length:szPayload]];
+    free(unencryptedBuffer);
+    return packet;
 }
 
 @end
