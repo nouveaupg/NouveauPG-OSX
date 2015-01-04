@@ -331,7 +331,8 @@
                 }
                 else if( [each packetTag] == 2 ) {
                     sig = [[OpenPGPSignature alloc]initWithPacket:each];
-                    if (sig.signatureType == 0x13) {
+                    if (sig.signatureType >= 0x10 &&
+                        sig.signatureType <= 0x13) {
                         primarySigPacket = [[OpenPGPPacket alloc]initWithData:[each packetData]];;
                     }
                     else if(sig.signatureType == 0x18) {
@@ -801,12 +802,12 @@
                     
                     OpenPGPPublicKey *found = nil;
                     for (Identities *each in app.identities) {
-                        if ([keyId isEqualToString:each.keyId]) {
+                        if ([[keyId uppercaseString] isEqualToString:[each.keyId uppercaseString]]) {
                             NSLog(@"Primary key found: %@",keyId);
                             found = each.primaryKey;
                             break;
                         }
-                        else if([keyId isEqualToString:each.secondaryKey.keyId]) {
+                        else if([[keyId uppercaseString] isEqualToString:[each.secondaryKey.keyId uppercaseString]]) {
                             NSLog(@"Subkey found: %@", keyId);
                             found = each.secondaryKey;
                             break;
@@ -1031,7 +1032,84 @@
 #pragma mark importing to Core Data
 
 -(bool)encryptIdentityWithPassword: (NSString *)password {
-    return false;
+    NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
+    
+    NSManagedObjectContext *ctx = [self managedObjectContext];
+    Identities *newIdentity = [NSEntityDescription insertNewObjectForEntityForName:@"Identities" inManagedObjectContext:ctx];
+    
+    [packets addObject:[m_primaryKey exportPublicKey]];
+    OpenPGPPacket *userIdPkt = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:[m_userId UTF8String] length:[m_userId length]] tag:13 oldFormat:NO];
+    [packets addObject:userIdPkt];
+    
+    OpenPGPPacket *userIdSig = m_userIdSigPkt;
+    if (!userIdPkt) {
+        userIdPkt = [OpenPGPSignature signUserId:m_userId withPublicKey:m_primaryKey];
+    }
+    [packets addObject:userIdPkt];
+
+    if (m_secondaryKey) {
+        [packets addObject:[m_secondaryKey exportPublicKey]];
+        
+        OpenPGPPacket *subkeySig = m_subkeySigPkt;
+        if (!subkeySig) {
+            subkeySig = [OpenPGPSignature signSubkey:m_secondaryKey withPrivateKey:m_primaryKey];
+        }
+        [packets addObject:subkeySig];
+    }
+    
+    NSString *publicCertificate = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kMessageTypeCertificate];
+    
+    newIdentity.publicCertificate = publicCertificate;
+    
+    [packets setObject:[m_primaryKey exportPrivateKey:password] atIndexedSubscript:0];
+    [packets setObject:[m_secondaryKey exportPrivateKey:password] atIndexedSubscript:3];
+    
+    NSString *privateKeystore = [OpenPGPMessage armouredMessageFromPacketChain:packets type:kMessageTypeKeystore];
+    
+    newIdentity.privateKeystore = privateKeystore;
+    unsigned char *fingerprint = [m_primaryKey fingerprintBytes];
+    unsigned int d1,d2,d3,d4,d5;
+    d1 = fingerprint[0] << 24 | fingerprint[1] << 16 | fingerprint[2] << 8 | fingerprint[3];
+    d2 = fingerprint[4] << 24 | fingerprint[5] << 16 | fingerprint[6] << 8 | fingerprint[7];
+    d3 = fingerprint[8] << 24 | fingerprint[9] << 16 | fingerprint[10] << 8 | fingerprint[11];
+    d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
+    d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
+    newIdentity.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
+    newIdentity.keyId = [m_primaryKey keyId];
+    newIdentity.created = [NSDate date];
+    
+    NSRange firstBracket = [m_userId rangeOfString:@"<"];
+    if (firstBracket.location != NSNotFound) {
+        NSString *nameOnly = [m_userId substringToIndex:firstBracket.location];
+        NSRange secondBracket =[m_userId rangeOfString:@">"];
+        NSUInteger len = secondBracket.location - firstBracket.location - 1;
+        NSString *emailOnly = [m_userId substringWithRange:NSMakeRange(firstBracket.location+1, len)];
+        
+        newIdentity.name = nameOnly;
+        newIdentity.email = emailOnly;
+    }
+    else {
+        // If the UserID doesn't conform to RFC 2822, we don't attempt to pull out the e-mail address
+        newIdentity.name = m_userId;
+    }
+    
+    [self saveAction:self];
+    
+    NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:identities];
+    [editable addObject:newIdentity];
+    identities = editable;
+    
+    return true;
+}
+
+-(OpenPGPPublicKey *)subkeyForPrimaryKeyId:(NSString *)primaryKeyId {
+    for (Identities *each in identities) {
+        if ([each.keyId isEqualToString:primaryKeyId]) {
+            return each.secondaryKey;
+        }
+    }
+    
+    return nil;
 }
 
 -(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore {

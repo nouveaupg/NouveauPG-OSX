@@ -143,12 +143,12 @@
                     
                     OpenPGPPublicKey *found = nil;
                     for (Identities *each in app.identities) {
-                        if ([keyId isEqualToString:each.keyId]) {
+                        if ([[keyId uppercaseString] isEqualToString:[each.keyId uppercaseString]]) {
                             NSLog(@"Primary key found: %@",keyId);
                             found = each.primaryKey;
                             break;
                         }
-                        else if([keyId isEqualToString:each.secondaryKey.keyId]) {
+                        else if([[keyId uppercaseString] isEqualToString:[each.secondaryKey.keyId uppercaseString]]) {
                             NSLog(@"Subkey found: %@", keyId);
                             found = each.secondaryKey;
                             break;
@@ -170,6 +170,7 @@
 }
 
 -(IBAction)rightButton:(id)sender {
+    AppDelegate *app = [[NSApplication sharedApplication] delegate];
     if (_state == kComposePanelStateComposeMessage) {
         NSString *inputString = [NSString stringWithString:[m_textView string]];
         LiteralPacket *literal = [[LiteralPacket alloc]initWithUTF8String:inputString];
@@ -188,72 +189,23 @@
     else if( _state == kComposePanelStateDecryptMessage ) {
         OpenPGPPublicKey *encryptionKey = [self validateOpenPGPMessage];
         
+        if (!encryptionKey) {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Could not decrypt message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The public key which this was encrypted for was not found on your Identities keychain."];
+            [alert runModal];
+            return;
+        }
+        
         bool isEncrypted = [encryptionKey isEncrypted];
         if (isEncrypted) {
-            bool result = [encryptionKey decryptKey:@""];
-            if (result) {
-                unsigned char *sessionKey = NULL;
-                OpenPGPMessage *encryptedMessage = [[OpenPGPMessage alloc]initWithArmouredText:[m_textView string]];
-                NSMutableArray *encryptedPackets = [[NSMutableArray alloc]initWithCapacity:1];
-                if ([encryptedMessage validChecksum]) {
-                    for (OpenPGPPacket *each in [OpenPGPPacket packetsFromMessage:encryptedMessage]) {
-                        if ([each packetTag] == 1) {
-                            unsigned char *ptr = (unsigned char *)[[each packetData] bytes];
-                            
-                            if ([[each packetData] length] >= 271) {
-                                unsigned int declaredBits = (*(ptr + 13) << 8) | (*(ptr + 14) & 0xff);
-                                sessionKey = [encryptionKey decryptBytes:(ptr+15) length:(declaredBits + 7)/8];
-                            }
-                            
-                        }
-                        else if( [each packetTag] == 18 ) {
-                            OpenPGPEncryptedPacket *newPacket = [[OpenPGPEncryptedPacket alloc]initWithData:[each packetData]];
-                            [encryptedPackets addObject:newPacket];
-                        }
-                    }
-                    if (sessionKey) {
-                        // decrypt the message with the session key.
-                        
-                        NSMutableData *outputData = [[NSMutableData alloc] init];
-                        for( OpenPGPEncryptedPacket *each in encryptedPackets ) {
-                            OpenPGPPacket *resultantPacket = [each decryptWithSessionKey:sessionKey algo:7];
-                            LiteralPacket *newLiteral = [[LiteralPacket alloc]initWithData:[resultantPacket packetData]];
-                            [outputData appendData:[newLiteral content]];
-                        }
-                        
-                        if ([outputData length] > 0) {
-                            NSString *stringData = [[NSString alloc]initWithData:outputData encoding:NSUTF8StringEncoding];
-                            if (stringData) {
-                                [m_textView setString:stringData];
-                                
-                                [m_textView selectAll:self];
-                                [m_prompt setStringValue:@"Decrypted message"];
-                                [m_rightButton setTitle:@"Copy"];
-                                [m_leftButton setTitle:@"Save as file..."];
-                                
-                                _state = kComposePanelStateReadMessage;
-                            }
-                        }
-
-                    }
-                }
-                else {
-                    NSLog(@"No valid OpenPGP message found.");
-                }
-            }
-            else {
-                
-                NSAlert *alert = [NSAlert alertWithMessageText:@"Could not decrypt message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The identity must be unlocked before you can decrypt with it."];
-                [alert runModal];
-                [NSApp stopModal];
-            }
+            NSLog(@"Identity locked.");
+            return;
             /*
             PasswordWindow *passwdWindow = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
             [passwdWindow presentPasswordPrompt:@"Enter password for private key" privateKey:m_publicKey window:self.window];
              */
         }
         else {
-            NSLog(@"Key not encrypted.");
+            NSLog(@"Decrypting message.");
             
             unsigned char *sessionKey = NULL;
             OpenPGPMessage *encryptedMessage = [[OpenPGPMessage alloc]initWithArmouredText:[m_textView string]];
@@ -267,6 +219,10 @@
                             unsigned int declaredBits = (*(ptr + 13) << 8) | (*(ptr + 14) & 0xff);
                             // decrypt the session key
                             sessionKey = [encryptionKey decryptBytes:(ptr+15) length:(declaredBits + 7)/8];
+                            if(!sessionKey) {
+                                OpenPGPPublicKey *subkey = [app subkeyForPrimaryKeyId:encryptionKey.keyId];
+                                sessionKey = [subkey decryptBytes:(ptr+15) length:(declaredBits + 7)/8];
+                            }
                         }
                     }
                     else if( [each packetTag] == 18 ) {

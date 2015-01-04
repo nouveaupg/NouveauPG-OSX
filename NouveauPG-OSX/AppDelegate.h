@@ -53,6 +53,7 @@
 
 -(void)refreshCertificateViewController;
 
+-(OpenPGPPublicKey *)subkeyForPrimaryKeyId:(NSString *)primaryKeyId;
 -(Identities *)identityForKeyId:(NSString *)keyId;
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;
 -(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
