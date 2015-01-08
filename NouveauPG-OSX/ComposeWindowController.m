@@ -26,7 +26,7 @@
         
         NSSavePanel *panelSave = [NSSavePanel savePanel];
         [panelSave setPrompt:@"Save"];
-        [panelSave setNameFieldStringValue:@"output.asc"];
+        [panelSave setNameFieldStringValue:@"encrypted.asc"];
         
         NSInteger result = [panelSave runModal];
         
@@ -43,6 +43,50 @@
             [NSApp stopModal];
         }
         
+    }
+    else if(_state == kComposePanelStateDecryptMessage ) {
+        NSOpenPanel *panel = [NSOpenPanel openPanel];
+        NSInteger result = [panel runModal];
+        if (result) {
+            NSError *error;
+            NSString *inputString = [[NSString alloc]initWithContentsOfURL:[panel URL] encoding:NSUTF8StringEncoding error:&error];
+            
+            if (!error) {
+                OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:inputString];
+                
+                if ([message validChecksum]) {
+                    [m_textView setString:[message originalArmouredText]];
+                    
+                    _state = kComposePanelStateDecryptMessage;
+                    [self rightButton:self];
+                }
+            }
+            else {
+                [[NSAlert alertWithError:error] runModal];
+            }
+            
+        }
+
+    }
+    else if(_state == kComposePanelStateReadMessage) {
+        NSSavePanel *panelSave = [NSSavePanel savePanel];
+        [panelSave setPrompt:@"Save"];
+        [panelSave setNameFieldStringValue:@"decrypted.txt"];
+        
+        NSInteger result = [panelSave runModal];
+        
+        if (result) {
+            NSString *outputString = [m_textView string];
+            NSError *error;
+            [outputString writeToURL:[panelSave URL] atomically:NO encoding:NSUTF8StringEncoding error:&error];
+            
+            if (error) {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"File save error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error description]];
+                [alert runModal];
+            }
+            
+            [NSApp stopModal];
+        }
     }
     else if(_state == kComposePanelStateExportCertificate) {
         NSSavePanel *panelSave = [NSSavePanel savePanel];
