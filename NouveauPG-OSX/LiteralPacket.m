@@ -69,7 +69,9 @@
 
 -(id)initWithUTF8String:(NSString *)string {
     if (self = [super init]) {
-        NSUInteger packetLength = [string length];
+        NSData *stringData = [string dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSUInteger packetLength = [stringData length];
         NSUInteger headerLength;
         packetLength += 14;
         if (packetLength < 192) {
@@ -100,7 +102,7 @@
                 *(ptr+4) = (packetLength >> 8) & 0xff;
                 *(ptr+5) = packetLength & 0xff;
             }
-            *(ptr+headerLength) = 0x75;
+            *(ptr+headerLength) = 0x62;
             *(ptr+headerLength + 1) = 8;
             memcpy((ptr + headerLength + 2), "_CONSOLE", 8);
             NSUInteger timestamp = (NSUInteger)[[NSDate date] timeIntervalSince1970];
@@ -108,7 +110,7 @@
             *(ptr+headerLength + 11) = timestamp >> 16 & 0xff;
             *(ptr+headerLength + 11) = timestamp >> 8 & 0xff;
             *(ptr+headerLength + 13) = timestamp & 0xff;
-            memcpy((ptr+headerLength + 14), [string UTF8String], [string length]);
+            memcpy((ptr+headerLength + 14), [stringData bytes], [stringData length]);
             
             m_packetData = [[NSData alloc]initWithBytes:ptr length:headerLength + packetLength];
             free(ptr);

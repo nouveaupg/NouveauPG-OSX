@@ -16,9 +16,9 @@
     unsigned char iv[16];
     unsigned char digest[20];
     int buffer = 2;
-    if ([m_packetData length] > 194) {
+    if ([m_packetData length] > 191) {
         buffer = 3;
-    } else if( [m_packetData length] > 8386 ) {
+    } else if( [m_packetData length] > 8382 ) {
         buffer = 6;
     }
     
