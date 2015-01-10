@@ -16,6 +16,8 @@
 #import "NewIdentityPanel.h"
 #import "IdenticonImage.h"
 #import "PasswordWindow.h"
+#import "Recipient.h"
+#import "Identities.h"
 
 @implementation AppDelegate
 
@@ -86,8 +88,14 @@
         NSLog(@"NSError: %@",[error description]);
     }
     
+    NSArray *sortedRecipients = [recipients sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSDate *first = [(Recipient *)a added];
+        NSDate *second = [(Recipient *)b added];
+        return [first compare:second];
+    }];
     NSMutableArray *newArray = [[NSMutableArray alloc]init];
-    for ( Recipient *eachRecipient in recipients ) {
+    
+    for ( Recipient *eachRecipient in sortedRecipients ) {
         [newArray addObject:eachRecipient.keyId];
     }
     [m_children setObject:newArray forKey:@"RECIPIENTS"];
@@ -117,9 +125,14 @@
         }
     }
 
+    NSArray *sortedIdentities = [identities sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+        NSDate *first = [(Identities *)a created];
+        NSDate *second = [(Identities *)b created];
+        return [first compare:second];
+    }];
     
     newArray = [[NSMutableArray alloc]init];
-    for (Identities *each in identities) {
+    for (Identities *each in sortedIdentities) {
         [newArray addObject:each.keyId];
     }
     [m_children setObject:newArray forKey:@"MY IDENTITIES"];
