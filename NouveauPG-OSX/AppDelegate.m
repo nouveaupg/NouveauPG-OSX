@@ -1327,6 +1327,11 @@
             }
         }
         
+        if( primaryKey.publicKeyType == -1 ) {
+            NSLog(@"Unsupported public key algorithm");
+            return false;
+        }
+        
         bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]];
         
         //[subkeySig validateSubkey:subkey withSigningKey:primaryKey];
@@ -1434,7 +1439,7 @@
                     
                 }
                 else {
-                    NSAlert *alert = [NSAlert alertWithMessageText:@"Already exists" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"An identity with the primary Key ID: %@ already exists.",keyId];
+                    NSAlert *alert = [NSAlert alertWithMessageText:@"Can't import public certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"A recipient identity with the key ID %@ already exists.",[keyId uppercaseString]];
                     [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
                 }
                 
@@ -1558,7 +1563,7 @@
                 m_pendingItem = [[NSString alloc]initWithString:selectedItem];
                 m_rootNode = [[NSString alloc]initWithString:parent];
                 
-                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient %@?",selectedObject.name];
+                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete identity?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected identity %@? You should back up your identity by saving your private certificate to disk.",selectedObject.name];
                 
                 [self.managedObjectContext deleteObject:selectedObject];
                 
