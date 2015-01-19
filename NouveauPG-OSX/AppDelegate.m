@@ -1422,18 +1422,23 @@
                 
                 if (!bFound) {
                     if([self importRecipientFromCertificate:message]) {
+                        NSArray *sortedRecipients = [recipients sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                            NSDate *first = [(Recipient *)a added];
+                            NSDate *second = [(Recipient *)b added];
+                            return [first compare:second];
+                        }];
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
-                        for (Recipient *each in recipients) {
+                        for (Recipient *each in sortedRecipients) {
                             if (each.keyId) {
                                 [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
                             }
-                            
                         }
+                        
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
                     }
                     else {
-                        NSAlert *alert = [NSAlert alertWithMessageText:@"Couldn't add certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Unspecified error occured when importing public key certificate. Public key certificate invalid or incompatible with NouveauPG."];
+                        NSAlert *alert = [NSAlert alertWithMessageText:@"Couldn't add certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Public key certificate invalid or incompatible with NouveauPG. NouveauPG currently only supports RSA keys."];
                         [alert beginSheetModalForWindow:self.window modalDelegate:nil didEndSelector:nil contextInfo:nil];
                     }
                     
