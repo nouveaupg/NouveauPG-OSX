@@ -1375,6 +1375,7 @@
         }
         else {
             NSLog(@"Did not add - invalid signature.!");
+            return false;
         }
         
         
