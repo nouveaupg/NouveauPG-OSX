@@ -31,6 +31,9 @@
     IBOutlet NSBox *m_subkeyBox;
     IBOutlet NSBox *m_subkeySignedBox;
     IBOutlet NSBox *m_subkeyExpiresBox;
+    IBOutlet NSTextField *m_secretKeyLabel;
+    IBOutlet NSTextField *m_subkeySigned;
+    IBOutlet NSTextField *m_subkeyExpires;
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;
@@ -51,7 +54,7 @@
 -(void)setKeyId:(NSString *)keyId;
 -(void)setPrivateCertificate:(bool)isPrivate;
 -(void)setIdentityLocked:(bool)locked;
--(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp;
+-(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp until: (NSDate *)expires;
 -(void)setValidSince:(NSDate *)created until:(NSDate *)expires;
 
 -(IBAction)composeMessage:(id)sender;

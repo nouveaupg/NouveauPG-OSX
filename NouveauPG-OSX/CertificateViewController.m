@@ -18,10 +18,18 @@
 
 @synthesize certificate;
 
--(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp {
+-(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp until:(NSDate *)expires {
     if (keyId == nil) {
-        [m_subkeyCertLabel setHidden:YES];
+        [m_subkeyBox setHidden:YES];
+        [m_subkeyExpiresBox setHidden:YES];
+        [m_subkeySignedBox setHidden:YES];
+        
         return;
+    }
+    else {
+        [m_subkeyBox setHidden:NO];
+        [m_subkeyExpiresBox setHidden:NO];
+        [m_subkeySignedBox setHidden:NO];
     }
     [m_subkeyCertLabel setHidden:NO];
     
@@ -29,8 +37,16 @@
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateStyle:NSDateFormatterShortStyle];
     
-    NSString *format = [NSString stringWithFormat:@"Subkey: %@ (signed %@)",keyId,[formatter stringFromDate:timestamp]];
-    [m_subkeyCertLabel setStringValue:format];
+    //NSString *format = [NSString stringWithFormat:@"Subkey: %@ (signed %@)",keyId,[formatter stringFromDate:timestamp]];
+    [m_subkeyCertLabel setStringValue:[keyId uppercaseString]];
+    [m_subkeySigned setStringValue:[formatter stringFromDate:timestamp]];
+    
+    if (expires) {
+        [m_subkeyExpires setStringValue:[formatter stringFromDate:expires]];
+    }
+    else {
+        [m_subkeyExpires setStringValue:@"Never"];
+    }
 }
 
 -(IBAction)decryptButton:(id)sender {
@@ -141,6 +157,7 @@
     if (isPrivate) {
         [m_decryptButton setHidden:NO];
         [m_privateCertButton setHidden:NO];
+        [m_secretKeyLabel setHidden:NO];
         
         [m_subkeyBox setHidden:YES];
         [m_subkeySignedBox setHidden:YES];
@@ -149,6 +166,7 @@
     else {
         [m_decryptButton setHidden:YES];
         [m_privateCertButton setHidden:YES];
+        [m_secretKeyLabel setHidden:YES];
         
         [m_subkeyBox setHidden:NO];
         [m_subkeySignedBox setHidden:NO];

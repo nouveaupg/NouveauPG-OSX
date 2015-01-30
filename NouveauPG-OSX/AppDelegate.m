@@ -851,6 +851,7 @@
         
         Recipient *selectedRecipient = [self recipientForKeyId:selectedItem];
         OpenPGPPublicKey *primaryKey;
+        OpenPGPPublicKey *secondaryKey;
         OpenPGPSignature *primarySig;
         OpenPGPSignature *secondarySig;
         if (selectedRecipient) {
@@ -868,15 +869,20 @@
                 else if ([eachPacket packetTag] == 6) {
                     primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
                 }
+                else if ([eachPacket packetTag] == 14) {
+                    secondaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
             }
             
             [m_certificateViewController setValidSince:[primarySig dateSigned] until:[primarySig dateExpires]];
             
             if (secondarySig) {
-                [m_certificateViewController setSubkeyKeyId:[primaryKey.keyId uppercaseString] signed:[primarySig dateSigned]];
+                [m_certificateViewController setSubkeyKeyId:[secondaryKey.keyId uppercaseString] signed:[secondarySig dateSigned] until:0];
             }
             else {
-                [m_certificateViewController setSubkeyKeyId:nil signed:0];
+                [m_certificateViewController setSubkeyKeyId:nil signed:nil until:nil];
+                
+                [m_certificateViewController setSubkeyKeyId:nil signed:0 until:0];
             }
             
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedRecipient.primary.publicKeySize];
@@ -888,7 +894,6 @@
         if (selectedIdentity) {
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedIdentity.primaryKey.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
-            [m_certificateViewController setSubkeyKeyId:nil signed:0];
             
             if ([selectedIdentity.primaryKey isEncrypted]) {
                 [m_certificateViewController setIdentityLocked:YES];
