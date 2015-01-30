@@ -1088,7 +1088,7 @@
     d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
     d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
     newIdentity.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
-    newIdentity.keyId = [m_primaryKey keyId];
+    newIdentity.keyId = [[m_primaryKey keyId] uppercaseString];
     newIdentity.created = [NSDate date];
     
     NSRange firstBracket = [m_userId rangeOfString:@"<"];
@@ -1111,6 +1111,16 @@
     NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:identities];
     [editable addObject:newIdentity];
     identities = editable;
+    
+    NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[identities count]];
+    for (Identities *each in identities) {
+        if (each.keyId) {
+            [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+        }
+    }
+    
+    [m_children setObject:newArray forKey:@"MY IDENTITIES"];
+    [m_outlineView reloadData];
     
     return true;
 }
