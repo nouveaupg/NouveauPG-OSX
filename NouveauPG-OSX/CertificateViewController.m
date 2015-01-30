@@ -141,10 +141,18 @@
     if (isPrivate) {
         [m_decryptButton setHidden:NO];
         [m_privateCertButton setHidden:NO];
+        
+        [m_subkeyBox setHidden:YES];
+        [m_subkeySignedBox setHidden:YES];
+        [m_subkeyExpiresBox setHidden:YES];
     }
     else {
         [m_decryptButton setHidden:YES];
         [m_privateCertButton setHidden:YES];
+        
+        [m_subkeyBox setHidden:NO];
+        [m_subkeySignedBox setHidden:NO];
+        [m_subkeyExpiresBox setHidden:NO];
         
         [m_lockButton setHidden:YES];
     }

@@ -28,6 +28,9 @@
     IBOutlet NSTextField *m_expireLabel;
     IBOutlet NSTextField *m_subkeyCertLabel;
     IBOutlet NSButton *m_lockButton;
+    IBOutlet NSBox *m_subkeyBox;
+    IBOutlet NSBox *m_subkeySignedBox;
+    IBOutlet NSBox *m_subkeyExpiresBox;
     
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;

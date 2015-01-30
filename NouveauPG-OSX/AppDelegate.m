@@ -1127,7 +1127,8 @@
 
 -(OpenPGPPublicKey *)subkeyForPrimaryKeyId:(NSString *)primaryKeyId {
     for (Identities *each in identities) {
-        if ([each.keyId isEqualToString:primaryKeyId]) {
+        NSLog(@"keyId: %@",each.keyId);
+        if ([each.keyId isEqualToString:[primaryKeyId uppercaseString]]) {
             return each.secondaryKey;
         }
     }

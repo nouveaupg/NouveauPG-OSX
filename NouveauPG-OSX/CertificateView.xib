@@ -18,9 +18,12 @@
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
                 <outlet property="m_privateCertButton" destination="TKg-kT-1l1" id="1fK-aR-40b"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
+                <outlet property="m_subkeyBox" destination="3WJ-T8-8b9" id="DCg-rF-YXq"/>
                 <outlet property="m_subkeyCertIcon" destination="fdR-0g-747" id="LZA-fX-m0g"/>
                 <outlet property="m_subkeyCertLabel" destination="iDc-1q-K3k" id="wy6-Lt-9yZ"/>
+                <outlet property="m_subkeyExpiresBox" destination="clD-iy-QH9" id="9Th-RV-WaK"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
+                <outlet property="m_subkeySignedBox" destination="pvC-9l-gOT" id="kBY-ad-LIY"/>
                 <outlet property="m_userIdCertIcon" destination="2UY-La-j4S" id="oqV-GP-o7d"/>
                 <outlet property="m_userIdField" destination="MwE-FP-kPH" id="isk-lh-zzv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="IPr-ek-9dI"/>
@@ -37,11 +40,11 @@
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate_background" id="yWq-Ia-T80"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i83-ff-I2d">
-                    <rect key="frame" x="50" y="190" width="106" height="106"/>
+                    <rect key="frame" x="40" y="190" width="106" height="106"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="kWN-2B-OjP"/>
                 </imageView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MwE-FP-kPH">
-                    <rect key="frame" x="169" y="272" width="259" height="21"/>
+                    <rect key="frame" x="149" y="272" width="286" height="21"/>
                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="User Id: First Last" id="z0u-no-5oC">
                         <font key="font" size="15" name="ArialRoundedMTBold"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -49,15 +52,15 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ghA-xF-3a4">
-                    <rect key="frame" x="169" y="253" width="259" height="17"/>
-                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
-                        <font key="font" metaFont="system"/>
+                    <rect key="frame" x="149" y="256" width="246" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="first@domain.com" id="61G-e6-f6K">
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nOn-AI-afk">
-                    <rect key="frame" x="84" y="40" width="148" height="20"/>
+                    <rect key="frame" x="84" y="41" width="148" height="20"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="User ID signature verified." id="sdU-sR-5Kg">
                         <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
                         <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -65,7 +68,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u4M-2D-wcH">
-                    <rect key="frame" x="274" y="40" width="148" height="20"/>
+                    <rect key="frame" x="274" y="41" width="148" height="20"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Subkey signature verified." id="APx-to-1bJ">
                         <font key="font" size="13" name="HelveticaNeue-CondensedBold"/>
                         <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -73,15 +76,15 @@
                     </textFieldCell>
                 </textField>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2UY-La-j4S">
-                    <rect key="frame" x="51" y="39" width="27" height="23"/>
+                    <rect key="frame" x="51" y="40" width="27" height="23"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="userid" id="ez3-T6-aPT"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdR-0g-747">
-                    <rect key="frame" x="250" y="38" width="18" height="24"/>
+                    <rect key="frame" x="250" y="39" width="18" height="24"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="subkey" id="TrM-sO-KDo"/>
                 </imageView>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Fingerprint" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="i4v-s7-dyy">
-                    <rect key="frame" x="40" y="66" width="396" height="43"/>
+                    <rect key="frame" x="40" y="67" width="396" height="43"/>
                     <view key="contentView">
                         <rect key="frame" x="1" y="1" width="394" height="27"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -100,7 +103,7 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a43-S7-XPo">
-                    <rect key="frame" x="250" y="145" width="176" height="25"/>
+                    <rect key="frame" x="257" y="160" width="176" height="25"/>
                     <buttonCell key="cell" type="roundTextured" title="Public Key Certificate" bezelStyle="texturedRounded" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YlT-NG-95C">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -110,25 +113,15 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Lj-LQ-1hh">
-                    <rect key="frame" x="256" y="180" width="166" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="(0A5E5FEA)" id="DfO-ZB-Xa4">
-                        <font key="font" metaFont="system"/>
+                    <rect key="frame" x="229" y="235" width="166" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="(0A5E5FEA)" id="DfO-ZB-Xa4">
+                        <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
-                    <rect key="frame" x="250" y="115" width="176" height="25"/>
-                    <buttonCell key="cell" type="roundTextured" title="Private Keystore" bezelStyle="texturedRounded" image="tiny_lock" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="privateKeyCertificate:" target="-2" id="vlc-Nk-YTv"/>
-                    </connections>
-                </button>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nTj-ma-2BO">
-                    <rect key="frame" x="53" y="145" width="192" height="25"/>
+                    <rect key="frame" x="43" y="160" width="200" height="25"/>
                     <buttonCell key="cell" type="roundTextured" title="Compose Message" bezelStyle="texturedRounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zyO-lS-p6O">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -137,8 +130,8 @@
                         <action selector="composeMessage:" target="-2" id="9TC-dc-tpz"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
-                    <rect key="frame" x="53" y="115" width="192" height="25"/>
+                <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WSJ-QT-dMN">
+                    <rect key="frame" x="43" y="131" width="200" height="25"/>
                     <buttonCell key="cell" type="roundTextured" title="Decrypt Message" bezelStyle="texturedRounded" image="tiny_lock" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="d08-q9-uA7">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -148,7 +141,7 @@
                     </connections>
                 </button>
                 <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
-                    <rect key="frame" x="400" y="177" width="20" height="23"/>
+                    <rect key="frame" x="395" y="232" width="38" height="38"/>
                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -157,16 +150,8 @@
                         <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
                     </connections>
                 </button>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDc-1q-K3k">
-                    <rect key="frame" x="51" y="120" width="384" height="12"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Subkey: 0A3EFBA3 (signed 2014-12-25 00:52:24)" id="24d-Jb-AxX">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Signed" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="VSA-KW-6Lu">
-                    <rect key="frame" x="162" y="204" width="151" height="41"/>
+                    <rect key="frame" x="148" y="190" width="151" height="41"/>
                     <view key="contentView">
                         <rect key="frame" x="1" y="1" width="149" height="25"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -185,9 +170,9 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Expires" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="lLp-3A-wXi">
-                    <rect key="frame" x="310" y="204" width="126" height="41"/>
+                    <rect key="frame" x="301" y="190" width="135" height="41"/>
                     <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="124" height="25"/>
+                        <rect key="frame" x="1" y="1" width="133" height="25"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H5l-HI-HQr">
@@ -204,13 +189,80 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="znS-xG-agY">
-                    <rect key="frame" x="169" y="180" width="143" height="17"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2048-bit RSA" id="iMp-EU-YsO">
-                        <font key="font" metaFont="system"/>
+                    <rect key="frame" x="149" y="235" width="143" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="2048-bit RSA" id="iMp-EU-YsO">
+                        <font key="font" metaFont="smallSystemBold"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <box autoresizesSubviews="NO" fixedFrame="YES" title="Subkey" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="3WJ-T8-8b9">
+                    <rect key="frame" x="40" y="110" width="74" height="45"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="72" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDc-1q-K3k">
+                                <rect key="frame" x="8" y="10" width="384" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0A3EFBA3" id="24d-Jb-AxX">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+                <box autoresizesSubviews="NO" fixedFrame="YES" title="Signed" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="pvC-9l-gOT">
+                    <rect key="frame" x="114" y="110" width="151" height="45"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="149" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="daG-fq-EDH">
+                                <rect key="frame" x="7" y="8" width="147" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Jan 26, 2000 10:40 PM" id="0aM-P8-1dI">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+                <box autoresizesSubviews="NO" fixedFrame="YES" title="Expires" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="clD-iy-QH9">
+                    <rect key="frame" x="267" y="110" width="169" height="45"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="167" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mX5-iv-cme">
+                                <rect key="frame" x="7" y="8" width="152" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Never" id="sC7-VO-BSW">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
+                <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TKg-kT-1l1">
+                    <rect key="frame" x="257" y="131" width="176" height="25"/>
+                    <buttonCell key="cell" type="roundTextured" title="Private Keystore" bezelStyle="texturedRounded" image="tiny_lock" imagePosition="left" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ogl-Bq-wO2">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="privateKeyCertificate:" target="-2" id="vlc-Nk-YTv"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="60" y="-33"/>
         </customView>
