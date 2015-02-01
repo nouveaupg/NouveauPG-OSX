@@ -39,7 +39,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RPP-1H-eeu">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="338"/>
+                    <rect key="frame" x="0.0" y="-1" width="480" height="338"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="certificate_background" id="yWq-Ia-T80"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i83-ff-I2d">
@@ -160,8 +160,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4PE-0f-1c6">
-                                <rect key="frame" x="16" y="7" width="127" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Jan 26, 2000 10:40 PM" id="NaI-dc-1fw">
+                                <rect key="frame" x="6" y="7" width="136" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Jan 26, 2000 10:40 PM" id="NaI-dc-1fw">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -179,8 +179,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H5l-HI-HQr">
-                                <rect key="frame" x="16" y="7" width="114" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Never" id="MAX-h1-yOR">
+                                <rect key="frame" x="16" y="7" width="101" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Never" id="MAX-h1-yOR">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -200,14 +200,14 @@
                     </textFieldCell>
                 </textField>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Subkey" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="3WJ-T8-8b9">
-                    <rect key="frame" x="40" y="110" width="74" height="45"/>
+                    <rect key="frame" x="40" y="110" width="106" height="45"/>
                     <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="72" height="29"/>
+                        <rect key="frame" x="1" y="1" width="104" height="29"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iDc-1q-K3k">
-                                <rect key="frame" x="8" y="10" width="384" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0A3EFBA3" id="24d-Jb-AxX">
+                                <rect key="frame" x="1" y="9" width="103" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="0A3EFBA3" id="24d-Jb-AxX">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -219,33 +219,14 @@
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Signed" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="pvC-9l-gOT">
-                    <rect key="frame" x="114" y="110" width="151" height="45"/>
+                    <rect key="frame" x="148" y="110" width="151" height="45"/>
                     <view key="contentView">
                         <rect key="frame" x="1" y="1" width="149" height="29"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="daG-fq-EDH">
-                                <rect key="frame" x="7" y="8" width="147" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Jan 26, 2000 10:40 PM" id="0aM-P8-1dI">
-                                    <font key="font" metaFont="smallSystem"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                        </subviews>
-                    </view>
-                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                </box>
-                <box autoresizesSubviews="NO" fixedFrame="YES" title="Expires" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="clD-iy-QH9">
-                    <rect key="frame" x="267" y="110" width="169" height="45"/>
-                    <view key="contentView">
-                        <rect key="frame" x="1" y="1" width="167" height="29"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mX5-iv-cme">
-                                <rect key="frame" x="7" y="8" width="152" height="14"/>
-                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Never" id="sC7-VO-BSW">
+                                <rect key="frame" x="1" y="9" width="147" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Jan 26, 2000 10:40 PM" id="0aM-P8-1dI">
                                     <font key="font" metaFont="smallSystem"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -274,8 +255,27 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
+                <box autoresizesSubviews="NO" fixedFrame="YES" title="Expires" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="clD-iy-QH9">
+                    <rect key="frame" x="301" y="110" width="135" height="45"/>
+                    <view key="contentView">
+                        <rect key="frame" x="1" y="1" width="133" height="29"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mX5-iv-cme">
+                                <rect key="frame" x="16" y="9" width="101" height="14"/>
+                                <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Never" id="sC7-VO-BSW">
+                                    <font key="font" metaFont="smallSystem"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                    </view>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </box>
             </subviews>
-            <point key="canvasLocation" x="60" y="-33"/>
+            <point key="canvasLocation" x="60" y="-19"/>
         </customView>
     </objects>
     <resources>

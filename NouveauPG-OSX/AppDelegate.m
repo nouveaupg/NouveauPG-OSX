@@ -356,8 +356,8 @@
             
             NSMutableArray *packets = [[NSMutableArray alloc]initWithCapacity:5];
             [packets addObject:[selectedIdentity.primaryKey exportPrivateKeyUnencrypted]];
-            [packets addObject:primarySigPacket];
             [packets addObject:userIdPacket];
+            [packets addObject:primarySigPacket];
             [packets addObject:[selectedIdentity.secondaryKey exportPrivateKeyUnencrypted]];
             [packets addObject:secondarySigPacket];
             
@@ -843,6 +843,10 @@
 }
 
 -(void)refreshCertificateViewController {
+    OpenPGPPublicKey *primaryKey;
+    OpenPGPPublicKey *secondaryKey;
+    OpenPGPSignature *primarySig;
+    OpenPGPSignature *secondarySig;
     id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
     id parent = [m_outlineView parentForItem:selectedItem];
     
@@ -850,10 +854,7 @@
         [m_certificateViewController setPrivateCertificate:NO];
         
         Recipient *selectedRecipient = [self recipientForKeyId:selectedItem];
-        OpenPGPPublicKey *primaryKey;
-        OpenPGPPublicKey *secondaryKey;
-        OpenPGPSignature *primarySig;
-        OpenPGPSignature *secondarySig;
+        
         if (selectedRecipient) {
             OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedRecipient.certificate];
             for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:message]) {
@@ -892,8 +893,28 @@
     else if ([parent isEqualToString:@"MY IDENTITIES"]) {
         Identities *selectedIdentity = [self identityForKeyId:selectedItem];
         if (selectedIdentity) {
+            
+            OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedIdentity.publicCertificate];
+            for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:message]) {
+                if ([eachPacket packetTag] == 2) {
+                    OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
+                    if (sig.signatureType == 0x18) {
+                        secondarySig = sig;
+                    }
+                    else if(sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
+                        primarySig = sig;
+                    }
+                }
+                else if ([eachPacket packetTag] == 6) {
+                    primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
+                else if ([eachPacket packetTag] == 14) {
+                    secondaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
+                }
+            }
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedIdentity.primaryKey.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+            [m_certificateViewController setValidSince:[primarySig dateSigned] until:nil];
             
             if ([selectedIdentity.primaryKey isEncrypted]) {
                 [m_certificateViewController setIdentityLocked:YES];
@@ -1060,10 +1081,10 @@
     [packets addObject:userIdPkt];
     
     OpenPGPPacket *userIdSig = m_userIdSigPkt;
-    if (!userIdPkt) {
-        userIdPkt = [OpenPGPSignature signUserId:m_userId withPublicKey:m_primaryKey];
+    if (!userIdSig) {
+        userIdSig = [OpenPGPSignature signUserId:m_userId withPublicKey:m_primaryKey];
     }
-    [packets addObject:userIdPkt];
+    [packets addObject:userIdSig];
 
     if (m_secondaryKey) {
         [packets addObject:[m_secondaryKey exportPublicKey]];
@@ -1159,7 +1180,7 @@
         }
         else if([eachPacket packetTag] == 2) {
             OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
-            if (sig.signatureType == 0x13) {
+            if (sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
                 m_userIdSigPkt = [[OpenPGPPacket alloc]initWithData:[eachPacket packetData]];
             }
             else if(sig.signatureType == 0x18) {
