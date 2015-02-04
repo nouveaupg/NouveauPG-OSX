@@ -463,6 +463,7 @@
                         secretExponentBits <<= 8;
                         ptr++;
                         secretExponentBits |= *ptr;
+                        ptr++;
                         
                         BIGNUM *bn = BN_new();
                         mpi_len = (secretExponentBits + 7) / 8;
@@ -476,12 +477,12 @@
                         secretPrimePBits <<= 8;
                         ptr++;
                         secretPrimePBits |= *ptr;
+                        ptr++;
                         
                         mpi_len = (secretPrimePBits + 7) / 8;
                         BN_bin2bn(ptr, mpi_len, bn);
+                       
                         m_rsaKey->p = bn;
-                        //assert(BN_num_bits(m_rsaKey->p) == secretPrimePBits);
-                        
                         ptr += mpi_len;
                         bn = BN_new();
                         // secret prime Q
@@ -489,10 +490,13 @@
                         secretPrimeQBits <<= 8;
                         ptr++;
                         secretPrimeQBits |= *ptr;
+                        ptr++;
                         
                         mpi_len = (secretPrimeQBits + 7) / 8;
                         BN_bin2bn(ptr, mpi_len, bn);
                         m_rsaKey->q = bn;
+                        
+                         //NSLog(@"BN_num_bits (q): %d",BN_num_bits(m_rsaKey->q));
                         //assert(BN_num_bits(m_rsaKey->q) == secretPrimeQBits);
                         
                         ptr += mpi_len;
@@ -502,10 +506,13 @@
                         inverseBits <<= 8;
                         ptr++;
                         inverseBits |= *ptr;
+                        ptr++;
                         
                         mpi_len = (inverseBits + 7) / 8;
                         BN_bin2bn(ptr, mpi_len, bn);
                         m_rsaKey->iqmp = bn;
+                        
+                        //NSLog(@"BN_num_bits (q): %d",BN_num_bits(m_rsaKey->iqmp));
                         //assert(BN_num_bits(m_rsaKey->iqmp) == inverseBits);
                         
                     }
