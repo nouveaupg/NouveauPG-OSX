@@ -1208,7 +1208,7 @@
         else {
             // prompt for password
             PasswordWindow *windowController = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
-            NSString *prompt = [NSString stringWithFormat:@"Importing identity \"%@\": enter a password to protect from unauthorized use.",m_userId];
+            NSString *prompt = @"Choose a password to protect this identity.";
             [windowController presentChangePasswordPrompt:prompt privateKey:m_primaryKey window:self.window];
             
             return true;
@@ -1277,6 +1277,7 @@
                             }
                             for (NSString *eachKeyId in [m_children objectForKey:@"MY IDENTITIES"]) {
                                 if ([eachKeyId isEqualToString:usedIdentity.keyId]) {
+                                    [m_outlineView expandItem:@"MY IDENTITIES"];
                                     NSInteger row = [m_outlineView rowForItem:eachKeyId];
                                     [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
                                     
@@ -1611,7 +1612,7 @@
                 m_pendingItem = [[NSString alloc]initWithString:selectedItem];
                 m_rootNode = [[NSString alloc]initWithString:parent];
                 
-                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete identity?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected identity %@? You should back up your identity by saving your private certificate to disk.",selectedObject.name];
+                NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete identity?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected identity \'%@\'? You should back up your identity by saving your private certificate to disk.",selectedObject.name];
                 
                 [self.managedObjectContext deleteObject:selectedObject];
                 
