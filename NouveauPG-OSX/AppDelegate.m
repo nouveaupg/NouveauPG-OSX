@@ -1116,6 +1116,8 @@
     newIdentity.fingerprint = [[NSString stringWithFormat:@"%08x%08x%08x%08x%08x",d1,d2,d3,d4,d5] uppercaseString];
     newIdentity.keyId = [[m_primaryKey keyId] uppercaseString];
     newIdentity.created = [NSDate date];
+    newIdentity.primaryKey = m_primaryKey;
+    newIdentity.secondaryKey = m_secondaryKey;
     
     NSRange firstBracket = [m_userId rangeOfString:@"<"];
     if (firstBracket.location != NSNotFound) {
@@ -1312,6 +1314,9 @@
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
                     }
+                }
+                else if(messageType == 2) {
+                    [self importIdentityFromKeystore:message];
                 }
             }
             else {
