@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6245" systemVersion="14B25" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6245"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ComposeWindowController">
@@ -17,27 +18,27 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="Vzo-me-KtL" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="139" y="81" width="400" height="239"/>
+            <rect key="contentRect" x="139" y="81" width="492" height="317"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="g78-Cm-2Ox">
-                <rect key="frame" x="0.0" y="0.0" width="400" height="239"/>
+                <rect key="frame" x="0.0" y="0.0" width="492" height="317"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iZr-Ek-V6U">
-                        <rect key="frame" x="20" y="54" width="360" height="140"/>
-                        <clipView key="contentView" ambiguous="YES" misplaced="YES" id="ngf-sk-J6c">
+                    <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iZr-Ek-V6U">
+                        <rect key="frame" x="20" y="61" width="452" height="211"/>
+                        <clipView key="contentView" id="ngf-sk-J6c">
                             <rect key="frame" x="1" y="1" width="238" height="133"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textView ambiguous="YES" importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="ej9-t6-Tci">
+                                <textView importsGraphics="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" smartInsertDelete="YES" id="ej9-t6-Tci">
                                     <rect key="frame" x="0.0" y="0.0" width="246" height="138"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <size key="minSize" width="358" height="138"/>
-                                    <size key="maxSize" width="463" height="10000000"/>
+                                    <size key="minSize" width="450" height="209"/>
+                                    <size key="maxSize" width="479" height="10000000"/>
                                     <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                    <size key="minSize" width="358" height="138"/>
-                                    <size key="maxSize" width="463" height="10000000"/>
+                                    <size key="minSize" width="450" height="209"/>
+                                    <size key="maxSize" width="479" height="10000000"/>
                                 </textView>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -51,18 +52,11 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QzT-cL-F6Q">
-                        <rect key="frame" x="299" y="13" width="87" height="32"/>
-                        <buttonCell key="cell" type="push" title="Encrypt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bAX-ZA-2qh">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="rightButton:" target="-2" id="taj-2m-xWL"/>
-                        </connections>
-                    </button>
-                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WWm-5U-KqD">
-                        <rect key="frame" x="14" y="13" width="137" height="32"/>
+                    <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="WWm-5U-KqD">
+                        <rect key="frame" x="6" y="13" width="137" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="125" id="0yK-vg-Zgh"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="Save As File..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IzS-2r-f7q">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -71,16 +65,22 @@
                             <action selector="leftButton:" target="-2" id="LAU-ky-aer"/>
                         </connections>
                     </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EXO-uO-PkI">
-                        <rect key="frame" x="18" y="202" width="362" height="17"/>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="EXO-uO-PkI">
+                        <rect key="frame" x="18" y="280" width="362" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="358" id="ugF-vu-Dbk"/>
+                        </constraints>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Composing a secret message for " id="qlH-QB-XrR">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wxy-Wl-Yax">
-                        <rect key="frame" x="222" y="13" width="82" height="32"/>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wxy-Wl-Yax">
+                        <rect key="frame" x="309" y="13" width="82" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="70" id="HjG-SS-ckc"/>
+                        </constraints>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="n2I-Jx-fim">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -92,9 +92,36 @@ Gw
                             <action selector="dismiss:" target="-2" id="tCy-T0-KJ3"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QzT-cL-F6Q">
+                        <rect key="frame" x="391" y="13" width="87" height="32"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="75" id="uNa-0L-N61"/>
+                        </constraints>
+                        <buttonCell key="cell" type="push" title="Encrypt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bAX-ZA-2qh">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="rightButton:" target="-2" id="taj-2m-xWL"/>
+                        </connections>
+                    </button>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="QzT-cL-F6Q" firstAttribute="leading" secondItem="wxy-Wl-Yax" secondAttribute="trailing" constant="12" symbolic="YES" id="7qV-v4-4bg"/>
+                    <constraint firstItem="iZr-Ek-V6U" firstAttribute="top" secondItem="EXO-uO-PkI" secondAttribute="bottom" constant="8" symbolic="YES" id="DaK-X5-Dcg"/>
+                    <constraint firstItem="WWm-5U-KqD" firstAttribute="top" secondItem="iZr-Ek-V6U" secondAttribute="bottom" constant="20" symbolic="YES" id="EMa-JC-HVg"/>
+                    <constraint firstAttribute="bottom" secondItem="WWm-5U-KqD" secondAttribute="bottom" constant="20" symbolic="YES" id="K52-Of-TDR"/>
+                    <constraint firstItem="wxy-Wl-Yax" firstAttribute="baseline" secondItem="WWm-5U-KqD" secondAttribute="baseline" id="MYD-1E-AtK"/>
+                    <constraint firstAttribute="trailing" secondItem="iZr-Ek-V6U" secondAttribute="trailing" constant="20" symbolic="YES" id="Nbf-Op-S4Z"/>
+                    <constraint firstItem="EXO-uO-PkI" firstAttribute="leading" secondItem="g78-Cm-2Ox" secondAttribute="leading" constant="20" symbolic="YES" id="UNf-VJ-4cD"/>
+                    <constraint firstItem="EXO-uO-PkI" firstAttribute="top" secondItem="g78-Cm-2Ox" secondAttribute="top" constant="20" symbolic="YES" id="VeN-Ks-MxY"/>
+                    <constraint firstItem="QzT-cL-F6Q" firstAttribute="baseline" secondItem="wxy-Wl-Yax" secondAttribute="baseline" id="WPT-gd-kNf"/>
+                    <constraint firstItem="iZr-Ek-V6U" firstAttribute="leading" secondItem="EXO-uO-PkI" secondAttribute="leading" id="Y85-I6-sZY"/>
+                    <constraint firstItem="WWm-5U-KqD" firstAttribute="leading" secondItem="g78-Cm-2Ox" secondAttribute="leading" constant="12" id="olu-VH-tV7"/>
+                    <constraint firstItem="QzT-cL-F6Q" firstAttribute="trailing" secondItem="iZr-Ek-V6U" secondAttribute="trailing" id="u4i-EW-LVt"/>
+                </constraints>
             </view>
-            <point key="canvasLocation" x="322" y="-259.5"/>
+            <point key="canvasLocation" x="368" y="-220.5"/>
         </window>
     </objects>
 </document>
