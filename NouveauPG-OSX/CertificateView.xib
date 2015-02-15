@@ -143,16 +143,6 @@
                         <action selector="decryptButton:" target="-2" id="bna-T3-V6M"/>
                     </connections>
                 </button>
-                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
-                    <rect key="frame" x="395" y="232" width="38" height="38"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
-                    </connections>
-                </button>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Signed" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="VSA-KW-6Lu">
                     <rect key="frame" x="148" y="190" width="151" height="41"/>
                     <view key="contentView">
@@ -274,6 +264,16 @@
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
+                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
+                    <rect key="frame" x="401" y="226" width="32" height="32"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="60" y="-19"/>
         </customView>

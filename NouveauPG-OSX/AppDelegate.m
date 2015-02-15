@@ -600,14 +600,7 @@
     
     if ([parent isEqualToString:@"RECIPIENTS"]) {
         
-        Recipient *selectedObject = nil;
-        
-        for (Recipient *each in recipients) {
-            if ([[each keyId] isEqualToString:selectedItem]) {
-                selectedObject = each;
-                break;
-            }
-        }
+        Recipient *selectedObject = [self recipientForKeyId:selectedItem];
         
         if (!m_certificateViewController) {
             [self setupCertificateSubview];
@@ -712,13 +705,7 @@
         [m_certificateViewController setIdenticon:newIdenticonCode];
     }
     else if([parent isEqualToString:@"MY IDENTITIES"]) {
-        Identities *selectedObject = nil;
-        
-        for (Identities *each in identities) {
-            if ([[each keyId] isEqualToString:selectedItem]) {
-                selectedObject = each;
-            }
-        }
+        Identities *selectedObject = [self identityForKeyId:selectedItem];
         
         if (selectedObject) {
             if (!m_certificateViewController) {
@@ -1662,7 +1649,7 @@
         m_pendingObject = nil;
         m_rootNode = nil;
         
-        [self.managedObjectContext reset];
+        [self.managedObjectContext rollback];
     }
 }
 
