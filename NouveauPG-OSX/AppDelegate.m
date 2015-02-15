@@ -656,27 +656,6 @@
             }
         }
         
-        if ([userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]) {
-            [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
-        }
-        else {
-            [m_certificateViewController setPrimarySignature:@"User ID not verified!"];
-        }
-        
-        if (subkeySig) {
-            if ([subkeySig validateSubkey:subkey withSigningKey:primaryKey]) {
-                [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
-                [m_certificateViewController setPublicKey:subkey];
-            }
-            else {
-                [m_certificateViewController setSubkeySignature:@"Subkey not verified!"];
-                [m_certificateViewController setPublicKey:primaryKey];
-            }
-        }
-        else {
-            [m_certificateViewController setPublicKey:primaryKey];
-            [m_certificateViewController setSubkeySignature:nil];
-        }
         
         
         [m_certificateViewController setUserId:selectedObject.name];
@@ -865,7 +844,7 @@
             [m_certificateViewController setValidSince:[primarySig dateSigned] until:[primarySig dateExpires]];
             
             if (secondarySig) {
-                [m_certificateViewController setSubkeyKeyId:[secondaryKey.keyId uppercaseString] signed:[secondarySig dateSigned] until:0];
+                [m_certificateViewController setSubkeyKeyId:[secondaryKey.keyId uppercaseString] signed:[secondarySig dateSigned] until:[secondarySig dateExpires]];
             }
             else {
                 [m_certificateViewController setSubkeyKeyId:nil signed:nil until:nil];
@@ -875,6 +854,29 @@
             
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedRecipient.primary.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
+            
+            if ([primarySig validateWithPublicKey:primaryKey userId:selectedRecipient.userId]) {
+                [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
+            }
+            else {
+                [m_certificateViewController warnPrimarySig:@"User ID not verified!"];
+            }
+            
+            if (secondarySig) {
+                if ([secondarySig validateSubkey:secondaryKey withSigningKey:primaryKey]) {
+                    [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
+                    [m_certificateViewController setPublicKey:secondaryKey];
+                }
+                else {
+                    [m_certificateViewController warnSecondarySig:@"Subkey not verified!"];
+                    [m_certificateViewController setPublicKey:primaryKey];
+                }
+            }
+            else {
+                [m_certificateViewController setPublicKey:primaryKey];
+                [m_certificateViewController setSubkeySignature:nil];
+            }
+            
         }
     }
     else if ([parent isEqualToString:@"MY IDENTITIES"]) {
@@ -901,7 +903,16 @@
             }
             NSString *publicKeyAlgo = [NSString stringWithFormat:@"%ld-bit RSA",(long)selectedIdentity.primaryKey.publicKeySize];
             [m_certificateViewController setPublicKeyAlgo:publicKeyAlgo];
-            [m_certificateViewController setValidSince:[primarySig dateSigned] until:nil];
+            
+            
+            if (primarySig) {
+                [m_certificateViewController setValidSince:[primarySig dateSigned] until:[primarySig dateExpires]];
+            }
+            else {
+                [m_certificateViewController setValidSince:nil until:nil];
+            }
+            
+            
             
             if ([selectedIdentity.primaryKey isEncrypted]) {
                 [m_certificateViewController setIdentityLocked:YES];

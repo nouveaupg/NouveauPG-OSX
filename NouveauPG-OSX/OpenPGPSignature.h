@@ -25,7 +25,6 @@
 @property NSInteger hashAlgo;
 
 - (id) initWithPacket: (OpenPGPPacket *)packet;
-+(OpenPGPPacket *)signWithUserId:(NSString *)userId publicKey: (OpenPGPPublicKey *)key;
 +(OpenPGPPacket *)signSubkey: (OpenPGPPublicKey *)subkey withPrivateKey:(OpenPGPPublicKey *)signingKey;
 +(OpenPGPPacket *)signUserId: (NSString *)userId withPublicKey: (OpenPGPPublicKey *)key;
 

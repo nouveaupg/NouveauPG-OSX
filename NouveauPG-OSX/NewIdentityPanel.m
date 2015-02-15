@@ -153,6 +153,7 @@
     
     [NSApp beginSheet:window modalForWindow:parent modalDelegate:self didEndSelector:nil contextInfo:nil];
     [NSApp runModalForWindow:window];
+    
     // sheet is up here...
     
     [NSApp endSheet:window];

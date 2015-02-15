@@ -35,6 +35,11 @@
     IBOutlet NSTextField *m_subkeySigned;
     IBOutlet NSTextField *m_subkeyExpires;
     
+    IBOutlet NSImageView *m_primaryWarnIcon;
+    IBOutlet NSImageView *m_primaryIcon;
+    IBOutlet NSImageView *m_subkeyWarnIcon;
+    IBOutlet NSImageView *m_subkeyIcon;
+    
     OpenPGPPublicKey *m_publicKey;
     NSString *m_userId;
     NSString *m_keyId;
@@ -43,6 +48,8 @@
     NSDate *m_expirationDate;
 }
 
+-(void)warnPrimarySig: (NSString *)message;
+-(void)warnSecondarySig: (NSString *)message;
 -(void)setUserId:(NSString *)userId;
 -(void)setEmail:(NSString *)email;
 -(void)setFingerprint: (NSString *)fingerprint;

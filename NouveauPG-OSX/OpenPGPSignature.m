@@ -101,7 +101,7 @@
                         m_creationTime = timestamp;
                         break;
                         
-                    case 3:
+                    case 9:
                         timestamp = *(ptr+2) << 24;
                         timestamp |= *(ptr+3) << 16;
                         timestamp |= *(ptr+4) << 8;
@@ -494,124 +494,6 @@
     return outputPacket;
 }
 
-+(OpenPGPPacket *)signWithUserId:(NSString *)userId publicKey: (OpenPGPPublicKey *)key {
-    // deprecated: use +(OpenPGPPacket *)signString: withKey: using:
-    OpenPGPPacket *outputPacket = nil;
-    OpenPGPPacket *keyPacket = [key exportPublicKey];
-    unsigned char digest[20];
-    SHA1([[keyPacket packetData] bytes], [[keyPacket packetData] length], digest);
-    
-    NSUInteger modulusBytes = (key.publicKeySize + 7) / 8;
-    size_t packetLen = modulusBytes + 43;
-    size_t hashedBytes = 0;
-    unsigned char *packetBody = malloc(packetLen);
-    if (packetBody) {
-        time_t signatureCreated = time(0);
-        memset(packetBody, 0xcd, packetLen);
-        // no real reason to change any of these options
-        packetBody[0] = 4;
-        packetBody[1] = 0x13;
-        packetBody[2] = 1;
-        packetBody[3] = 2;
-        packetBody[4] = 0;
-        packetBody[5] = 21;
-        packetBody[6] = 5;
-        packetBody[7] = 2;
-        packetBody[8] = signatureCreated >> 24;
-        packetBody[9] = (signatureCreated >> 16) & 0xff;
-        packetBody[10] = (signatureCreated >> 8) & 0xff;
-        packetBody[11] = signatureCreated &  0xff;
-        packetBody[12] = 2;
-        packetBody[13] = 25;
-        packetBody[14] = 0x1; // key flags
-        packetBody[15] = 2;
-        packetBody[16] = 11; // symmetric algorithms
-        packetBody[17] = 7;
-        packetBody[18] = 2;
-        packetBody[19] = 21; // hash algorithms
-        packetBody[20] = 2;
-        packetBody[21] = 2;
-        packetBody[22] = 22; // compression algorithms
-        packetBody[23] = 0;
-        packetBody[24] = 2;
-        packetBody[25] = 30;
-        packetBody[26] = 1;
-        //packetBody[27] = 9;
-        //packetBody[28] = 16;
-        //memcpy((packetBody+29),(digest+12),8);
-        packetBody[27] = 0;
-        packetBody[28] = 10; // unhashed data
-        packetBody[29] = 9;
-        packetBody[30] = 16;
-        memcpy((packetBody+31),(digest+12),8);
-        packetBody[39] = 0xff;
-        packetBody[40] = 0xff;
-        packetBody[41] = key.publicKeySize >> 8;
-        packetBody[42] = key.publicKeySize & 0xff;
-        
-        OpenPGPPacket *pubKey = [key exportPublicKey];
-        NSData *packetData = [pubKey packetData];
-        
-        SHA_CTX *hashContext = malloc(sizeof(SHA_CTX));
-        unsigned char *userIdBuffer = malloc([userId length] + 5);
-        
-        if (userIdBuffer && hashContext) {
-            SHA1_Init(hashContext);
-            SHA1_Update(hashContext, [packetData bytes], [packetData length]);
-            hashedBytes += [packetData length];
-            userIdBuffer[0] = 0xB4;
-            userIdBuffer[1] = [userId length] >> 24;
-            userIdBuffer[2] = ([userId length] >> 16) & 0xff;
-            userIdBuffer[3] = ([userId length] >> 8) & 0xff;
-            userIdBuffer[4] = [userId length] & 0xff;
-            memcpy(userIdBuffer, [userId UTF8String], [userId length]);
-            SHA1_Update(hashContext, userIdBuffer, [userId length] + 5);
-            hashedBytes += [userId length] + 5;
-            // maybe wrong
-            unsigned char trailer[6];
-            trailer[0] = 4;
-            trailer[1] = 0x13;
-            trailer[2] = 1;
-            trailer[3] = 2;
-            trailer[4] = packetBody[4];
-            trailer[5] = packetBody[5];
-    
-            SHA1_Update(hashContext, trailer, 6);
-            
-            SHA1_Update(hashContext, (packetBody + 6), (packetBody[4]<<8) | packetBody[5]);
-            hashedBytes = 27;
-            trailer[0] = 4;
-            trailer[1] = 0xff;
-            trailer[2] = hashedBytes >> 24;
-            trailer[3] = (hashedBytes >> 16) & 0xff;
-            trailer[4] = (hashedBytes >> 8) & 0xff;
-            trailer[5] = hashedBytes & 0xff;
-            
-            SHA1_Update(hashContext, trailer, 6);
-            SHA1_Final(digest, hashContext);
-            free(hashContext);
-            free(userIdBuffer);
-            
-            packetBody[39] = digest[0];
-            packetBody[40] = digest[1];
-            
-            NSLog(@"Digest bytes: %02x%02x",digest[0],digest[1]);
-            
-            NSData *mpi = [key signHashWithPrivateKey:digest length:20];
-            memcpy((packetBody+43), [mpi bytes], [mpi length]);
-            outputPacket = [[OpenPGPPacket alloc]initWithPacketBody:[NSData dataWithBytes:packetBody length:packetLen] tag:2 oldFormat:YES];
-        }else {
-            NSLog(@"Could not allocate userIdBuffer or hashContext (malloc fail).");
-        }
-        free(packetBody);
-    }
-    else {
-        NSLog(@"Could not allocate packetBody buffer.");
-    }
-    
-    return outputPacket;
-}
-
 +(OpenPGPPacket *)signSubkey: (OpenPGPPublicKey *)subkey withPrimaryKey: (OpenPGPPublicKey *)primary using: (NSInteger)algo {
     EVP_MD *hashFunction = NULL;
     if (algo == 8) {
@@ -831,7 +713,7 @@
     if (m_expiryTime == 0) {
         return nil;
     }
-    return [NSDate dateWithTimeIntervalSince1970:m_expiryTime];
+    return [NSDate dateWithTimeIntervalSince1970:m_creationTime + m_expiryTime];
 }
 
 @end

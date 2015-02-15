@@ -18,6 +18,22 @@
 
 @synthesize certificate;
 
+-(void)warnSecondarySig: (NSString *)message {
+    [m_subkeyWarnIcon setHidden:NO];
+    [m_subkeyIcon setHidden:YES];
+    
+    [m_subkeySignatureField setTextColor:[NSColor redColor]];
+    [m_subkeySignatureField setStringValue:message];
+}
+
+-(void)warnPrimarySig: (NSString *)message {
+    [m_primaryWarnIcon setHidden:NO];
+    [m_primaryIcon setHidden:YES];
+    
+    [m_primarySignatureField setTextColor:[NSColor redColor]];
+    [m_primarySignatureField setStringValue:message];
+}
+
 -(void)setSubkeyKeyId:(NSString *)keyId signed:(NSDate *)timestamp until:(NSDate *)expires {
     if (keyId == nil) {
         [m_subkeyBox setHidden:YES];
@@ -141,9 +157,17 @@
 }
 
 -(void)setPrimarySignature: (NSString *)signature {
+    [m_primaryIcon setHidden:NO];
+    [m_primaryWarnIcon setHidden:YES];
+    
+    [m_primarySignatureField setTextColor:[NSColor colorWithRed:.5 green:.5 blue:0 alpha:1]];
     [m_primarySignatureField setStringValue:signature];
 }
 -(void)setSubkeySignature: (NSString *)signature {
+    [m_subkeyIcon setHidden:NO];
+    [m_subkeyWarnIcon setHidden:YES];
+    
+    [m_subkeySignatureField setTextColor:[NSColor colorWithRed:.5 green:.5 blue:0 alpha:1]];
     if(signature) {
         [m_subkeySignatureField setStringValue:signature];
         [m_subkeyCertIcon setHidden:NO];
@@ -182,6 +206,14 @@
 }
 
 -(void)setValidSince:(NSDate *)created until:(NSDate *)expires {
+    if (!created) {
+        [m_createdLabel setStringValue:@"### INVALID ###"];
+        [m_expireLabel setStringValue:@"### INVALID ###"];
+        
+        return;
+    }
+    
+    
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateStyle:NSDateFormatterShortStyle];
@@ -189,7 +221,7 @@
     m_creationDate = [created copy];
     [m_createdLabel setStringValue:[formatter stringFromDate:created]];
     
-    if (m_expirationDate) {
+    if (expires) {
         m_expirationDate = [expires copy];
         [m_expireLabel setStringValue:[formatter stringFromDate:expires]];
     }

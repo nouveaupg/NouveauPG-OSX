@@ -15,19 +15,21 @@
                 <outlet property="m_keyIdField" destination="9Lj-LQ-1hh" id="e1W-gn-H03"/>
                 <outlet property="m_lockButton" destination="Dq8-3D-D8g" id="fW6-Yj-j9g"/>
                 <outlet property="m_mainIdenticon" destination="kWN-2B-OjP" id="Hga-pD-Hu3"/>
+                <outlet property="m_primaryIcon" destination="2UY-La-j4S" id="BIw-D2-uz9"/>
                 <outlet property="m_primarySignatureField" destination="nOn-AI-afk" id="3Dj-RN-oHb"/>
+                <outlet property="m_primaryWarnIcon" destination="27l-xi-kZC" id="6Rc-Ct-qwg"/>
                 <outlet property="m_privateCertButton" destination="TKg-kT-1l1" id="1fK-aR-40b"/>
                 <outlet property="m_publicKeyAlgoField" destination="znS-xG-agY" id="Puo-yS-C3v"/>
                 <outlet property="m_secretKeyLabel" destination="lC2-V4-fah" id="Tre-mh-9m3"/>
                 <outlet property="m_subkeyBox" destination="3WJ-T8-8b9" id="DCg-rF-YXq"/>
-                <outlet property="m_subkeyCertIcon" destination="fdR-0g-747" id="LZA-fX-m0g"/>
                 <outlet property="m_subkeyCertLabel" destination="iDc-1q-K3k" id="wy6-Lt-9yZ"/>
                 <outlet property="m_subkeyExpires" destination="mX5-iv-cme" id="Zt1-5m-Srv"/>
                 <outlet property="m_subkeyExpiresBox" destination="clD-iy-QH9" id="9Th-RV-WaK"/>
+                <outlet property="m_subkeyIcon" destination="fdR-0g-747" id="LzS-JL-qCh"/>
                 <outlet property="m_subkeySignatureField" destination="u4M-2D-wcH" id="YOX-tV-2XL"/>
                 <outlet property="m_subkeySigned" destination="daG-fq-EDH" id="nbH-4e-ZuD"/>
                 <outlet property="m_subkeySignedBox" destination="pvC-9l-gOT" id="kBY-ad-LIY"/>
-                <outlet property="m_userIdCertIcon" destination="2UY-La-j4S" id="oqV-GP-o7d"/>
+                <outlet property="m_subkeyWarnIcon" destination="NyV-Xe-WcL" id="cc0-F7-Y9J"/>
                 <outlet property="m_userIdField" destination="MwE-FP-kPH" id="isk-lh-zzv"/>
                 <outlet property="view" destination="c22-O7-iKe" id="IPr-ek-9dI"/>
             </connections>
@@ -81,6 +83,10 @@
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2UY-La-j4S">
                     <rect key="frame" x="51" y="40" width="27" height="23"/>
                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="userid" id="ez3-T6-aPT"/>
+                </imageView>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27l-xi-kZC">
+                    <rect key="frame" x="51" y="38" width="27" height="23"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="warning" id="NSX-Pu-Ym2"/>
                 </imageView>
                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fdR-0g-747">
                     <rect key="frame" x="250" y="39" width="18" height="24"/>
@@ -141,6 +147,16 @@
                     </buttonCell>
                     <connections>
                         <action selector="decryptButton:" target="-2" id="bna-T3-V6M"/>
+                    </connections>
+                </button>
+                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
+                    <rect key="frame" x="401" y="226" width="32" height="32"/>
+                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
                     </connections>
                 </button>
                 <box autoresizesSubviews="NO" fixedFrame="YES" title="Signed" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="VSA-KW-6Lu">
@@ -264,16 +280,10 @@
                     <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                     <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </box>
-                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Dq8-3D-D8g">
-                    <rect key="frame" x="401" y="226" width="32" height="32"/>
-                    <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="tiny_lock" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fPI-eF-Fre">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="lockIdentity:" target="-2" id="adn-6c-TGO"/>
-                    </connections>
-                </button>
+                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NyV-Xe-WcL">
+                    <rect key="frame" x="246" y="38" width="27" height="23"/>
+                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="warning" id="UXT-1m-719"/>
+                </imageView>
             </subviews>
             <point key="canvasLocation" x="60" y="-19"/>
         </customView>
@@ -283,5 +293,6 @@
         <image name="subkey" width="25" height="37"/>
         <image name="tiny_lock" width="14" height="20"/>
         <image name="userid" width="57.913043975830078" height="56.347827911376953"/>
+        <image name="warning" width="30" height="30"/>
     </resources>
 </document>
