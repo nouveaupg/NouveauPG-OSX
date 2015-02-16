@@ -418,12 +418,32 @@
 
 -(void)composeMessageForPublicKey:(OpenPGPPublicKey *)publicKey UserID:(NSString *)userId {
     
+    if ([m_certificateViewController warn]) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Invalid certificate" defaultButton:@"Cancel" alternateButton:@"Continue" otherButton:nil informativeTextWithFormat:@"Are you sure you want to compose a message for this recipient? There are one or more problems with the certificate."];
+        m_confirmation = kConfirmationStateCompose;
+        m_pendingEncryptionKey = publicKey;
+        m_pendingEncryptionRecipient = userId;
+        
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+        return;
+    }
+    
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
     windowController.state = kComposePanelStateComposeMessage;
     [windowController presentComposePanel:self.window withPublicKey:publicKey UserId:userId];
 }
 
 -(void)presentPublicKeyCertificate:(NSString *)certificate UserID:(NSString *)userId {
+    if ([m_certificateViewController warn]) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Invalid certificate" defaultButton:@"Cancel" alternateButton:@"Continue" otherButton:nil informativeTextWithFormat:@"Export this certificate? There are one or more problems with the certificate that may cause errors in other PGP clients."];
+        m_confirmation = kConfirmationStateExport;
+        m_pendingExportCertificate = certificate;
+        m_pendingExportUserId = userId;
+        
+        [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+        return;
+    }
+    
     ComposeWindowController *windowController = [[ComposeWindowController alloc]initWithWindowNibName:@"ComposePanel"];
     windowController.state = kComposePanelStateExportCertificate;
     [windowController presentPublicKeyCertPanel:self.window publicKeyCertificate:certificate UserId:userId];
@@ -815,6 +835,8 @@
     OpenPGPSignature *secondarySig;
     id selectedItem = [m_outlineView itemAtRow:[m_outlineView selectedRow]];
     id parent = [m_outlineView parentForItem:selectedItem];
+    
+    m_certificateViewController.warn = NO;
     
     if ([parent isEqualToString:@"RECIPIENTS"]) {
         [m_certificateViewController setPrivateCertificate:NO];
@@ -1599,6 +1621,7 @@
                 
                 NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete recipient?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected recipient?"];
                 
+                m_confirmation = kConfirmationStateDeleteItem;
                 [confirm beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
             }
         }
@@ -1613,7 +1636,7 @@
                 NSAlert *confirm = [NSAlert alertWithMessageText:@"Delete identity?" defaultButton:@"Delete" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"Are you sure you want to delete the selected identity \'%@\'? You should back up your identity by saving your private certificate to disk.",selectedObject.name];
                 
                 [self.managedObjectContext deleteObject:selectedObject];
-                
+                m_confirmation = kConfirmationStateDeleteItem;
                 [confirm beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
             }
         }
@@ -1628,40 +1651,64 @@
 
 - (void)alertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo {
     NSError *error;
-    if (returnCode == 1) {
-        [self.managedObjectContext save:&error];
-        
-        if( [m_rootNode isEqualToString:@"RECIPIENTS"] ) {
-            NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
-            [mutable removeObject:m_pendingObject];
-            recipients = [[NSArray alloc]initWithArray:mutable];
-        }
-        else if( [m_rootNode isEqualToString:@"MY IDENTITIES"] ) {
-            NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:identities];
-            [mutable removeObject:m_pendingObject];
-            identities = [[NSArray alloc]initWithArray:mutable];
-        }
-        
-        NSMutableArray *treeArray = [[NSMutableArray alloc]initWithCapacity:10];
-        for (NSString *each in [m_children objectForKey:m_rootNode] ) {
-            if (![each isEqualToString:m_pendingItem]) {
-                [treeArray addObject:[[NSString alloc]initWithString:each]];
+    if (m_confirmation == kConfirmationStateDeleteItem) {
+        if (returnCode == 1) {
+            [self.managedObjectContext save:&error];
+            
+            if( [m_rootNode isEqualToString:@"RECIPIENTS"] ) {
+                NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
+                [mutable removeObject:m_pendingObject];
+                recipients = [[NSArray alloc]initWithArray:mutable];
             }
+            else if( [m_rootNode isEqualToString:@"MY IDENTITIES"] ) {
+                NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:identities];
+                [mutable removeObject:m_pendingObject];
+                identities = [[NSArray alloc]initWithArray:mutable];
+            }
+            
+            NSMutableArray *treeArray = [[NSMutableArray alloc]initWithCapacity:10];
+            for (NSString *each in [m_children objectForKey:m_rootNode] ) {
+                if (![each isEqualToString:m_pendingItem]) {
+                    [treeArray addObject:[[NSString alloc]initWithString:each]];
+                }
+            }
+            [m_children setObject:treeArray forKey:m_rootNode];
+            
+            [m_outlineView reloadData];
+            
+            [m_certificateViewController.view removeFromSuperview];
+            m_certificateViewController = nil;
         }
-        [m_children setObject:treeArray forKey:m_rootNode];
-        
-        [m_outlineView reloadData];
-        
-        [m_certificateViewController.view removeFromSuperview];
-        m_certificateViewController = nil;
+        else {
+            m_pendingItem = nil;
+            m_pendingObject = nil;
+            m_rootNode = nil;
+            
+            [self.managedObjectContext rollback];
+        }
     }
-    else {
-        m_pendingItem = nil;
-        m_pendingObject = nil;
-        m_rootNode = nil;
-        
-        [self.managedObjectContext rollback];
+    else if( m_confirmation == kConfirmationStateCompose ) {
+        if (returnCode == 0) {
+            m_certificateViewController.warn = NO;
+            
+            [self composeMessageForPublicKey:m_pendingEncryptionKey UserID:m_pendingEncryptionRecipient];
+            
+        }
+        m_pendingEncryptionKey = nil;
+        m_pendingEncryptionRecipient = nil;
     }
+    else if( m_confirmation == kConfirmationStateExport ) {
+        if (returnCode == 0) {
+            m_certificateViewController.warn = NO;
+            
+            [self presentPublicKeyCertificate:m_pendingExportCertificate UserID:m_pendingExportUserId];
+        }
+        m_pendingExportCertificate = nil;
+        m_pendingExportUserId = nil;
+    }
+    // keep this here to stop catastrophic replay bugs
+    m_confirmation = kConfirmationStateNone;
+   
 }
 
 @end

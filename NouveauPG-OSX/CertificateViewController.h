@@ -71,5 +71,6 @@
 -(IBAction)lockIdentity:(id)sender;
 
 @property (copy) NSString *certificate;
+@property (assign) bool warn;
 
 @end

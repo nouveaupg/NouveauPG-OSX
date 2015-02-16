@@ -17,10 +17,13 @@
 @implementation CertificateViewController
 
 @synthesize certificate;
+@synthesize warn;
 
 -(void)warnSecondarySig: (NSString *)message {
     [m_subkeyWarnIcon setHidden:NO];
     [m_subkeyIcon setHidden:YES];
+    
+    self.warn = true;
     
     [m_subkeySignatureField setTextColor:[NSColor redColor]];
     [m_subkeySignatureField setStringValue:message];
@@ -29,6 +32,8 @@
 -(void)warnPrimarySig: (NSString *)message {
     [m_primaryWarnIcon setHidden:NO];
     [m_primaryIcon setHidden:YES];
+    
+    self.warn = true;
     
     [m_primarySignatureField setTextColor:[NSColor redColor]];
     [m_primarySignatureField setStringValue:message];
@@ -170,10 +175,10 @@
     [m_subkeySignatureField setTextColor:[NSColor colorWithRed:.5 green:.5 blue:0 alpha:1]];
     if(signature) {
         [m_subkeySignatureField setStringValue:signature];
-        [m_subkeyCertIcon setHidden:NO];
+        [m_subkeyIcon setHidden:NO];
     } else {
         [m_subkeySignatureField setStringValue:@""];
-        [m_subkeyCertIcon setHidden:YES];
+        [m_subkeyIcon setHidden:YES];
     }
 }
 

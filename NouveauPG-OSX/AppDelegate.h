@@ -13,17 +13,30 @@
 #import "Identities.h"
 #import "Recipient.h"
 
+#define kConfirmationStateNone 0
+#define kConfirmationStateDeleteItem 1
+#define kConfirmationStateCompose 2
+#define kConfirmationStateExport 3
+
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
     IBOutlet NSView *m_placeholderView;
     
     CertificateViewController *m_certificateViewController;
     
+    OpenPGPPublicKey *m_pendingEncryptionKey;
+    NSString *m_pendingEncryptionRecipient;
+    
+    NSString *m_pendingExportCertificate;
+    NSString *m_pendingExportUserId;
+    
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;
     NSManagedObject *m_pendingObject;
     NSString *m_pendingItem;
     NSString *m_rootNode;
+    
+    NSInteger m_confirmation;
     
     // Incoming keystore objects
     
