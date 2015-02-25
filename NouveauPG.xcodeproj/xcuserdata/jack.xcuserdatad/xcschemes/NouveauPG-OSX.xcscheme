@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "04795ECF19C0A1AD000A3142"
-               BuildableName = "NouveauPG-OSX.app"
-               BlueprintName = "NouveauPG-OSX"
-               ReferencedContainer = "container:NouveauPG-OSX.xcodeproj">
+               BuildableName = "NouveauPG.app"
+               BlueprintName = "NouveauPG"
+               ReferencedContainer = "container:NouveauPG.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "04795EF319C0A1AE000A3142"
-               BuildableName = "NouveauPG-OSXTests.xctest"
-               BlueprintName = "NouveauPG-OSXTests"
-               ReferencedContainer = "container:NouveauPG-OSX.xcodeproj">
+               BuildableName = "NouveauPGTests.xctest"
+               BlueprintName = "NouveauPGTests"
+               ReferencedContainer = "container:NouveauPG.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "04795ECF19C0A1AD000A3142"
-            BuildableName = "NouveauPG-OSX.app"
-            BlueprintName = "NouveauPG-OSX"
-            ReferencedContainer = "container:NouveauPG-OSX.xcodeproj">
+            BuildableName = "NouveauPG.app"
+            BlueprintName = "NouveauPG"
+            ReferencedContainer = "container:NouveauPG.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "04795ECF19C0A1AD000A3142"
-            BuildableName = "NouveauPG-OSX.app"
-            BlueprintName = "NouveauPG-OSX"
-            ReferencedContainer = "container:NouveauPG-OSX.xcodeproj">
+            BuildableName = "NouveauPG.app"
+            BlueprintName = "NouveauPG"
+            ReferencedContainer = "container:NouveauPG.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "04795ECF19C0A1AD000A3142"
-            BuildableName = "NouveauPG-OSX.app"
-            BlueprintName = "NouveauPG-OSX"
-            ReferencedContainer = "container:NouveauPG-OSX.xcodeproj">
+            BuildableName = "NouveauPG.app"
+            BlueprintName = "NouveauPG"
+            ReferencedContainer = "container:NouveauPG.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

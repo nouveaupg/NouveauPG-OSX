@@ -906,6 +906,7 @@
         if (selectedIdentity) {
             
             OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:selectedIdentity.publicCertificate];
+            UserIDPacket *userIdPkt = nil;
             for (OpenPGPPacket *eachPacket in [OpenPGPPacket packetsFromMessage:message]) {
                 if ([eachPacket packetTag] == 2) {
                     OpenPGPSignature *sig = [[OpenPGPSignature alloc]initWithPacket:eachPacket];
@@ -915,6 +916,9 @@
                     else if(sig.signatureType >= 0x10 && sig.signatureType <= 0x13) {
                         primarySig = sig;
                     }
+                }
+                else if( [eachPacket packetTag] == 13) {
+                    userIdPkt = [[UserIDPacket alloc]initWithPacket:eachPacket];
                 }
                 else if ([eachPacket packetTag] == 6) {
                     primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
@@ -934,6 +938,27 @@
                 [m_certificateViewController setValidSince:nil until:nil];
             }
             
+            if ([primarySig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]]) {
+                [m_certificateViewController setPrimarySignature:@"User ID signature verified."];
+            }
+            else {
+                [m_certificateViewController warnPrimarySig:@"User ID not verified!"];
+            }
+            
+            if (secondarySig) {
+                if ([secondarySig validateSubkey:secondaryKey withSigningKey:primaryKey]) {
+                    [m_certificateViewController setSubkeySignature:@"Subkey signature verified."];
+                    [m_certificateViewController setPublicKey:secondaryKey];
+                }
+                else {
+                    [m_certificateViewController warnSecondarySig:@"Subkey not verified!"];
+                    [m_certificateViewController setPublicKey:primaryKey];
+                }
+            }
+            else {
+                [m_certificateViewController setPublicKey:primaryKey];
+                [m_certificateViewController setSubkeySignature:nil];
+            }
             
             
             if ([selectedIdentity.primaryKey isEncrypted]) {

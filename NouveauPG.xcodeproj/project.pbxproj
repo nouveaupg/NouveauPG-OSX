@@ -61,23 +61,23 @@
 		0429885319F9BB9C00083E70 /* ComposeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeWindowController.m; sourceTree = "<group>"; };
 		0429885819FC069600083E70 /* IdenticonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdenticonImage.h; sourceTree = "<group>"; };
 		0429885919FC069600083E70 /* IdenticonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdenticonImage.m; sourceTree = "<group>"; };
-		04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NouveauPG-OSX.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04795ED019C0A1AD000A3142 /* NouveauPG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NouveauPG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795ED319C0A1AD000A3142 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		04795ED619C0A1AD000A3142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		04795ED719C0A1AD000A3142 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		04795ED819C0A1AD000A3142 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		04795EDB19C0A1AD000A3142 /* NouveauPG-OSX-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPG-OSX-Info.plist"; sourceTree = "<group>"; };
+		04795EDB19C0A1AD000A3142 /* NouveauPG-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPG-Info.plist"; sourceTree = "<group>"; };
 		04795EDD19C0A1AD000A3142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04795EDF19C0A1AD000A3142 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		04795EE119C0A1AD000A3142 /* NouveauPG-OSX-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NouveauPG-OSX-Prefix.pch"; sourceTree = "<group>"; };
+		04795EE119C0A1AD000A3142 /* NouveauPG-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NouveauPG-Prefix.pch"; sourceTree = "<group>"; };
 		04795EE319C0A1AD000A3142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		04795EE519C0A1AD000A3142 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		04795EE619C0A1AD000A3142 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		04795EE919C0A1AD000A3142 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		04795EEE19C0A1AD000A3142 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		04795EF419C0A1AE000A3142 /* NouveauPG-OSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NouveauPG-OSXTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		04795EF419C0A1AE000A3142 /* NouveauPGTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NouveauPGTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795EF519C0A1AE000A3142 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		04795EFC19C0A1AE000A3142 /* NouveauPG-OSXTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPG-OSXTests-Info.plist"; sourceTree = "<group>"; };
+		04795EFC19C0A1AE000A3142 /* NouveauPGTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "NouveauPGTests-Info.plist"; sourceTree = "<group>"; };
 		04795EFE19C0A1AE000A3142 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04795F0019C0A1AE000A3142 /* NouveauPG_OSXTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NouveauPG_OSXTests.m; sourceTree = "<group>"; };
 		048D726F1A101C8100793F2F /* NouveauPG-OSX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "NouveauPG-OSX.entitlements"; sourceTree = "<group>"; };
@@ -148,8 +148,8 @@
 		04795ED119C0A1AD000A3142 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */,
-				04795EF419C0A1AE000A3142 /* NouveauPG-OSXTests.xctest */,
+				04795ED019C0A1AD000A3142 /* NouveauPG.app */,
+				04795EF419C0A1AE000A3142 /* NouveauPGTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -194,10 +194,10 @@
 		04795EDA19C0A1AD000A3142 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				04795EDB19C0A1AD000A3142 /* NouveauPG-OSX-Info.plist */,
+				04795EDB19C0A1AD000A3142 /* NouveauPG-Info.plist */,
 				04795EDC19C0A1AD000A3142 /* InfoPlist.strings */,
 				04795EDF19C0A1AD000A3142 /* main.m */,
-				04795EE119C0A1AD000A3142 /* NouveauPG-OSX-Prefix.pch */,
+				04795EE119C0A1AD000A3142 /* NouveauPG-Prefix.pch */,
 				04795EE219C0A1AD000A3142 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -215,7 +215,7 @@
 		04795EFB19C0A1AE000A3142 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				04795EFC19C0A1AE000A3142 /* NouveauPG-OSXTests-Info.plist */,
+				04795EFC19C0A1AE000A3142 /* NouveauPGTests-Info.plist */,
 				04795EFD19C0A1AE000A3142 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -283,9 +283,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		04795ECF19C0A1AD000A3142 /* NouveauPG-OSX */ = {
+		04795ECF19C0A1AD000A3142 /* NouveauPG */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 04795F0419C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG-OSX" */;
+			buildConfigurationList = 04795F0419C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG" */;
 			buildPhases = (
 				04795ECC19C0A1AD000A3142 /* Sources */,
 				04795ECD19C0A1AD000A3142 /* Frameworks */,
@@ -295,14 +295,14 @@
 			);
 			dependencies = (
 			);
-			name = "NouveauPG-OSX";
+			name = NouveauPG;
 			productName = "NouveauPG-OSX";
-			productReference = 04795ED019C0A1AD000A3142 /* NouveauPG-OSX.app */;
+			productReference = 04795ED019C0A1AD000A3142 /* NouveauPG.app */;
 			productType = "com.apple.product-type.application";
 		};
-		04795EF319C0A1AE000A3142 /* NouveauPG-OSXTests */ = {
+		04795EF319C0A1AE000A3142 /* NouveauPGTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 04795F0719C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG-OSXTests" */;
+			buildConfigurationList = 04795F0719C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPGTests" */;
 			buildPhases = (
 				04795EF019C0A1AE000A3142 /* Sources */,
 				04795EF119C0A1AE000A3142 /* Frameworks */,
@@ -313,9 +313,9 @@
 			dependencies = (
 				04795EF919C0A1AE000A3142 /* PBXTargetDependency */,
 			);
-			name = "NouveauPG-OSXTests";
+			name = NouveauPGTests;
 			productName = "NouveauPG-OSXTests";
-			productReference = 04795EF419C0A1AE000A3142 /* NouveauPG-OSXTests.xctest */;
+			productReference = 04795EF419C0A1AE000A3142 /* NouveauPGTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -328,6 +328,7 @@
 				ORGANIZATIONNAME = "John Hill";
 				TargetAttributes = {
 					04795ECF19C0A1AD000A3142 = {
+						DevelopmentTeam = U275QAVXQX;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 1;
@@ -339,7 +340,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 04795ECB19C0A1AD000A3142 /* Build configuration list for PBXProject "NouveauPG-OSX" */;
+			buildConfigurationList = 04795ECB19C0A1AD000A3142 /* Build configuration list for PBXProject "NouveauPG" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -352,8 +353,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				04795ECF19C0A1AD000A3142 /* NouveauPG-OSX */,
-				04795EF319C0A1AE000A3142 /* NouveauPG-OSXTests */,
+				04795ECF19C0A1AD000A3142 /* NouveauPG */,
+				04795EF319C0A1AE000A3142 /* NouveauPGTests */,
 			);
 		};
 /* End PBXProject section */
@@ -425,7 +426,7 @@
 /* Begin PBXTargetDependency section */
 		04795EF919C0A1AE000A3142 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 04795ECF19C0A1AD000A3142 /* NouveauPG-OSX */;
+			target = 04795ECF19C0A1AD000A3142 /* NouveauPG */;
 			targetProxy = 04795EF819C0A1AE000A3142 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -498,7 +499,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -531,7 +532,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -541,14 +542,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "NouveauPG-OSX/NouveauPG-OSX.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
-				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-OSX-Info.plist";
+				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-Prefix.pch";
+				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-lcrypto";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NouveauPG;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -558,14 +559,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "NouveauPG-OSX/NouveauPG-OSX.entitlements";
-				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
-				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-OSX-Info.plist";
+				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-Prefix.pch";
+				INFOPLIST_FILE = "NouveauPG-OSX/NouveauPG-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "-lcrypto";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NouveauPG;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -585,8 +586,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "NouveauPG-OSXTests/NouveauPG-OSXTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "NouveauPG-OSXTests/NouveauPGTests-Info.plist";
+				PRODUCT_NAME = NouveauPGTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -603,8 +604,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "NouveauPG-OSX/NouveauPG-OSX-Prefix.pch";
-				INFOPLIST_FILE = "NouveauPG-OSXTests/NouveauPG-OSXTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "NouveauPG-OSXTests/NouveauPGTests-Info.plist";
+				PRODUCT_NAME = NouveauPGTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -613,7 +614,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		04795ECB19C0A1AD000A3142 /* Build configuration list for PBXProject "NouveauPG-OSX" */ = {
+		04795ECB19C0A1AD000A3142 /* Build configuration list for PBXProject "NouveauPG" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				04795F0219C0A1AE000A3142 /* Debug */,
@@ -622,7 +623,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		04795F0419C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG-OSX" */ = {
+		04795F0419C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				04795F0519C0A1AE000A3142 /* Debug */,
@@ -631,7 +632,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		04795F0719C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPG-OSXTests" */ = {
+		04795F0719C0A1AE000A3142 /* Build configuration list for PBXNativeTarget "NouveauPGTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				04795F0819C0A1AE000A3142 /* Debug */,

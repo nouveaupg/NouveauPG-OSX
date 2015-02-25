@@ -581,6 +581,10 @@
         free(unencryptedBuffer);
         return output;
     }
+    else {
+        NSLog(@"Unsupported symmetric algorithm: %d",unencryptedBuffer[offset]);
+    }
+    free(unencryptedBuffer);
     return NULL;
 }
 

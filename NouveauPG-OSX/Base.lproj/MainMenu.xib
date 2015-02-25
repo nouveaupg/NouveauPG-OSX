@@ -70,7 +70,11 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="File" id="bib-Uj-vzu">
                         <items>
-                            <menuItem title="Import..." keyEquivalent="o" id="SXM-mH-x3i"/>
+                            <menuItem title="Import..." keyEquivalent="o" id="SXM-mH-x3i">
+                                <connections>
+                                    <action selector="importFromFile:" target="Voe-Tx-rLC" id="PKa-Xy-XxZ"/>
+                                </connections>
+                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="m54-Is-iLE"/>
                             <menuItem title="Close" keyEquivalent="w" id="DVo-aG-piG">
                                 <connections>
