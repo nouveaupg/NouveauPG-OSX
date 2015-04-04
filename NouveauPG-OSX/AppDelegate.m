@@ -18,6 +18,7 @@
 #import "PasswordWindow.h"
 #import "Recipient.h"
 #import "Identities.h"
+#import "ActivationWindowController.h"
 
 @implementation AppDelegate
 
@@ -32,9 +33,33 @@
 @synthesize recipients;
 @synthesize identities;
 
+- (void)presentActivationWindow {
+    // test for activation
+    NSString *installationUuid = [[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"];
+    double epoch = [[NSUserDefaults standardUserDefaults]doubleForKey:@"epoch"];
+    
+    ActivationWindowController *windowController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
+        [windowController presentActivationWindow:self.window Uuid:installationUuid date:[NSDate dateWithTimeIntervalSince1970:epoch]];
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    if(![[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"]) {
+        [[NSUserDefaults standardUserDefaults]setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
+        [[NSUserDefaults standardUserDefaults]setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"epoch"];
+    }
+    else {
+        NSLog(@"UUID %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"]);
+    }
+    
+    // test for activation
+    NSString *installationUuid = [[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"];
+    double epoch = [[NSUserDefaults standardUserDefaults]doubleForKey:@"epoch"];
+    if (1) {
+        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(presentActivationWindow) userInfo:nil repeats:NO];
+    }
+    
     
     OpenSSL_add_all_algorithms();
     

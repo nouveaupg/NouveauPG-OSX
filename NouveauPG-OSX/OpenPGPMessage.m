@@ -56,8 +56,6 @@
             }
         }
         
-        /* 
-        
         if (!messageBody) {
             header = [armouredMessage rangeOfString:@"-----BEGIN PGP SIGNATURE-----"];
             if (header.location != NSNotFound) {
@@ -67,8 +65,6 @@
                 }
             }
         }
-         
-        */
         
         if (messageBody) {
             NSMutableString *contentAccumulator = [[NSMutableString alloc]initWithCapacity:[messageBody length]];

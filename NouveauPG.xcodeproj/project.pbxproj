@@ -12,6 +12,9 @@
 		0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429885019F9B9DB00083E70 /* ComposePanel.xib */; };
 		0429885419F9BB9C00083E70 /* ComposeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885319F9BB9C00083E70 /* ComposeWindowController.m */; };
 		0429885A19FC069600083E70 /* IdenticonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885919FC069600083E70 /* IdenticonImage.m */; };
+		043BE0D71AD0252B00CCD2C1 /* ActivationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043BE0D51AD0252B00CCD2C1 /* ActivationWindowController.m */; };
+		043BE0D81AD0252B00CCD2C1 /* ActivationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043BE0D61AD0252B00CCD2C1 /* ActivationWindowController.xib */; };
+		043BE0DD1AD0614B00CCD2C1 /* validation_certificate in Resources */ = {isa = PBXBuildFile; fileRef = 043BE0DC1AD0614B00CCD2C1 /* validation_certificate */; };
 		04795ED419C0A1AD000A3142 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04795ED319C0A1AD000A3142 /* Cocoa.framework */; };
 		04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04795EDC19C0A1AD000A3142 /* InfoPlist.strings */; };
 		04795EE019C0A1AD000A3142 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 04795EDF19C0A1AD000A3142 /* main.m */; };
@@ -61,6 +64,10 @@
 		0429885319F9BB9C00083E70 /* ComposeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeWindowController.m; sourceTree = "<group>"; };
 		0429885819FC069600083E70 /* IdenticonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdenticonImage.h; sourceTree = "<group>"; };
 		0429885919FC069600083E70 /* IdenticonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdenticonImage.m; sourceTree = "<group>"; };
+		043BE0D41AD0252B00CCD2C1 /* ActivationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivationWindowController.h; sourceTree = "<group>"; };
+		043BE0D51AD0252B00CCD2C1 /* ActivationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivationWindowController.m; sourceTree = "<group>"; };
+		043BE0D61AD0252B00CCD2C1 /* ActivationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivationWindowController.xib; sourceTree = "<group>"; };
+		043BE0DC1AD0614B00CCD2C1 /* validation_certificate */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = validation_certificate; sourceTree = "<group>"; };
 		04795ED019C0A1AD000A3142 /* NouveauPG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NouveauPG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04795ED319C0A1AD000A3142 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		04795ED619C0A1AD000A3142 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -199,6 +206,7 @@
 				04795EDF19C0A1AD000A3142 /* main.m */,
 				04795EE119C0A1AD000A3142 /* NouveauPG-Prefix.pch */,
 				04795EE219C0A1AD000A3142 /* Credits.rtf */,
+				043BE0DC1AD0614B00CCD2C1 /* validation_certificate */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -276,6 +284,9 @@
 				A86AE7FF1A1A80160028108C /* PasswordWindow.h */,
 				A86AE8001A1A80160028108C /* PasswordWindow.m */,
 				A86AE8011A1A80160028108C /* PasswordWindow.xib */,
+				043BE0D41AD0252B00CCD2C1 /* ActivationWindowController.h */,
+				043BE0D51AD0252B00CCD2C1 /* ActivationWindowController.m */,
+				043BE0D61AD0252B00CCD2C1 /* ActivationWindowController.xib */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -365,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				04795EDE19C0A1AD000A3142 /* InfoPlist.strings in Resources */,
+				043BE0D81AD0252B00CCD2C1 /* ActivationWindowController.xib in Resources */,
 				0429884319F99FCC00083E70 /* CertificateView.xib in Resources */,
 				A80BF6E11A03FD92003393FA /* NewIdentityPanel.xib in Resources */,
 				04795EEF19C0A1AD000A3142 /* Images.xcassets in Resources */,
@@ -372,6 +384,7 @@
 				04795EE419C0A1AD000A3142 /* Credits.rtf in Resources */,
 				A86AE8031A1A80160028108C /* PasswordWindow.xib in Resources */,
 				04795EEA19C0A1AD000A3142 /* MainMenu.xib in Resources */,
+				043BE0DD1AD0614B00CCD2C1 /* validation_certificate in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -392,6 +405,7 @@
 			files = (
 				04795EE719C0A1AD000A3142 /* AppDelegate.m in Sources */,
 				04C9638819CFC3F300A2446C /* EncryptedEnvelope.m in Sources */,
+				043BE0D71AD0252B00CCD2C1 /* ActivationWindowController.m in Sources */,
 				A86AE8021A1A80160028108C /* PasswordWindow.m in Sources */,
 				04C9638A19CFC3F300A2446C /* NSString+Base64.m in Sources */,
 				A80BF6E01A03FD92003393FA /* NewIdentityPanel.m in Sources */,
