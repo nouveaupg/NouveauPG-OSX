@@ -75,7 +75,7 @@
                 }
                 if (sig) {
                     if([sig validateWithPublicKey:publicKey userId:uuid]) {
-                        NSLog(@"Validation succesful!");
+                        NSLog(@"Validation successful!");
                         return true;
                     }
                     else {
@@ -124,7 +124,14 @@
         [m_dismissButton setEnabled:FALSE];
     }
     else {
-        instructions = [NSString stringWithFormat:@"%d out of 30 days remaining in trial period.\nActivate this installation anonymously at\nfhttp://nouveaupg.com/activate",days];
+        days = 30 - days;
+        if (days > 1) {
+            instructions = [NSString stringWithFormat:@"%d days remaining in trial period.\nActivate this installation anonymously at\nhttp://nouveaupg.com/activate",days];
+        }
+        else {
+            instructions = @"1 day remaining in trial period.\nActivate this installation anonymously at\nhttp://nouveaupg.com/activate";
+        }
+        
         [m_quitButton setHidden:YES];
     }
     [m_instructionsField setStringValue:instructions];

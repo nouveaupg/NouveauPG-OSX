@@ -45,6 +45,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    NSError *error;
+    
     if(![[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"]) {
         [[NSUserDefaults standardUserDefaults]setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
         [[NSUserDefaults standardUserDefaults]setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"epoch"];
@@ -54,12 +56,22 @@
     }
     
     // test for activation
-    NSString *installationUuid = [[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"];
-    double epoch = [[NSUserDefaults standardUserDefaults]doubleForKey:@"epoch"];
-    if (1) {
-        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(presentActivationWindow) userInfo:nil repeats:NO];
-    }
+    ActivationWindowController *activationController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
     
+    NSString *signatureText = [[NSUserDefaults standardUserDefaults]objectForKey:@"signature"];
+    if (signatureText) {
+        if ([activationController validateSignature:signatureText]) {
+            NSLog(@"Activation signature: %@",signatureText);
+        }
+        else {
+            NSLog(@"Not activated.");
+            [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(presentActivationWindow) userInfo:nil repeats:NO];
+        }
+    }
+    else {
+        NSLog(@"Not activated.");
+       [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(presentActivationWindow) userInfo:nil repeats:NO];
+    }
     
     OpenSSL_add_all_algorithms();
     
@@ -72,14 +84,13 @@
     [m_outlineView setRowSizeStyle:NSTableViewRowSizeStyleDefault];
     
     m_children = [[NSMutableDictionary alloc]initWithCapacity:3];
-    
+    error = nil;
     NSManagedObjectContext *ctx = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Recipient"
                                               inManagedObjectContext:ctx];
     [fetchRequest setEntity:entity];
     
-    NSError *error;
     self.recipients = [ctx executeFetchRequest:fetchRequest error:&error];
     NSLog(@"Loaded %lu recipients (public key certificates) from datastore.",(unsigned long)[self.recipients count]);
     
