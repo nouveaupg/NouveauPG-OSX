@@ -87,7 +87,7 @@
             NSInteger len = [m_hashedSubpacketData length];
             while (len > 0) {
                 NSUInteger subpacketLength = *ptr;
-                NSLog(@"Hashed subpacket tag: %d; length: %ld",*(ptr+1),len);
+                NSLog(@"Hashed subpacket tag: %d; length: %ld",*(ptr+1),subpacketLength);
                 int tag = *(ptr + 1);
                 unsigned int timestamp = 0;
                 

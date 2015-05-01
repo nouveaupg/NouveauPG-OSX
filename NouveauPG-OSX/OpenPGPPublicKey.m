@@ -359,8 +359,11 @@
     
     unsigned char *output = malloc([encryptedSig length]);
     int result = RSA_public_decrypt([encryptedSig length], [encryptedSig bytes], output, m_rsaKey, RSA_NO_PADDING);
-    if (result == [encryptedSig length]) {
+    if (result != -1) {
         retValue = [[NSData alloc]initWithBytes:output length:result];
+    }
+    else {
+        NSLog(@"OpenSSL returned error for RSA_public_decrypt");
     }
     free(output);
     
