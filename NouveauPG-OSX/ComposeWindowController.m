@@ -26,7 +26,12 @@
         
         NSSavePanel *panelSave = [NSSavePanel savePanel];
         [panelSave setPrompt:@"Save"];
-        [panelSave setNameFieldStringValue:@"encrypted.asc"];
+        
+        NSString *trimmedString = [m_userId stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        trimmedString = [trimmedString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        [panelSave setNameFieldStringValue:[NSString stringWithFormat:@"EncryptedMessageFor%@.asc",trimmedString]];
         
         NSInteger result = [panelSave runModal];
         
@@ -91,7 +96,12 @@
     else if(_state == kComposePanelStateExportCertificate) {
         NSSavePanel *panelSave = [NSSavePanel savePanel];
         [panelSave setPrompt:@"Save"];
-        NSString *defaultFilename = [NSString stringWithFormat:@"certificate.asc"];
+        
+        NSString *trimmedString = [m_userId stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        trimmedString = [trimmedString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        NSString *defaultFilename = [NSString stringWithFormat:@"%@.asc",trimmedString];
         [panelSave setNameFieldStringValue:defaultFilename];
         
         NSInteger result = [panelSave runModal];
@@ -112,7 +122,12 @@
     else if(_state == kComposePanelStateExportKeystore) {
         NSSavePanel *panelSave = [NSSavePanel savePanel];
         [panelSave setPrompt:@"Save"];
-        NSString *defaultFilename = [NSString stringWithFormat:@"keystore.asc"];
+        
+        NSString *trimmedString = [m_userId stringByTrimmingCharactersInSet:
+                                   [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        trimmedString = [trimmedString stringByReplacingOccurrencesOfString:@" " withString:@""];
+        
+        NSString *defaultFilename = [NSString stringWithFormat:@"%@_keystore.asc",trimmedString];
         [panelSave setNameFieldStringValue:defaultFilename];
         
         NSInteger result = [panelSave runModal];
