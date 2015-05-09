@@ -26,6 +26,8 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+@import CloudKit;
+
 #define kMessageTypeEncrypted 1
 #define kMessageTypeCertificate 2
 #define kMessageTypeKeystore 3
@@ -54,6 +56,8 @@
     else {
         NSLog(@"UUID %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"]);
     }
+    
+    [self startSyncFromCloud];
     
     // test for activation
     ActivationWindowController *activationController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
@@ -1390,11 +1394,16 @@
                 if (messageType == 1) {
                     if([self importRecipientFromCertificate:message]) {
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:20];
+                        NSString *lastOne = nil;
                         for (Recipient *each in recipients) {
                             [newArray addObject:each.keyId];
+                            lastOne = each.keyId;
                         }
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
+                        
+                        NSInteger row = [m_outlineView rowForItem:lastOne];
+                        [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
                     }
                 }
                 else if(messageType == 2) {
@@ -1495,6 +1504,7 @@
         }
 
         if (validSig) {
+            [self saveObjectToCloud:newRecipient];
             [self saveAction:self];
         }
         else {
@@ -1553,14 +1563,20 @@
                             return [first compare:second];
                         }];
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:[recipients count]];
+                        NSString *lastOne = nil;
+                        
                         for (Recipient *each in sortedRecipients) {
                             if (each.keyId) {
-                                [newArray addObject:[[NSString alloc]initWithString:each.keyId]];
+                                lastOne =[[NSString alloc]initWithString:each.keyId];
+                                [newArray addObject:lastOne];
                             }
                         }
                         
                         [m_children setObject:newArray forKey:@"RECIPIENTS"];
                         [m_outlineView reloadData];
+                        
+                        NSInteger row = [m_outlineView rowForItem:lastOne];
+                        [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
                     }
                     else {
                         NSAlert *alert = [NSAlert alertWithMessageText:@"Couldn't add certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Public key certificate invalid or incompatible with NouveauPG. NouveauPG currently only supports RSA keys."];
@@ -1770,6 +1786,61 @@
     // keep this here to stop catastrophic replay bugs
     m_confirmation = kConfirmationStateNone;
    
+}
+
+#pragma mark CloudKit
+
+-(void)startSyncFromCloud {
+    CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
+    CKDatabase *privateDatabase = [myContainer privateCloudDatabase];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"Created > %@",[NSDate dateWithTimeIntervalSince1970:0]];
+    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Identities" predicate:predicate];
+    [privateDatabase performQuery:query inZoneWithID:nil completionHandler:^(NSArray *results, NSError *error) {
+        if (error) {
+            // Error handling for failed fetch from public database
+        }
+        else {
+            // Display the fetched records
+            for( CKRecord *each in results ) {
+                if( ![each objectForKey:@"PrivateKeystore"] ) {
+                    NSLog(@"Recipient: %@ <%@>",[each objectForKey:@"Name"],[each objectForKey:@"Email"]);
+                }
+            }
+        }
+    }];
+
+}
+
+-(bool)saveObjectToCloud: (NSManagedObject *)object {
+    
+    CKRecord *newRecord = [[CKRecord alloc]initWithRecordType:@"Identities"];
+    //CKContainer *myContainer = [CKContainer defaultContainer];
+    CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
+    CKDatabase *privateDatabase = [myContainer privateCloudDatabase];
+    
+    if ([[[object entity] name] isEqualToString:@"Recipient"]) {
+        Recipient *recipient = (Recipient *)object;
+        [newRecord setObject:recipient.name forKey:@"Name"];
+        [newRecord setObject:recipient.email forKey:@"Email"];
+        [newRecord setObject:recipient.certificate forKey:@"PublicCertificate"];
+        [newRecord setObject:recipient.added forKey:@"Created"];
+        [newRecord setObject:recipient.keyId forKey:@"KeyId"];
+        [newRecord setObject:recipient.fingerprint forKey:@"Fingerprint"];
+    }
+    
+    [privateDatabase saveRecord:newRecord completionHandler:^(CKRecord *identityRecord, NSError *error){
+        if (!error) {
+            // Insert successfully saved record code
+            NSLog(@"Record saved.");
+        }
+        else {
+            // Insert error handling
+            NSLog(@"Error saving CloudKit record: %@",[error description]);
+        }
+    }];
+    
+    
+    return true;
 }
 
 @end

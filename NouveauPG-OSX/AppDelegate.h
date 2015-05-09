@@ -79,6 +79,8 @@
 -(void)presentDecryptSheet:(NSString *)keyId;
 -(Recipient *)recipientForKeyId:(NSString *)keyId;
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
+-(bool)saveObjectToCloud: (NSManagedObject *)object;
+-(void)startSyncFromCloud;
 
 +(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage;
 
