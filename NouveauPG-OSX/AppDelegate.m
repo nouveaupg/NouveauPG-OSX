@@ -20,13 +20,13 @@
 #import "Identities.h"
 #import "ActivationWindowController.h"
 
+@import CloudKit;
+
 @implementation AppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
-
-@import CloudKit;
 
 #define kMessageTypeEncrypted 1
 #define kMessageTypeCertificate 2
@@ -49,6 +49,8 @@
     // Insert code here to initialize your application
     NSError *error;
     
+    [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"iCloudSyncEnabled"];
+    
     if(![[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"]) {
         [[NSUserDefaults standardUserDefaults]setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
         [[NSUserDefaults standardUserDefaults]setDouble:[[NSDate date] timeIntervalSince1970] forKey:@"epoch"];
@@ -57,7 +59,14 @@
         NSLog(@"UUID %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"]);
     }
     
-    [self startSyncFromCloud];
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"iCloudSyncEnabled"]) {
+        [self startSyncFromCloud];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"refreshOutline" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
+        NSLog(@"Refresh outline...");
+        [m_outlineView reloadData];
+    }];
     
     // test for activation
     ActivationWindowController *activationController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
@@ -1517,6 +1526,8 @@
         [editable addObject:newRecipient];
         recipients = [[NSArray alloc]initWithArray:editable];
         
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"refreshOutline" object:nil];
+        
         return true;
     }
     else {
@@ -1730,7 +1741,18 @@
     NSError *error;
     if (m_confirmation == kConfirmationStateDeleteItem) {
         if (returnCode == 1) {
+            NSString *recordType;
+            NSString *keyId;
+            if ([m_pendingObject isKindOfClass:[Recipient class]]) {
+                Recipient *r = (Recipient *)m_pendingObject;
+                keyId = [[NSString alloc]initWithString: r.keyId];
+                recordType = @"Recipient";
+            }
             [self.managedObjectContext save:&error];
+            
+            if ([[NSUserDefaults standardUserDefaults]boolForKey:@"iCloudSyncEnabled"]) {
+                [self deleteCloudObject:keyId recordType:recordType];
+            }
             
             if( [m_rootNode isEqualToString:@"RECIPIENTS"] ) {
                 NSMutableArray *mutable = [[NSMutableArray alloc]initWithArray:recipients];
@@ -1804,12 +1826,52 @@
             for( CKRecord *each in results ) {
                 if( ![each objectForKey:@"PrivateKeystore"] ) {
                     NSLog(@"Recipient: %@ <%@>",[each objectForKey:@"Name"],[each objectForKey:@"Email"]);
+                    
+                    bool found = false;
+                    
+                    for (Recipient *eachRecipient in recipients ) {
+                        if ([[eachRecipient keyId] isEqualToString:[each objectForKey:@"KeyId"]]) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if(!found) {
+                        OpenPGPMessage *certificateMessage = [[OpenPGPMessage alloc]initWithArmouredText:[each objectForKey:@"PublicCertificate"]];
+                        if ([certificateMessage validChecksum]) {
+                            [self importRecipientFromCertificate:certificateMessage];
+                            
+                        }
+                    }
                 }
             }
         }
     }];
 
 }
+
+- (void)deleteCloudObject: (NSString *)keyId recordType:(NSString *)type {
+    //CKRecord *newRecord = [[CKRecord alloc]initWithRecordType:@"Identities"];
+    //CKContainer *myContainer = [CKContainer defaultContainer];
+    CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
+    CKDatabase *privateDatabase = [myContainer privateCloudDatabase];
+    
+    NSPredicate *predicate;
+    
+    if ([type isEqualToString:@"Recipient"]) {
+        predicate = [NSPredicate predicateWithFormat:@"KeyId == %@",keyId];
+    }
+    
+    CKQuery *query = [[CKQuery alloc] initWithRecordType:@"Identities" predicate:predicate];
+    [privateDatabase performQuery:query inZoneWithID:nil completionHandler:^(NSArray *results, NSError *error) {
+        for (CKRecord *each in results) {
+            [privateDatabase deleteRecordWithID:each.recordID completionHandler:^(CKRecordID *recordID, NSError *error) {
+                NSLog(@"Record deleted.");
+            }];
+        }
+    }];
+}
+
 
 -(bool)saveObjectToCloud: (NSManagedObject *)object {
     
@@ -1831,7 +1893,8 @@
     [privateDatabase saveRecord:newRecord completionHandler:^(CKRecord *identityRecord, NSError *error){
         if (!error) {
             // Insert successfully saved record code
-            NSLog(@"Record saved.");
+            
+            NSLog(@"Record saved: %@ (%@)",[identityRecord objectForKey:@"Name"],[identityRecord objectForKey:@"KeyId"]);
         }
         else {
             // Insert error handling

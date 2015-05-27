@@ -81,6 +81,7 @@
 -(bool)generateNewIdentity:(NSString *)userID keySize: (NSInteger)bits password:(NSString *)passwd;
 -(bool)saveObjectToCloud: (NSManagedObject *)object;
 -(void)startSyncFromCloud;
+- (void)deleteCloudObject: (NSString *)keyId recordType:(NSString *)type;
 
 +(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage;
 
