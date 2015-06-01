@@ -44,12 +44,31 @@
         [windowController presentActivationWindow:self.window Uuid:installationUuid date:[NSDate dateWithTimeIntervalSince1970:epoch]];
 }
 
+-(IBAction)toggleCloudSync:(id)sender {
+    NSMenuItem *menuItem = sender;
+    if ([menuItem state] == NSOffState) {
+        [[NSUserDefaults standardUserDefaults]setBool:true forKey:@"iCloudSyncEnabled"];
+        menuItem.state = NSOnState;
+        
+        [self startSyncFromCloud];
+    }
+    else {
+        [[NSUserDefaults standardUserDefaults]setBool:false forKey:@"iCloudSyncEnabled"];
+        menuItem.state = NSOffState;
+    }
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
     NSError *error;
     
-    [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"iCloudSyncEnabled"];
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:@"iCloudSyncEnabled"]) {
+        m_cloudSyncMenuItem.state = NSOnState;
+    }
+    else {
+        m_cloudSyncMenuItem.state = NSOffState;
+    }
     
     if(![[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"]) {
         [[NSUserDefaults standardUserDefaults]setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
@@ -64,9 +83,30 @@
     }
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"refreshOutline" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
-        NSLog(@"Refresh outline...");
+        
+        NSArray *sortedRecipients = [recipients sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+            NSDate *first = [(Recipient *)a added];
+            NSDate *second = [(Recipient *)b added];
+            return [first compare:second];
+        }];
+        NSMutableArray *newArray = [[NSMutableArray alloc]init];
+        
+        for ( Recipient *eachRecipient in sortedRecipients ) {
+            [newArray addObject:eachRecipient.keyId];
+        }
+        [m_children setObject:newArray forKey:@"RECIPIENTS"];
+        
         [m_outlineView reloadData];
     }];
+    
+    // register for CloudKit notifications
+    
+    NSPredicate *recipientsPredicate = [NSPredicate predicateWithFormat:@"PrivateKeystore != NULL"];
+    CKSubscription *recipientsSubscription = [[CKSubscription alloc]initWithRecordType:@"Identities" predicate:recipientsPredicate options:CKSubscriptionOptionsFiresOnRecordCreation];
+    CKNotificationInfo *notificationInfo = [CKNotificationInfo new];
+    recipientsSubscription.notificationInfo = notificationInfo;
+    
+    
     
     // test for activation
     ActivationWindowController *activationController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
@@ -187,6 +227,11 @@
     [m_children setObject:newArray forKey:@"MY IDENTITIES"];
 }
 
+-(void)reloadTimerFired: (id)sender {
+    NSLog(@"Reloading m_outlineView");
+    [m_outlineView reloadData];
+}
+
 // -------------------------------------------------------------------------------
 //	applicationShouldTerminateAfterLastWindowClosed:sender
 //
@@ -287,6 +332,11 @@
         [[NSApplication sharedApplication] presentError:error];
         return nil;
     }
+    
+    NSPersistentStore *store = [coordinator.persistentStores firstObject];
+    NSURL *location = [coordinator URLForPersistentStore:store];
+    NSLog(@"Location: %@",[location description]);
+    
     _managedObjectContext = [[NSManagedObjectContext alloc] init];
     [_managedObjectContext setPersistentStoreCoordinator:coordinator];
 
@@ -1525,6 +1575,7 @@
         NSMutableArray *editable = [[NSMutableArray alloc]initWithArray:recipients];
         [editable addObject:newRecipient];
         recipients = [[NSArray alloc]initWithArray:editable];
+        
         
         [[NSNotificationCenter defaultCenter]postNotificationName:@"refreshOutline" object:nil];
         

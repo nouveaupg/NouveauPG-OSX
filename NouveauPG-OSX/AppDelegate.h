@@ -21,6 +21,7 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
     IBOutlet NSView *m_placeholderView;
+    IBOutlet NSMenuItem *m_cloudSyncMenuItem;
     
     CertificateViewController *m_certificateViewController;
     
@@ -82,6 +83,8 @@
 -(bool)saveObjectToCloud: (NSManagedObject *)object;
 -(void)startSyncFromCloud;
 - (void)deleteCloudObject: (NSString *)keyId recordType:(NSString *)type;
+-(void)reloadTimerFired: (id)sender;
+-(IBAction)toggleCloudSync:(id)sender;
 
 +(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage;
 
