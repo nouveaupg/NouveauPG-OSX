@@ -83,8 +83,16 @@
                     if ([trimmedString length] == 0) {
                         parserState = kParsingContent;
                     }
+                    else {
+                        // if we find a line where we are expecting a header, and it doesn't have a colon
+                        // we know there are no headers
+                        NSRange colonRange = [trimmedString rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+                        if (colonRange.location == NSNotFound) {
+                            parserState = kParsingContent;
+                        }
+                    }
                 }
-                else if( parserState == kParsingContent ) {
+                if( parserState == kParsingContent ) {
                     // we just append Base64 encoded data to the accumulator and strip out whitespace
                     // the way Base64 is specified, the '=' sign will never be the first character of a line.
                     // when we find a line that begins with '=' we know we've reached the checksum
