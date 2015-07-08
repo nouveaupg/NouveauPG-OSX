@@ -17,6 +17,8 @@
 #define kConfirmationStateDeleteItem 1
 #define kConfirmationStateCompose 2
 #define kConfirmationStateExport 3
+#define kConfirmationImportNoSigs 4
+#define kConfirmationImportInvalidSigs 5
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
@@ -30,6 +32,7 @@
     
     NSString *m_pendingExportCertificate;
     NSString *m_pendingExportUserId;
+    NSString *m_pendingImportCertificate;
     
     NSArray *m_topLevelNodes;
     NSMutableDictionary *m_children;
@@ -70,7 +73,7 @@
 -(OpenPGPPublicKey *)subkeyForPrimaryKeyId:(NSString *)primaryKeyId;
 -(Identities *)identityForKeyId:(NSString *)keyId;
 -(void)presentPasswordPrompt: (NSString *)identityKeyId;
--(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate;
+-(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate override:(bool)skipValidCheck;
 -(bool)importIdentityFromKeystore:(OpenPGPMessage *)keystore;
 -(bool)encryptIdentityWithPassword: (NSString *)password;
 -(bool)importEncryptedMessage:(OpenPGPMessage *)message;

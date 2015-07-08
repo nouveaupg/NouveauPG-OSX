@@ -32,6 +32,8 @@
 #define kMessageTypeCertificate 2
 #define kMessageTypeKeystore 3
 
+#define APP_STORE 1
+
 @synthesize recipients;
 @synthesize identities;
 
@@ -63,12 +65,16 @@
     // Insert code here to initialize your application
     NSError *error;
     
+    
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"iCloudSyncEnabled"]) {
         m_cloudSyncMenuItem.state = NSOnState;
     }
     else {
         m_cloudSyncMenuItem.state = NSOffState;
     }
+    
+#ifndef APP_STORE
+    
     
     if(![[NSUserDefaults standardUserDefaults] stringForKey:@"uuid"]) {
         [[NSUserDefaults standardUserDefaults]setObject:[[NSUUID UUID] UUIDString] forKey:@"uuid"];
@@ -77,6 +83,9 @@
     else {
         NSLog(@"UUID %@",[[NSUserDefaults standardUserDefaults]objectForKey:@"uuid"]);
     }
+    
+#else
+    m_cloudSyncMenuItem.enabled = NO;
     
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"iCloudSyncEnabled"]) {
         [self startSyncFromCloud];
@@ -99,6 +108,12 @@
         [m_outlineView reloadData];
     }];
     
+    [[NSNotificationCenter defaultCenter] addObserverForName:@"cloudKitError" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note){
+        NSError *error = [note object];
+        NSAlert *alert = [NSAlert alertWithMessageText:@"iCloud Error" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"%@",[error localizedDescription]];
+        [alert runModal];
+    }];
+    
     // register for CloudKit notifications
     
     NSPredicate *recipientsPredicate = [NSPredicate predicateWithFormat:@"PrivateKeystore != NULL"];
@@ -107,7 +122,8 @@
     recipientsSubscription.notificationInfo = notificationInfo;
     
     
-    
+#endif
+#ifndef APP_STORE
     // test for activation
     ActivationWindowController *activationController = [[ActivationWindowController alloc]initWithWindowNibName:@"ActivationWindowController"];
     
@@ -125,6 +141,7 @@
         NSLog(@"Not activated.");
        [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(presentActivationWindow) userInfo:nil repeats:NO];
     }
+#endif
     
     OpenSSL_add_all_algorithms();
     
@@ -1451,7 +1468,7 @@
                 }
                 
                 if (messageType == 1) {
-                    if([self importRecipientFromCertificate:message]) {
+                    if([self importRecipientFromCertificate:message override:NO]) {
                         NSMutableArray *newArray = [[NSMutableArray alloc]initWithCapacity:20];
                         NSString *lastOne = nil;
                         for (Recipient *each in recipients) {
@@ -1484,7 +1501,7 @@
 
 
 
--(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate {
+-(bool)importRecipientFromCertificate:(OpenPGPMessage *)publicKeyCertificate override:(bool)skipValidCheck {
     NSLog(@"Importing Recipient from public key certificate.");
     
     if ([publicKeyCertificate validChecksum]) {
@@ -1499,6 +1516,8 @@
         
         NSArray *packets = [OpenPGPPacket packetsFromMessage:publicKeyCertificate];
         for ( OpenPGPPacket *eachPacket in packets ) {
+            NSLog(@"Packet tag: %ld length: %lu", (long)[eachPacket packetTag] , (unsigned long)[[eachPacket packetData] length]);
+            
             if ([eachPacket packetTag] == 6) {
                 primaryKey = [[OpenPGPPublicKey alloc]initWithPacket:eachPacket];
             }
@@ -1513,7 +1532,7 @@
                 if (signature.signatureType == 0x18) {
                     subkeySig = signature;
                 }
-                else if (signature.signatureType == 0x13 ) {
+                else if ( signature.signatureType <= 0x13 && signature.signatureType >= 0x10 ) {
                     userIdSig = signature;
                 }
             }
@@ -1526,7 +1545,9 @@
         
         bool validSig = [userIdSig validateWithPublicKey:primaryKey userId:[userIdPkt stringValue]];
         
-        //[subkeySig validateSubkey:subkey withSigningKey:primaryKey];
+        if (subkeySig) {
+            validSig = [subkeySig validateSubkey:subkey withSigningKey:primaryKey];
+        }
         
         unsigned char *fingerprint = [primaryKey fingerprintBytes];
         unsigned int d1,d2,d3,d4,d5;
@@ -1562,11 +1583,27 @@
             newRecipient.name = [userIdPkt stringValue];
         }
 
-        if (validSig) {
+        if (validSig || skipValidCheck) {
             [self saveObjectToCloud:newRecipient];
             [self saveAction:self];
         }
         else {
+            
+            if (!userIdSig) {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Public certificate contains no signatures" defaultButton:@"Import" alternateButton:@"Cancel" otherButton:nil informativeTextWithFormat:@"The public certificate you are importing doesn't have any signatures. You can't be sure the User ID and password haven't been modified by a third party. Are you sure you want to import?"];
+                alert.alertStyle = NSCriticalAlertStyle;
+                m_confirmation = kConfirmationImportNoSigs;
+                m_pendingImportCertificate = [[NSString alloc]initWithString:[publicKeyCertificate originalArmouredText]];
+                [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+            }
+            else {
+                NSAlert *alert = [NSAlert alertWithMessageText:@"Public certificate contains invalid signatures" defaultButton:@"Cancel" alternateButton:@"Import" otherButton:nil informativeTextWithFormat:@"The public certificate you are importing contains one or more invalid signatures. This suggests the certificate has been modified or corrupted. Are you sure you want to import?"];
+                alert.alertStyle = NSCriticalAlertStyle;
+                m_confirmation = kConfirmationImportInvalidSigs;
+                m_pendingImportCertificate = [[NSString alloc]initWithString:[publicKeyCertificate originalArmouredText]];
+                [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:nil];
+            }
+            
             NSLog(@"Did not add - invalid signature.!");
             return false;
         }
@@ -1618,7 +1655,7 @@
                 }
                 
                 if (!bFound) {
-                    if([self importRecipientFromCertificate:message]) {
+                    if([self importRecipientFromCertificate:message override:NO]) {
                         NSArray *sortedRecipients = [recipients sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
                             NSDate *first = [(Recipient *)a added];
                             NSDate *second = [(Recipient *)b added];
@@ -1856,6 +1893,18 @@
         m_pendingExportCertificate = nil;
         m_pendingExportUserId = nil;
     }
+    else if (m_confirmation == kConfirmationImportNoSigs ) {
+        if (returnCode == 1) {
+            OpenPGPMessage *importCertificate = [[OpenPGPMessage alloc]initWithArmouredText:m_pendingImportCertificate];
+            [self importRecipientFromCertificate:importCertificate override:YES];
+        }
+    }
+    else if (m_confirmation == kConfirmationImportInvalidSigs ) {
+        if (returnCode == 0) {
+            OpenPGPMessage *importCertificate = [[OpenPGPMessage alloc]initWithArmouredText:m_pendingImportCertificate];
+            [self importRecipientFromCertificate:importCertificate override:YES];
+        }
+    }
     // keep this here to stop catastrophic replay bugs
     m_confirmation = kConfirmationStateNone;
    
@@ -1881,7 +1930,7 @@
                     bool found = false;
                     
                     for (Recipient *eachRecipient in recipients ) {
-                        if ([[eachRecipient keyId] isEqualToString:[each objectForKey:@"KeyId"]]) {
+                        if ([[[eachRecipient keyId] uppercaseString] isEqualToString:[each objectForKey:@"KeyId"]]) {
                             found = true;
                             break;
                         }
@@ -1890,7 +1939,7 @@
                     if(!found) {
                         OpenPGPMessage *certificateMessage = [[OpenPGPMessage alloc]initWithArmouredText:[each objectForKey:@"PublicCertificate"]];
                         if ([certificateMessage validChecksum]) {
-                            [self importRecipientFromCertificate:certificateMessage];
+                            [self importRecipientFromCertificate:certificateMessage override:NO];
                             
                         }
                     }
