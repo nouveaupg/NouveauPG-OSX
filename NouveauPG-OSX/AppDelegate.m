@@ -65,13 +65,15 @@
     // Insert code here to initialize your application
     NSError *error;
     
-    
+    /*
     if ([[NSUserDefaults standardUserDefaults]boolForKey:@"iCloudSyncEnabled"]) {
         m_cloudSyncMenuItem.state = NSOnState;
     }
     else {
         m_cloudSyncMenuItem.state = NSOffState;
     }
+     */
+    [[NSUserDefaults standardUserDefaults] setBool:false forKey:@"iCloudSyncEnabled"];
     
 #ifndef APP_STORE
     
@@ -116,10 +118,10 @@
     
     // register for CloudKit notifications
     
-    NSPredicate *recipientsPredicate = [NSPredicate predicateWithFormat:@"PrivateKeystore != NULL"];
-    CKSubscription *recipientsSubscription = [[CKSubscription alloc]initWithRecordType:@"Identities" predicate:recipientsPredicate options:CKSubscriptionOptionsFiresOnRecordCreation];
-    CKNotificationInfo *notificationInfo = [CKNotificationInfo new];
-    recipientsSubscription.notificationInfo = notificationInfo;
+    //NSPredicate *recipientsPredicate = [NSPredicate predicateWithFormat:@"PrivateKeystore != NULL"];
+    //CKSubscription *recipientsSubscription = [[CKSubscription alloc]initWithRecordType:@"Identities" predicate:recipientsPredicate options:CKSubscriptionOptionsFiresOnRecordCreation];
+    //CKNotificationInfo *notificationInfo = [CKNotificationInfo new];
+    //recipientsSubscription.notificationInfo = notificationInfo;
     
     
 #endif

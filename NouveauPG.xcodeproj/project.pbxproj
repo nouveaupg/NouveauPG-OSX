@@ -12,7 +12,6 @@
 		0429885119F9B9DB00083E70 /* ComposePanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0429885019F9B9DB00083E70 /* ComposePanel.xib */; };
 		0429885419F9BB9C00083E70 /* ComposeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885319F9BB9C00083E70 /* ComposeWindowController.m */; };
 		0429885A19FC069600083E70 /* IdenticonImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 0429885919FC069600083E70 /* IdenticonImage.m */; };
-		0431CE221AF6D8CE003711F2 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0431CE211AF6D8CE003711F2 /* CloudKit.framework */; };
 		043BE0D71AD0252B00CCD2C1 /* ActivationWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 043BE0D51AD0252B00CCD2C1 /* ActivationWindowController.m */; };
 		043BE0D81AD0252B00CCD2C1 /* ActivationWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 043BE0D61AD0252B00CCD2C1 /* ActivationWindowController.xib */; };
 		043BE0DD1AD0614B00CCD2C1 /* validation_certificate in Resources */ = {isa = PBXBuildFile; fileRef = 043BE0DC1AD0614B00CCD2C1 /* validation_certificate */; };
@@ -65,7 +64,6 @@
 		0429885319F9BB9C00083E70 /* ComposeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeWindowController.m; sourceTree = "<group>"; };
 		0429885819FC069600083E70 /* IdenticonImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdenticonImage.h; sourceTree = "<group>"; };
 		0429885919FC069600083E70 /* IdenticonImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdenticonImage.m; sourceTree = "<group>"; };
-		0431CE211AF6D8CE003711F2 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		043BE0D41AD0252B00CCD2C1 /* ActivationWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivationWindowController.h; sourceTree = "<group>"; };
 		043BE0D51AD0252B00CCD2C1 /* ActivationWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivationWindowController.m; sourceTree = "<group>"; };
 		043BE0D61AD0252B00CCD2C1 /* ActivationWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivationWindowController.xib; sourceTree = "<group>"; };
@@ -129,7 +127,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				04795ED419C0A1AD000A3142 /* Cocoa.framework in Frameworks */,
-				0431CE221AF6D8CE003711F2 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +164,6 @@
 		04795ED219C0A1AD000A3142 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0431CE211AF6D8CE003711F2 /* CloudKit.framework */,
 				04795ED319C0A1AD000A3142 /* Cocoa.framework */,
 				04795EF519C0A1AE000A3142 /* XCTest.framework */,
 				04795ED519C0A1AD000A3142 /* Other Frameworks */,
@@ -349,7 +345,7 @@
 								enabled = 1;
 							};
 							com.apple.iCloud = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};

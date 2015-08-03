@@ -14,7 +14,6 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
-                <outlet property="m_cloudSyncMenuItem" destination="U5q-kK-SRo" id="94M-Db-zWm"/>
                 <outlet property="m_outlineView" destination="lgJ-bY-Pko" id="wgr-gp-teN"/>
                 <outlet property="m_placeholderView" destination="dfG-se-JAu" id="RMg-MD-ROi"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
@@ -34,13 +33,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                            <menuItem title="Sync using iCloud" state="on" id="U5q-kK-SRo">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="toggleCloudSync:" target="Voe-Tx-rLC" id="Nhk-0l-0an"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
                             <menuItem title="Hide NouveauPG" keyEquivalent="h" id="Olw-nP-bQN">
                                 <connections>
                                     <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
