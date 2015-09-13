@@ -20,8 +20,6 @@
 #import "Identities.h"
 #import "ActivationWindowController.h"
 
-@import CloudKit;
-
 @implementation AppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -32,7 +30,7 @@
 #define kMessageTypeCertificate 2
 #define kMessageTypeKeystore 3
 
-#define APP_STORE 1
+//#define APP_STORE 1
 
 @synthesize recipients;
 @synthesize identities;
@@ -88,10 +86,11 @@
     
 #else
     m_cloudSyncMenuItem.enabled = NO;
-    
+    /*
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"iCloudSyncEnabled"]) {
         [self startSyncFromCloud];
     }
+     */
     
     [[NSNotificationCenter defaultCenter] addObserverForName:@"refreshOutline" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *note) {
         
@@ -1540,6 +1539,15 @@
             }
         }
         
+        
+        
+        unsigned char *fingerprint = [primaryKey fingerprintBytes];
+        unsigned int d1,d2,d3,d4,d5;
+        d1 = fingerprint[0] << 24 | fingerprint[1] << 16 | fingerprint[2] << 8 | fingerprint[3];
+        d2 = fingerprint[4] << 24 | fingerprint[5] << 16 | fingerprint[6] << 8 | fingerprint[7];
+        d3 = fingerprint[8] << 24 | fingerprint[9] << 16 | fingerprint[10] << 8 | fingerprint[11];
+        d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
+        d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
         if( primaryKey.publicKeyType == -1 ) {
             NSLog(@"Unsupported public key algorithm");
             return false;
@@ -1550,15 +1558,6 @@
         if (subkeySig) {
             validSig = [subkeySig validateSubkey:subkey withSigningKey:primaryKey];
         }
-        
-        unsigned char *fingerprint = [primaryKey fingerprintBytes];
-        unsigned int d1,d2,d3,d4,d5;
-        d1 = fingerprint[0] << 24 | fingerprint[1] << 16 | fingerprint[2] << 8 | fingerprint[3];
-        d2 = fingerprint[4] << 24 | fingerprint[5] << 16 | fingerprint[6] << 8 | fingerprint[7];
-        d3 = fingerprint[8] << 24 | fingerprint[9] << 16 | fingerprint[10] << 8 | fingerprint[11];
-        d4 = fingerprint[12] << 24 | fingerprint[13] << 16 | fingerprint[14] << 8 | fingerprint[15];
-        d5 = fingerprint[16] << 24 | fingerprint[17] << 16 | fingerprint[18] << 8 | fingerprint[19];
-        
         NSManagedObjectContext *ctx = [self managedObjectContext];
         Recipient *newRecipient = [NSEntityDescription insertNewObjectForEntityForName:@"Recipient" inManagedObjectContext:ctx];
         newRecipient.userId = [userIdPkt stringValue];
@@ -1586,7 +1585,7 @@
         }
 
         if (validSig || skipValidCheck) {
-            [self saveObjectToCloud:newRecipient];
+            //[self saveObjectToCloud:newRecipient];
             [self saveAction:self];
         }
         else {
@@ -1915,6 +1914,7 @@
 #pragma mark CloudKit
 
 -(void)startSyncFromCloud {
+    /*
     CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
     CKDatabase *privateDatabase = [myContainer privateCloudDatabase];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"Created > %@",[NSDate dateWithTimeIntervalSince1970:0]];
@@ -1949,12 +1949,14 @@
             }
         }
     }];
+     */
 
 }
 
 - (void)deleteCloudObject: (NSString *)keyId recordType:(NSString *)type {
     //CKRecord *newRecord = [[CKRecord alloc]initWithRecordType:@"Identities"];
     //CKContainer *myContainer = [CKContainer defaultContainer];
+    /*
     CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
     CKDatabase *privateDatabase = [myContainer privateCloudDatabase];
     
@@ -1972,11 +1974,12 @@
             }];
         }
     }];
+     */
 }
 
 
 -(bool)saveObjectToCloud: (NSManagedObject *)object {
-    
+    /*
     CKRecord *newRecord = [[CKRecord alloc]initWithRecordType:@"Identities"];
     //CKContainer *myContainer = [CKContainer defaultContainer];
     CKContainer *myContainer = [CKContainer containerWithIdentifier:@"iCloud.com.nouveaupg.nouveaupg"];
@@ -2004,7 +2007,7 @@
         }
     }];
     
-    
+    */
     return true;
 }
 

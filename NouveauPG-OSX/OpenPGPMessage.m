@@ -68,7 +68,7 @@
         
         if (messageBody) {
             NSMutableString *contentAccumulator = [[NSMutableString alloc]initWithCapacity:[messageBody length]];
-            NSArray *lines = [messageBody componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\r\n"]];
+            NSArray *lines = [messageBody componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\n"]];
             for (NSString* line in lines) {
                 NSString *trimmedString = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 if (parserState == -1) {

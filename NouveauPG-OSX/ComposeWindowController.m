@@ -246,7 +246,14 @@
         _state = kComposePanelStateEncryptMessage;
     }
     else if( _state == kComposePanelStateDecryptMessage ) {
-        OpenPGPPublicKey *encryptionKey = [self validateOpenPGPMessage];
+        OpenPGPMessage *message = [[OpenPGPMessage alloc]initWithArmouredText:[m_textView string]];
+        if (![message validChecksum]) {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Invalid OpenPGP message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The checksum for this OpenPGP message failed. The data is corrupted."];
+            [alert runModal];
+            return;
+        }
+        
+        OpenPGPPublicKey *encryptionKey = [AppDelegate validateEncryptedMessage:message];
         
         if (!encryptionKey) {
             NSAlert *alert = [NSAlert alertWithMessageText:@"Could not decrypt message" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The public key which this was encrypted for was not found on your Identities keychain."];
