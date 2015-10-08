@@ -69,6 +69,8 @@
         if (messageBody) {
             NSMutableString *contentAccumulator = [[NSMutableString alloc]initWithCapacity:[messageBody length]];
             NSArray *lines = [messageBody componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\n"]];
+            NSCharacterSet *charactersToRemove = [[NSCharacterSet characterSetWithCharactersInString:@"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/+="] invertedSet];
+           
             for (NSString* line in lines) {
                 NSString *trimmedString = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
                 if (parserState == -1) {
@@ -98,11 +100,11 @@
                     // when we find a line that begins with '=' we know we've reached the checksum
                     
                     if ([trimmedString length] == 0) {
-                    // this takes care of CR/LF pairs
+                    // avoids throwing exception when there is no first character to check
                         continue;
                     }
-                    
-                    if ([trimmedString characterAtIndex:0] == '=') {
+                    NSString *strippedReplacement = [[trimmedString componentsSeparatedByCharactersInSet:charactersToRemove] componentsJoinedByString:@""];
+                    if ([strippedReplacement characterAtIndex:0] == '=') {
                         m_decodedData = [OpenPGPMessage base64DataFromString:contentAccumulator];
                         if ( m_decodedData ) {
                             parserState = kParsingChecksum;
@@ -133,14 +135,20 @@
                             if (checksum == crc) {
                                 m_validChecksum = true;
                             }
+                            else {
+                                NSLog(@"Error: checksum failed.");
+                            }
                             return self;
                         }
                     }
                     else {
-                        [contentAccumulator appendString:trimmedString];
+                        [contentAccumulator appendString:strippedReplacement];
                     }
                 }
             }
+        }
+        else {
+            NSLog(@"No message body found. OpenPGP message must have header and footer to have a message body.");
         }
     }
     return nil;

@@ -1108,7 +1108,12 @@
     Identities *identity = nil;
     
     for (Identities *each in identities) {
+        NSString *subkeyId = [[[each secondaryKey] keyId] uppercaseString];
         if ([[[each keyId] uppercaseString] isEqualToString:[keyId uppercaseString]]) {
+            identity = each;
+            break;
+        }
+        else if([subkeyId isEqualToString:[keyId uppercaseString]]) {
             identity = each;
             break;
         }
@@ -1977,6 +1982,19 @@
      */
 }
 
+-(void)selectIdentityWithKeyId: (NSString *)keyId {
+    Identities *eachIdentity = [self identityForKeyId:keyId];
+    NSArray *allIdentities = [m_children objectForKey:@"MY IDENTITIES"];
+    
+    for (NSString *each in allIdentities) {
+        if ([[keyId uppercaseString] isEqualToString:each]) {
+            
+            NSInteger row = [m_outlineView rowForItem:each];
+            [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
+            break;
+        }
+    }
+}
 
 -(bool)saveObjectToCloud: (NSManagedObject *)object {
     /*

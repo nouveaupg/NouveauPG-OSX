@@ -89,6 +89,9 @@
 -(void)reloadTimerFired: (id)sender;
 -(IBAction)toggleCloudSync:(id)sender;
 
+-(void)selectIdentityWithKeyId: (NSString *)keyId;
+-(void)selectRecipientWithKeyId: (NSString *)keyId;
+
 +(OpenPGPPublicKey *)validateEncryptedMessage:(OpenPGPMessage *)encryptedMessage;
 
 -(void)setupCertificateSubview;

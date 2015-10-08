@@ -264,10 +264,15 @@
         bool isEncrypted = [encryptionKey isEncrypted];
         if (isEncrypted) {
             NSLog(@"Identity locked.");
-            return;
+            [NSApp stopModal];
+            
+            AppDelegate *app = [[NSApplication sharedApplication] delegate];
+            [app selectIdentityWithKeyId:encryptionKey.keyId];
+    
+            
             /*
             PasswordWindow *passwdWindow = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
-            [passwdWindow presentPasswordPrompt:@"Enter password for private key" privateKey:m_publicKey window:self.window];
+            [passwdWindow presentPasswordPrompt:@"Enter password for private key" privateKey:encryptionKey window:self.window];
              */
         }
         else {
