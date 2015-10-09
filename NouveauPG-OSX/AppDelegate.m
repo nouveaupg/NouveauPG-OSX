@@ -30,7 +30,7 @@
 #define kMessageTypeCertificate 2
 #define kMessageTypeKeystore 3
 
-//#define APP_STORE 1
+#define APP_STORE 1
 
 @synthesize recipients;
 @synthesize identities;
@@ -1622,6 +1622,14 @@
         
         [[NSNotificationCenter defaultCenter]postNotificationName:@"refreshOutline" object:nil];
         
+        [m_outlineView expandItem:@"RECIPIENTS"];
+        
+        [self selectRecipientWithKeyId:newRecipient.keyId];
+        
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Imported certificate" defaultButton:@"OK" alternateButton:nil otherButton:nil informativeTextWithFormat:@"The public key certificate with the UserID: %@ has been successfully imported. You can now encrypt messages for this recipient.",newRecipient.name];
+        
+        [alert runModal];
+        
         return true;
     }
     else {
@@ -1916,7 +1924,64 @@
    
 }
 
-#pragma mark CloudKit
+#pragma mark Select certificate or identity by keyid
+
+-(void)selectRecipientWithKeyId: (NSString *)keyId {
+    NSArray *allRecipients = [m_children objectForKey:@"RECIPIENTS"];
+    
+    Recipient *selectedRecipient = nil;
+    
+    for ( Recipient *each in recipients) {
+        NSString *primaryKeyId = [[each.primary keyId] uppercaseString];
+        NSString *secondaryKeyId = [[each.subkey keyId] uppercaseString];
+        if ([[keyId uppercaseString] isEqualToString:primaryKeyId] || [[keyId uppercaseString] isEqualToString:secondaryKeyId]) {
+            selectedRecipient = each;
+        }
+    }
+    
+    if (!selectedRecipient) {
+        return;
+    }
+    
+    for (NSString *eachRecipient in allRecipients) {
+        if ([[selectedRecipient.keyId uppercaseString] isEqualToString:eachRecipient]) {
+            NSInteger row = [m_outlineView rowForItem:eachRecipient];
+            [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
+            break;
+        }
+    }
+}
+
+-(void)selectIdentityWithKeyId: (NSString *)keyId {
+    NSArray *allIdentities = [m_children objectForKey:@"MY IDENTITIES"];
+    
+    Identities *selectedIdentity = nil;
+    
+    for( Identities *each in identities ) {
+        NSString *primaryKeyId = [[each.primaryKey keyId] uppercaseString];
+        NSString *secondaryKeyId = [[each.secondaryKey keyId] uppercaseString];
+        if ([[keyId uppercaseString] isEqualToString:primaryKeyId] || [[keyId uppercaseString] isEqualToString:secondaryKeyId]) {
+            selectedIdentity = each;
+        }
+    }
+    
+    if (!selectedIdentity) {
+        return;
+    }
+    
+    for (NSString *eachIdentity in allIdentities) {
+        if ([[selectedIdentity.keyId uppercaseString] isEqualToString:eachIdentity]) {
+            
+            NSInteger row = [m_outlineView rowForItem:eachIdentity];
+            [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
+            break;
+        }
+    }
+    
+}
+
+
+#pragma mark CloudKit DEPRECATED
 
 -(void)startSyncFromCloud {
     /*
@@ -1982,19 +2047,6 @@
      */
 }
 
--(void)selectIdentityWithKeyId: (NSString *)keyId {
-    Identities *eachIdentity = [self identityForKeyId:keyId];
-    NSArray *allIdentities = [m_children objectForKey:@"MY IDENTITIES"];
-    
-    for (NSString *each in allIdentities) {
-        if ([[keyId uppercaseString] isEqualToString:each]) {
-            
-            NSInteger row = [m_outlineView rowForItem:each];
-            [m_outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:false];
-            break;
-        }
-    }
-}
 
 -(bool)saveObjectToCloud: (NSManagedObject *)object {
     /*

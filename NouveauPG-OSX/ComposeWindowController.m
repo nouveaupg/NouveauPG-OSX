@@ -267,13 +267,23 @@
             [NSApp stopModal];
             
             AppDelegate *app = [[NSApplication sharedApplication] delegate];
-            [app selectIdentityWithKeyId:encryptionKey.keyId];
+            Identities *selectedIdentity = nil;
+            NSString *keyId = encryptionKey.keyId;
+            
+            for( Identities *each in app.identities ) {
+                NSString *primaryKeyId = [[each.primaryKey keyId] uppercaseString];
+                NSString *secondaryKeyId = [[each.secondaryKey keyId] uppercaseString];
+                if ([[keyId uppercaseString] isEqualToString:primaryKeyId] || [[keyId uppercaseString] isEqualToString:secondaryKeyId]) {
+                    selectedIdentity = each;
+                }
+            }
+            
+            [app selectIdentityWithKeyId:keyId];
     
             
-            /*
-            PasswordWindow *passwdWindow = [[PasswordWindow alloc]initWithWindowNibName:@"PasswordWindow"];
-            [passwdWindow presentPasswordPrompt:@"Enter password for private key" privateKey:encryptionKey window:self.window];
-             */
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Identity locked" defaultButton:@"Dismiss" alternateButton:nil otherButton:nil informativeTextWithFormat:@"This encrypted OpenPGP message is for the identity named %@. Unlock this identity and try decrypting again.",selectedIdentity.name];
+            
+            [alert runModal];
         }
         else {
             NSLog(@"Decrypting message.");
