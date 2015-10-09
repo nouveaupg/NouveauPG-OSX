@@ -30,8 +30,6 @@
 #define kMessageTypeCertificate 2
 #define kMessageTypeKeystore 3
 
-#define APP_STORE 1
-
 @synthesize recipients;
 @synthesize identities;
 
@@ -1392,6 +1390,9 @@
 
 -(IBAction)importFromFile:(id)sender {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+#ifdef APP_STORE
+    [panel setAllowedFileTypes:[NSArray arrayWithObject:@"asc"]];
+#endif
     
     // display the panel
     NSInteger result = [panel runModal];

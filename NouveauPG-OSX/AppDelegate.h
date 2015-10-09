@@ -20,6 +20,8 @@
 #define kConfirmationImportNoSigs 4
 #define kConfirmationImportInvalidSigs 5
 
+#define APP_STORE 1
+
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     IBOutlet NSOutlineView *m_outlineView;
     IBOutlet NSView *m_placeholderView;

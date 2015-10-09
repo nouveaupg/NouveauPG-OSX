@@ -51,8 +51,9 @@
     }
     else if(_state == kComposePanelStateDecryptMessage ) {
         NSOpenPanel *panel = [NSOpenPanel openPanel];
-        panel.allowedFileTypes = [NSArray arrayWithObject:@"asc"];
-        panel.allowsOtherFileTypes = YES;
+#ifdef APP_STORE
+        panel.allowedFileTypes = [NSArray arrayWithObjects:@"asc",nil];
+#endif
         NSInteger result = [panel runModal];
         if (result) {
             NSError *error;
@@ -149,8 +150,9 @@
     }
     else if(_state == kComposePanelStateComposeMessage) {
         NSOpenPanel *panel = [NSOpenPanel openPanel];
-        panel.allowedFileTypes = [NSArray arrayWithObject:@"asc"];
-        panel.allowsOtherFileTypes = YES;
+#ifdef APP_STORE
+        panel.allowedFileTypes = [NSArray arrayWithObjects:@"asc",@"txt",nil];
+#endif
         NSInteger result = [panel runModal];
         if (result) {
             NSError *error;
