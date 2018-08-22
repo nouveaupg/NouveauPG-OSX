@@ -10,3 +10,5 @@ Personally my least favorite part is the certificate background which is maybe k
 be the best metaphore.
 
 Some of the code is probably kind of a mess but so is RFC 4880. (The Official IEEE OpenPGP spec)
+
+Log an issue if you have any problems compiling, it should be an easy compile on macOS Sierra.
